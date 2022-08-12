@@ -18,7 +18,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-var _ = Describe("test annotation", Label("annotation"), func() {
+var _ = Describe("test annotation", Label("annotation"), Pending, func() {
 	var nsName, podName string
 
 	BeforeEach(func() {

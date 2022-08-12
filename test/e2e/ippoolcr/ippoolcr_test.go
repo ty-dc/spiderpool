@@ -16,7 +16,7 @@ import (
 	"github.com/spidernet-io/spiderpool/test/e2e/common"
 )
 
-var _ = Describe("test ippool CR", Label("ippoolCR"), func() {
+var _ = Describe("test ippool CR", Label("ippoolCR"), Pending, func() {
 	var nsName string
 
 	BeforeEach(func() {
