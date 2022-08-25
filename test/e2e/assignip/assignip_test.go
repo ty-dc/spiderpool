@@ -21,7 +21,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-var _ = Describe("test pod", Label("assignip"), Pending, func() {
+var _ = Describe("test pod", Label("assignip"), func() {
 	var err error
 	var testName, namespace string
 	var dpm *appsv1.Deployment

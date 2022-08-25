@@ -14,7 +14,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 )
 
-var _ = Describe("test reliability", Label("reliability"), Pending, Serial, func() {
+var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 	var podName, namespace string
 	var wg sync.WaitGroup
 

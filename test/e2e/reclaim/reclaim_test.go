@@ -21,7 +21,7 @@ import (
 	"github.com/spidernet-io/spiderpool/test/e2e/common"
 )
 
-var _ = Describe("test ip with reclaim ip case", Label("reclaim"), Pending, func() {
+var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 	var err error
 	var podName, namespace string
 	var podIPv4, podIPv6 string
