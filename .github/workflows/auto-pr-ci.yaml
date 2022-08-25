@@ -283,7 +283,7 @@ jobs:
           RESULT=0
           make e2e_test -e E2E_CLUSTER_NAME=${{ steps.prepare.outputs.clusterName }}  \
               -e E2E_GINKGO_LABELS=${{ needs.get_ref.outputs.e2e_labels }} \
-              -e GINKGO_OPTION=" --skip performance " \
+              -e GINKGO_OPTION= --label-filter= "!P00002" \
               -e E2E_TIMEOUT=${{ env.E2E_TIME_OUT }} \
               -e E2E_IP_FAMILY=dual || RESULT=1
           if ((RESULT==0)) ; then
