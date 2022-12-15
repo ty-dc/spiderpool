@@ -61,11 +61,11 @@ var _ = Describe("test subnet", Label("subnet"), func() {
 
 		var (
 			// Available IP in Subnet
-			subnetIpNum int = 150
+			subnetIpNum int = 50
 			// Number of deployments created
-			deployOriginiaNum int = 30
+			deployOriginiaNum int = 10
 			// How much of the deployment is for scaling up?
-			deployScaleupNum int = 15
+			deployScaleupNum int = 5
 			// Initial number of replicas of deploy
 			deployReplicasOriginialNum int32 = 2
 			// Number of Scaling up replicas of deploy

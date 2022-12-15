@@ -46,7 +46,9 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 
 		// Generate job yaml with different behaviour and create it
 		GinkgoWriter.Printf("try to create Job %v/%v with job behavior is %v \n", namespace, jdName, behavior)
-		jd := common.GenerateExampleJobYaml(behavior, jdName, namespace, pointer.Int32Ptr(2))
+		jd := common.GenerateExampleJobYaml(behavior, jdName, namespace, pointer.Int32Ptr(1))
+		podIppoolAnnoStr := common.GeneratePodIPPoolAnnotations(frame, common.NIC1, globalDefaultV4IpoolList, globalDefaultV6IpoolList)
+		jd.Spec.Template.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 		switch behavior {
 		case common.JobTypeFail:
 			jd.Spec.Template.Spec.Containers[0].Command = []string{"/bin/sh", "-c", jobHoldDuration + "exit 1"}
@@ -73,7 +75,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 						continue OUTER
 					}
 					GinkgoWriter.Printf("Confirm that the job has been assigned to the IP address \n")
-					ok, _, _, err := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podList)
+					ok, _, _, err := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podList)
 					if !ok || err != nil {
 						continue OUTER
 					}
@@ -109,7 +111,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 		Expect(podlist.Items).NotTo(HaveLen(0))
 
 		GinkgoWriter.Println("The IP should be reclaimed for the job pod finished with success or failure Status")
-		Expect(common.WaitIPReclaimedFinish(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podlist, time.Minute*2)).To(Succeed())
+		Expect(common.WaitIPReclaimedFinish(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podlist, time.Minute*2)).To(Succeed())
 
 		GinkgoWriter.Printf("delete job: %v \n", jdName)
 		Expect(frame.DeleteJob(jdName, namespace)).NotTo(HaveOccurred(), "failed to delete job: %v \n", jdName)
@@ -132,6 +134,8 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 		for _, ns := range namespaces {
 			// Create pods with the same name in different namespaces
 			podYaml := common.GenerateExamplePodYaml(podName, ns)
+			podIppoolAnnoStr := common.GeneratePodIPPoolAnnotations(frame, common.NIC1, globalDefaultV4IpoolList, globalDefaultV6IpoolList)
+			podYaml.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(podYaml).NotTo(BeNil())
 			pod, _, _ := common.CreatePodUntilReady(frame, podYaml, podName, ns, common.PodStartTimeout)
 			Expect(pod).NotTo(BeNil(), "Failed to create Pod")
@@ -153,7 +157,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 
 		// Another Pod in namespace1 with the same name has a normal status and IP
 		Expect(frame.CheckPodListIpReady(podList)).NotTo(HaveOccurred())
-		ok, _, _, err := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podList)
+		ok, _, _, err := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podList)
 		Expect(err).NotTo(HaveOccurred(), "error: %v\n", err)
 		Expect(ok).To(BeTrue())
 
@@ -164,7 +168,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 		GinkgoWriter.Printf("Successfully deleted namespace %v \n", namespace1)
 
 		// Check that the Pod IPs in the IPPool are reclaimed properly after deleting the namespace（namespace1）
-		Expect(common.WaitIPReclaimedFinish(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podList, common.IPReclaimTimeout)).To(Succeed())
+		Expect(common.WaitIPReclaimedFinish(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podList, common.IPReclaimTimeout)).To(Succeed())
 	})
 
 	It("the IP can be reclaimed after its deployment, statefulSet, daemonSet, replicaSet, or job is deleted, even when CNI binary is gone on the host",
@@ -191,6 +195,8 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// Create different controller resources
 			// Generate example podYaml and create Pod
 			podYaml := common.GenerateExamplePodYaml(podName, namespace)
+			podIppoolAnnoStr := common.GeneratePodIPPoolAnnotations(frame, common.NIC1, globalDefaultV4IpoolList, globalDefaultV6IpoolList)
+			podYaml.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(podYaml).NotTo(BeNil())
 			GinkgoWriter.Printf("try to create Pod %v/%v \n", namespace, podName)
 			Expect(frame.CreatePod(podYaml)).NotTo(HaveOccurred(), "failed to create Pod %v/%v \n", namespace, podName)
@@ -198,6 +204,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// Generate example StatefulSet yaml and create StatefulSet
 			GinkgoWriter.Printf("Generate example StatefulSet %v/%v yaml \n", namespace, stsName)
 			stsYaml := common.GenerateExampleStatefulSetYaml(stsName, namespace, stsReplicasNum)
+			stsYaml.Spec.Template.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(stsYaml).NotTo(BeNil(), "failed to generate example %v/%v yaml \n", namespace, stsName)
 			GinkgoWriter.Printf("Tty to create StatefulSet %v/%v \n", namespace, stsName)
 			Expect(frame.CreateStatefulSet(stsYaml)).To(Succeed(), "failed to create StatefulSet %v/%v \n", namespace, stsName)
@@ -205,6 +212,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// Generate example daemonSet yaml and create daemonSet
 			GinkgoWriter.Printf("Generate example daemonSet %v/%v yaml\n", namespace, dsName)
 			dsYaml := common.GenerateExampleDaemonSetYaml(dsName, namespace)
+			dsYaml.Spec.Template.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(dsYaml).NotTo(BeNil(), "failed to generate example daemonSet %v/%v yaml\n", namespace, dsName)
 			GinkgoWriter.Printf("Try to create daemonSet %v/%v \n", namespace, dsName)
 			Expect(frame.CreateDaemonSet(dsYaml)).To(Succeed(), "failed to create daemonSet %v/%v \n", namespace, dsName)
@@ -212,6 +220,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// Generate example replicaSet yaml and create replicaSet
 			GinkgoWriter.Printf("Generate example replicaSet %v/%v yaml \n", namespace, rsName)
 			rsYaml := common.GenerateExampleReplicaSetYaml(rsName, namespace, rsReplicasNum)
+			rsYaml.Spec.Template.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(rsYaml).NotTo(BeNil(), "failed to generate replicaSet example %v/%v yaml \n", namespace, rsName)
 			GinkgoWriter.Printf("Try to create replicaSet %v/%v \n", namespace, rsName)
 			Expect(frame.CreateReplicaSet(rsYaml)).To(Succeed(), "failed to create replicaSet %v/%v \n", namespace, rsName)
@@ -219,6 +228,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// Generate example Deployment yaml and create Deployment
 			GinkgoWriter.Printf("Generate example deployment %v/%v yaml \n", namespace, deployName)
 			deployYaml := common.GenerateExampleDeploymentYaml(deployName, namespace, depReplicasNum)
+			deployYaml.Spec.Template.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(deployYaml).NotTo(BeNil(), "failed to generate deployment example %v/%v yaml \n", namespace, deployName)
 			GinkgoWriter.Printf("Try to create deployment %v/%v \n", namespace, deployName)
 			Expect(frame.CreateDeployment(deployYaml)).NotTo(HaveOccurred())
@@ -226,6 +236,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// Generate example job yaml and create Job resource
 			GinkgoWriter.Printf("Generate example job %v/%v yaml\n", namespace, jobName)
 			jobYaml := common.GenerateExampleJobYaml(common.JobTypeRunningForever, jobName, namespace, &jobNum)
+			jobYaml.Spec.Template.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			Expect(jobYaml).NotTo(BeNil(), "failed to generate job example %v/%v yaml \n", namespace, jobName)
 			GinkgoWriter.Printf("Try to create job %v/%v \n", namespace, jobName)
 			Expect(frame.CreateJob(jobYaml)).To(Succeed(), "failed to create job %v/%v \n", namespace, jobName)
@@ -256,7 +267,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			// E00001、E00002、E00003、E00004、E00005、E00006
 			// Check the resource ip information in ippool is correct
 			GinkgoWriter.Printf("check the ip information of resources in the nippool is correct \n", namespace)
-			ok, _, _, err := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podList)
+			ok, _, _, err := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podList)
 			Expect(err).NotTo(HaveOccurred(), "failed to check ip recorded in ippool, err: %v\n", err)
 			Expect(ok).To(BeTrue())
 
@@ -298,7 +309,7 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 			Expect(frame.DeletePodList(podList, opt)).To(Succeed(), "failed to delete podList\n")
 
 			// Check that the IP in the IPPool has been reclaimed correctly.
-			Expect(common.WaitIPReclaimedFinish(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podList, common.IPReclaimTimeout)).To(Succeed())
+			Expect(common.WaitIPReclaimedFinish(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podList, common.IPReclaimTimeout)).To(Succeed())
 			GinkgoWriter.Println("Delete resource with 0 second grace period where the IP of the resource is correctly reclaimed")
 
 			// restore cni bin

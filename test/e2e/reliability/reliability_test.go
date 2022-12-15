@@ -53,6 +53,8 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 			// create pod when component is unstable
 			GinkgoWriter.Printf("create pod %v/%v when %v is unstable \n", namespace, podName, componentName)
 			podYaml := common.GenerateExamplePodYaml(podName, namespace)
+			podIppoolAnnoStr := common.GeneratePodIPPoolAnnotations(frame, common.NIC1, globalDefaultV4IpoolList, globalDefaultV6IpoolList)
+			podYaml.Annotations = map[string]string{constant.AnnoPodIPPool: podIppoolAnnoStr}
 			e = frame.CreatePod(podYaml)
 			Expect(e).NotTo(HaveOccurred())
 
@@ -79,7 +81,7 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 			GinkgoWriter.Printf("pod: %v/%v, ips: %+v \n", namespace, podName, pod.Status.PodIPs)
 
 			// Check the Pod's IP recorded IPPool
-			ok, _, _, err := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, &corev1.PodList{Items: []corev1.Pod{*pod}})
+			ok, _, _, err := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, &corev1.PodList{Items: []corev1.Pod{*pod}})
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ok).To(BeTrue())
 			wg.Wait()
@@ -89,7 +91,7 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 			Expect(frame.DeletePod(podName, namespace)).NotTo(HaveOccurred())
 			// G00008: The Spiderpool component recovery from repeated reboot, and could correctly reclaim IP
 			if componentName == constant.SpiderpoolAgent || componentName == constant.SpiderpoolController {
-				Expect(common.WaitIPReclaimedFinish(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, &corev1.PodList{Items: []corev1.Pod{*pod}}, common.IPReclaimTimeout)).To(Succeed())
+				Expect(common.WaitIPReclaimedFinish(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, &corev1.PodList{Items: []corev1.Pod{*pod}}, common.IPReclaimTimeout)).To(Succeed())
 			}
 		},
 		Entry("Successfully run a pod during the ETCD is restarting",
@@ -127,10 +129,10 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 			Expect(err1).ShouldNot(HaveOccurred())
 
 			// Check if the IP exists in the IPPool before restarting the node
-			isRecord1, _, _, err2 := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, podList)
+			isRecord1, _, _, err2 := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, podList)
 			Expect(isRecord1).Should(BeTrue())
 			Expect(err2).ShouldNot(HaveOccurred())
-			GinkgoWriter.Printf("Pod IP recorded in IPPool %v,%v \n", ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList)
+			GinkgoWriter.Printf("Pod IP recorded in IPPool %v,%v \n", globalDefaultV4IpoolList, globalDefaultV6IpoolList)
 
 			// Send a cmd to restart the node and check the cluster until it is ready
 			ctx, cancel := context.WithTimeout(context.Background(), common.PodReStartTimeout)
@@ -150,10 +152,10 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 			Expect(err5).ShouldNot(HaveOccurred())
 
 			// After restarting the node, check that the IP is still recorded in the ippool.
-			isRecord2, _, _, err6 := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList, restartPodList)
+			isRecord2, _, _, err6 := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, restartPodList)
 			Expect(isRecord2).Should(BeTrue())
 			Expect(err6).ShouldNot(HaveOccurred())
-			GinkgoWriter.Printf("After restarting the node, the IP recorded in the ippool: %v ,%v", ClusterDefaultV4IpoolList, ClusterDefaultV6IpoolList)
+			GinkgoWriter.Printf("After restarting the node, the IP recorded in the ippool: %v ,%v", globalDefaultV4IpoolList, globalDefaultV6IpoolList)
 
 			// Try to delete Deployment and Daemonset
 			Expect(frame.DeleteDeployment(podName, namespace)).NotTo(HaveOccurred())

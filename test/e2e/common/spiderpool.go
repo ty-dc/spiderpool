@@ -338,6 +338,39 @@ func GetClusterDefaultIppool(f *frame.Framework) (v4IppoolList, v6IppoolList []s
 	return conf.ClusterDefaultIPv4IPPool, conf.ClusterDefaultIPv6IPPool, nil
 }
 
+func GetClusterDefaultSubnet(f *frame.Framework) (v4SubnetList, v6SubnetList []string, e error) {
+	if f == nil {
+		return nil, nil, errors.New("wrong input")
+	}
+
+	configMap, e := f.GetConfigmap(SpiderPoolConfigmapName, SpiderPoolConfigmapNameSpace)
+	if e != nil {
+		return nil, nil, e
+	}
+	GinkgoWriter.Printf("configmap: %+v \n", configMap.Data)
+
+	data, ok := configMap.Data["conf.yml"]
+	if !ok || len(data) == 0 {
+		return nil, nil, errors.New("failed to find cluster default subnet")
+	}
+
+	conf := cmd.Config{}
+	if err := yaml.Unmarshal([]byte(data), &conf); nil != err {
+		GinkgoWriter.Printf("failed to decode yaml config: %v \n", data)
+		return nil, nil, errors.New("failed to find cluster default subnet")
+	}
+	GinkgoWriter.Printf("yaml config: %v \n", conf)
+
+	if conf.EnableIPv4 && len(conf.ClusterDefaultIPv4Subnet) == 0 {
+		return nil, nil, errors.New("IPv4 Subnet is not specified when IPv4 is enabled")
+	}
+	if conf.EnableIPv6 && len(conf.ClusterDefaultIPv6Subnet) == 0 {
+		return nil, nil, errors.New("IPv6 Subnet is not specified when IPv6 is enabled")
+	}
+
+	return conf.ClusterDefaultIPv4Subnet, conf.ClusterDefaultIPv6Subnet, nil
+}
+
 func GetNamespaceDefaultIppool(f *frame.Framework, namespace string) (v4IppoolList, v6IppoolList []string, e error) {
 	ns, err := f.GetNamespace(namespace)
 	if err != nil {

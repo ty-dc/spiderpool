@@ -24,6 +24,7 @@ var _ = Describe("test annotation", Label("annotation"), func() {
 	var nsName, podName string
 	var v4SubnetName, v6SubnetName string
 	var v4SubnetObject, v6SubnetObject *spiderpool.SpiderSubnet
+
 	BeforeEach(func() {
 		if frame.Info.SpiderSubnetEnabled {
 			if frame.Info.IpV4Enabled {
@@ -266,21 +267,17 @@ var _ = Describe("test annotation", Label("annotation"), func() {
 			DeferCleanup(func() {
 				GinkgoWriter.Printf("Try to delete v4Pool %v, v6Pool %v. \n", v4PoolNameList, v6PoolNameList)
 				if frame.Info.IpV4Enabled {
-					for _, pool := range v4PoolNameList {
-						Expect(common.DeleteIPPoolByName(frame, pool)).NotTo(HaveOccurred())
-					}
+					Expect(common.DeleteIPPoolByName(frame, v4PoolName)).NotTo(HaveOccurred())
 				}
 				if frame.Info.IpV6Enabled {
-					for _, pool := range v6PoolNameList {
-						Expect(common.DeleteIPPoolByName(frame, pool)).NotTo(HaveOccurred())
-					}
+					Expect(common.DeleteIPPoolByName(frame, v6PoolName)).NotTo(HaveOccurred())
 				}
 			})
 		})
 
 		It(`the "ippools" annotation has the higher priority over the "ippool" annotation`, Label("A00005"), func() {
 			// Generate IPPool annotation string
-			podIppoolAnnoStr = common.GeneratePodIPPoolAnnotations(frame, common.NIC1, ClusterDefaultV4IppoolList, ClusterDefaultV6IppoolList)
+			podIppoolAnnoStr = common.GeneratePodIPPoolAnnotations(frame, common.NIC1, globalDefaultV4IpoolList, globalDefaultV6IpoolList)
 			// Generate IPPools annotation string
 			podIppoolsAnnoStr = common.GeneratePodIPPoolsAnnotations(frame, common.NIC1, cleanGateway, v4PoolNameList, v6PoolNameList)
 
@@ -408,9 +405,11 @@ var _ = Describe("test annotation", Label("annotation"), func() {
 
 			It(`the namespace annotation has precedence over global default ippool`, Label("A00006", "smoke"), func() {
 				// Generate a pod yaml with namespace annotations
+				if frame.Info.SpiderSubnetEnabled {
+					Skip("The subnet function is enabled, the namespace annotation has a lower priority than the default subnet")
+				}
 				podYaml := common.GenerateExamplePodYaml(podName, nsName)
 				Expect(podYaml).NotTo(BeNil())
-
 				// The namespace annotation has precedence over global default ippool
 				checkAnnotationPriority(podYaml, podName, nsName, v4PoolNameList, v6PoolNameList)
 			})
@@ -670,11 +669,11 @@ var _ = Describe("test annotation", Label("annotation"), func() {
 			},
 		}
 		if frame.Info.IpV4Enabled {
-			podIppoolsAnno[0].IPv4Pools = ClusterDefaultV4IppoolList
+			podIppoolsAnno[0].IPv4Pools = globalDefaultV4IpoolList
 			podIppoolsAnno[1].IPv4Pools = []string{v4PoolName}
 		}
 		if frame.Info.IpV6Enabled {
-			podIppoolsAnno[0].IPv6Pools = ClusterDefaultV6IppoolList
+			podIppoolsAnno[0].IPv6Pools = globalDefaultV6IpoolList
 			podIppoolsAnno[1].IPv6Pools = []string{v6PoolName}
 		}
 		podIppoolsAnnoMarshal, err := json.Marshal(podIppoolsAnno)
@@ -697,7 +696,7 @@ var _ = Describe("test annotation", Label("annotation"), func() {
 		Expect(pod).NotTo(BeNil())
 
 		GinkgoWriter.Println("Check if multiple NICs are valid.")
-		ok, _, _, err := common.CheckPodIpRecordInIppool(frame, ClusterDefaultV4IppoolList, ClusterDefaultV6IppoolList, &corev1.PodList{Items: []corev1.Pod{*pod}})
+		ok, _, _, err := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IpoolList, globalDefaultV6IpoolList, &corev1.PodList{Items: []corev1.Pod{*pod}})
 		Expect(ok).NotTo(BeFalse())
 		Expect(err).NotTo(HaveOccurred())
 
