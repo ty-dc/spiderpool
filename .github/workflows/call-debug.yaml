@@ -8,6 +8,8 @@ on:
         required: true
         default: main
 
+permissions: write-all
+
 jobs:
   call_debug:
     runs-on: ubuntu-latest
