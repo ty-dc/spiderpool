@@ -31,9 +31,10 @@ jobs:
           fetch-depth: 0
           ref: ${{ steps.get_ref.outputs.ref }}
 
-      - name: debug
-        uses: ./.github/workflows/call-release-doc.yaml
-        with:
-          ref: ${{ steps.get_ref.outputs.ref }}
-          submit: false
-          secrets: inherit
+  debug-doc:
+    needs: call_debug
+    uses: ./.github/workflows/call-release-doc.yaml
+    with:
+      ref: ${{ needs.get_ref.outputs.ref }}
+      submit: false
+    secrets: inherit
