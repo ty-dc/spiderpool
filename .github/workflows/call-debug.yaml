@@ -1,0 +1,37 @@
+name: call debug
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'sha, tag, branch'
+        required: true
+        default: main
+
+jobs:
+  call_debug:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Ref
+        id: get_ref
+        run: |
+          if ${{ github.event_name == 'workflow_dispatch' }} ; then
+              echo "trigger by workflow_dispatch"
+              echo ::set-output name=ref::${{ github.event.inputs.ref }}
+          else
+              echo "trigger by ${{ github.event_name }}"
+              echo ::set-output name=ref::${{ github.event.pull_request.head.sha }}
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.get_ref.outputs.ref }}
+
+      - name: call_debug
+        uses: ./.github/workflows/call-release-doc.yaml
+        with:
+          ref: ${{ steps.get_ref.outputs.ref }}
+          submit: false
+          secrets: inherit
