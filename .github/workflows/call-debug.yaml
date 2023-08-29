@@ -11,6 +11,8 @@ on:
 jobs:
   call_debug:
     runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.get_ref.outputs.ref }}
     steps:
       - name: Get Ref
         id: get_ref
@@ -29,7 +31,7 @@ jobs:
           fetch-depth: 0
           ref: ${{ steps.get_ref.outputs.ref }}
 
-      - name: call_debug
+      - name: debug
         uses: ./.github/workflows/call-release-doc.yaml
         with:
           ref: ${{ steps.get_ref.outputs.ref }}
