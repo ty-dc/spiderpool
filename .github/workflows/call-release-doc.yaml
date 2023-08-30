@@ -112,6 +112,13 @@ jobs:
           else
               echo "the version:${{ env.DOCS_TAG }} of the doc does not need to be set to the latest."
               mike deploy --rebase --prefix ${{ env.DEST_DIRECTORY }} -b ${{ env.MERGE_BRANCH }} ${{ env.DOCS_TAG }}
+          if ${{ needs.get_ref.outputs.set_latest == 'true' }} ;then
+              echo "generate doc version:${{ needs.get_ref.outputs.docs_tag }} and set to latest."
+              mike deploy --rebase --prefix ${{ env.DEST_DIRECTORY }} -b ${{ env.MERGE_BRANCH }} --update-aliases ${{ needs.get_ref.outputs.docs_tag }} latest
+              mike set-default --prefix ${{ env.DEST_DIRECTORY }} -b ${{ env.MERGE_BRANCH }} latest
+          else
+              echo "the version:${{ needs.get_ref.outputs.docs_tag }} of the doc does not need to be set to the latest."
+              mike deploy --rebase --prefix ${{ env.DEST_DIRECTORY }} -b ${{ env.MERGE_BRANCH }} ${{ needs.get_ref.outputs.docs_tag }}
           fi
           rm -rf ./site
           rm -rf ./mkdocs.yml
