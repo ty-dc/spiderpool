@@ -36,9 +36,9 @@ if ! kind &> /dev/null ; then
     if [ -z "$JUST_CLI_CHECK" ] ; then
         echo "try to install it"
         if [ -z $http_proxy ]; then
-          curl -Lo /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.12.0/kind-$OS-amd64
+          curl -Lo /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/$(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')/kind-$OS-amd64
         else
-          curl -x $http_proxy -Lo /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/v0.12.0/kind-$OS-amd64
+          curl -x $http_proxy -Lo -Lo /usr/local/bin/kind https://github.com/kubernetes-sigs/kind/releases/download/$(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')/kind-$OS-amd64
         fi
         chmod +x /usr/local/bin/kind
         ! kind -h  &>/dev/null && echo "error, failed to install kind" && exit 1
