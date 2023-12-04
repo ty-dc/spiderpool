@@ -6,53 +6,48 @@ Kind 是一个使用 Docker 容器节点运行本地 Kubernetes 集群的工具�
 
 ## 先决条件
 
-* 已安装 [Go](https://go.dev/)
-
-* 克隆 Spiderpool 代码仓库到本地主机上，并进入 Spiderpool 工程的根目录。
+* 获取 Spiderpool 稳定版本的代码到本地主机上，并进入 Spiderpool 工程的根目录。
 
     ```bash
-    git clone https://github.com/spidernet-io/spiderpool.git && cd spiderpool
+    ~# LATEST_RELEASE_VERISON=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | grep '"tag_name":' | grep -v rc | grep -Eo "(v[0-9]+\.[0-9]+\.[0-9])" | sort -r | head -n 1)
+    ~# curl -Lo /tmp/$LATEST_RELEASE_VERISON.tar.gz https://github.com/spidernet-io/spiderpool/archive/refs/tags/$LATEST_RELEASE_VERISON.tar.gz
+    ~# mkdir -p /tmp/spiderpool && tar -xvf /tmp/$LATEST_RELEASE_VERISON.tar.gz -C /tmp/spiderpool
+    ~# cd /tmp/spiderpool
     ```
+  
+* 执行 `make dev-doctor`，检查本地主机上的开发工具是否满足部署 Kind 集群与 Spiderpool 的条件。
 
-* 通过以下方式获取 Spiderpool 的最新镜像 tag
+    构建 Spiderpool 环境需要具备 Kubectl、Kind、Docker、Helm、yq 工具。如果你的本机上缺少，请运行 `test/scripts/install-tools.sh` 来安装它们。
+
+## 快速启动
+
+=== "创建基于 Spiderpool 单 CNI 环境"
+
+    如下命令将创建一个 Macvlan 的单 CNI 网络环境。
 
     ```bash
-    ~# SPIDERPOOL_LATEST_IMAGE_TAG=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | jq -r '.[].tag_name' | head -n 1)
+    ~# make setup_singleCni_macvlan
     ```
 
-* 执行 `make dev-doctor`，检查本地主机上的开发工具是否满足部署 Kind 集群与 Spiderpool 的条件，如果缺少组件会为您自动安装。
+=== "创建基于 Spiderpool 和 Calico 的双 CNI 环境"
 
-## Spiderpool 脚本支持的多种安装模式
+    如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。
+
+    ```bash
+    ~# make setup_dualCni_calico
+    ```
+
+=== "创建基于 Spiderpool 和 Cilium 的双 CNI 环境"
+
+    如下命令将创建一个 Cilium 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。
+
+    ```bash
+    ~# make setup_dualCni_cilium
+    ```
+
+    > 确认操作系统 Kernel 版本号是是否 >= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。
 
 如果您在中国大陆，安装时可以额外指定参数 `-e E2E_CHINA_IMAGE_REGISTRY=true` ，以帮助您更快的拉取镜像。
-
-### 安装 Spiderpool 在 Underlay CNI（Macvlan） 集群
-  
-  ```bash
-  ~# make e2e_init_underlay -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
-
-### 安装 Spiderpool 在 Calico Overlay CNI 集群
-
-  ```bash
-  ~# make e2e_init_overlay_calico -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
-
-### 在启用了 kube-proxy 的 Cilium 集群中安装 Spiderpool
-
-* 确认操作系统 Kernel 版本号是是否 >= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。
-
-  ```bash
-  ~# make e2e_init_overlay_cilium -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
-
-### 在启用了 ebpf 的 Cilium 集群中安装 Spiderpool
-
-* 确认操作系统 Kernel 版本号是是否 >= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。
-
-  ```bash
-  ~# make e2e_init_cilium_with_ebpf -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
 
 ## 验证安装
 
@@ -141,7 +136,7 @@ test-app-84d5699474-dbtl5   1/1     Running   0          6m23s   172.18.40.112  
 
 * 删除测试镜像
 
-    ```bash
-    ~# docker rmi -f $(docker images | grep spiderpool | awk '{print $3}')
-    ~# docker rmi -f $(docker images | grep multus | awk '{print $3}')
-    ```
+  ```bash
+  ~# docker rmi -f $(docker images | grep spiderpool | awk '{print $3}')
+  ~# docker rmi -f $(docker images | grep multus | awk '{print $3}')
+  ```

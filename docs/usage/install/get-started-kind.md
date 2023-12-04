@@ -6,53 +6,48 @@ Kind is a tool for running local Kubernetes clusters using Docker container "nod
 
 ## Prerequisites
 
-* [Go](https://go.dev/) has already been installed.
-
-* Clone the Spiderpool code repository to the local host and go to the root directory of the Spiderpool project.
+* Get the Spiderpool stable version code to the local host and enter the root directory of the Spiderpool project.
 
     ```bash
-    ~# git clone https://github.com/spidernet-io/spiderpool.git && cd spiderpool
+    ~# LATEST_RELEASE_VERISON=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | grep '"tag_name":' | grep -v rc | grep -Eo "(v[0-9]+\.[0-9]+\.[0-9])" | sort -r | head -n 1)
+    ~# curl -Lo /tmp/$LATEST_RELEASE_VERISON.tar.gz https://github.com/spidernet-io/spiderpool/archive/refs/tags/$LATEST_RELEASE_VERISON.tar.gz
+    ~# mkdir -p /tmp/spiderpool && tar -xvf /tmp/$LATEST_RELEASE_VERISON.tar.gz -C /tmp/spiderpool
+    ~# cd /tmp/spiderpool
     ```
 
-* Get the latest image tag of Spiderpool.
+* Execute `make dev-doctor` to check whether the development tools on the local host meet the conditions for deploying Kind cluster and Spiderpool.
+
+    Building a Spiderpool environment requires Kubectl, Kind, Docker, Helm, and yq tools. If they are missing on your machine, run `test/scripts/install-tools.sh` to install them.
+
+## Quick Start
+
+=== "Create a single CNI environment based on Spiderpool"
+
+    The following command will create a Macvlan single-CNI network environment.
 
     ```bash
-    ~# SPIDERPOOL_LATEST_IMAGE_TAG=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | jq -r '.[].tag_name' | head -n 1)
+    ~# make setup_singleCni_macvlan
     ```
 
-* Execute `make dev-doctor` to check that the development tools on the local host meet the conditions for deploying a Kind cluster with Spiderpool, and that the components are automatically installed for you if they are missing.
+=== "Create a dual CNI environment based on Spiderpool and Calico"
 
-## Various installation modes supported by Spiderpool script
+    The following command will create a multi-CNI network environment with Calico as the main CNI and Macvlan.
+
+    ```bash
+    ~# make setup_dualCni_calico
+    ```
+
+=== "Create a dual CNI environment based on Spiderpool and Cilium"
+
+    The following command will create a multi-CNI network environment with Cilium as the main CNI and Macvlan.
+
+    ```bash
+    ~# make setup_dualCni_cilium
+    ```
+
+    > Confirm whether the operating system Kernel version number is >= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.
 
 If you are mainland user who is not available to access ghcr.io, Additional parameter `-e E2E_CHINA_IMAGE_REGISTRY=true` can be specified during installation to help you pull images faster.
-
-### Install Spiderpool in Underlay CNI (Macvlan) cluster
-
-  ```bash
-  ~# make e2e_init_underlay -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
-
-### Install Spiderpool on Calico Overlay CNI cluster
-
-  ```bash
-  ~# make e2e_init_overlay_calico -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
-
-## Install Spiderpool in Cilium cluster with kube-proxy enabled
-
-* Confirm whether the operating system Kernel version number is >= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.
-
-  ```bash
-  ~# make e2e_init_overlay_cilium -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
-
-## Installing Spiderpool in Cilium cluster with ebpf enabled
-
-* Confirm whether the operating system Kernel version number is >= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.
-
-  ```bash
-  ~# make e2e_init_cilium_with_ebpf -e E2E_SPIDERPOOL_TAG=$SPIDERPOOL_LATEST_IMAGE_TAG
-  ```
 
 ## Check that everything is working
 
@@ -124,6 +119,8 @@ spec:
           protocol: TCP
 EOF
 ```
+
+Verify creation
 
 ```bash
 ~# kubectl get po -l app=test-app -o wide
