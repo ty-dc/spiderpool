@@ -13,7 +13,7 @@
     
     
       
-        <title>Macvlan - spiderpool</title>
+        <title>Kind - spiderpool</title>
       
     
     
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Macvlan
+              Kind
             
           </span>
         </div>
@@ -242,8 +242,23 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../readme/" class="md-nav__link">
+      <a href="./" class="md-nav__link">
         Get Started
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../readme/" class="md-nav__link">
+        Index
       </a>
     </li>
   
@@ -262,18 +277,18 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3">
+        <label class="md-nav__link" for="__nav_4">
           Installation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Installation" data-md-level="1">
-        <label class="md-nav__title" for="__nav_3">
+        <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           Installation
         </label>
@@ -290,18 +305,18 @@
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_1" type="checkbox" id="__nav_3_1" checked>
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_1" type="checkbox" id="__nav_4_1" checked>
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_1">
+        <label class="md-nav__link" for="__nav_4_1">
           Underlay Installation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Underlay Installation" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_1">
+        <label class="md-nav__title" for="__nav_4_1">
           <span class="md-nav__icon md-icon"></span>
           Underlay Installation
         </label>
@@ -339,6 +354,48 @@
               
   
   
+  
+    <li class="md-nav__item">
+      <a href="../get-started-macvlan/" class="md-nav__link">
+        Macvlan
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../get-started-ovs/" class="md-nav__link">
+        Ovs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../get-started-sriov/" class="md-nav__link">
+        SR-IOV
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
     
   
   
@@ -351,12 +408,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Macvlan
+          Kind
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Macvlan
+        Kind
       </a>
       
         
@@ -409,8 +466,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-spiderpool-on-cilium-overlay-cni-cluster" class="md-nav__link">
-    Install Spiderpool on Cilium Overlay CNI cluster
+  <a href="#install-spiderpool-in-cilium-cluster-with-kube-proxy-enabled" class="md-nav__link">
+    Install Spiderpool in Cilium cluster with kube-proxy enabled
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-spiderpool-in-cilium-cluster-with-ebpf-enabled" class="md-nav__link">
+    Installing Spiderpool in Cilium cluster with ebpf enabled
   </a>
   
 </li>
@@ -438,34 +502,6 @@
 
             
           
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../get-started-ovs/" class="md-nav__link">
-        Ovs
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../get-started-sriov/" class="md-nav__link">
-        SR-IOV
-      </a>
-    </li>
-  
-
-            
-          
         </ul>
       </nav>
     </li>
@@ -482,18 +518,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" type="checkbox" id="__nav_3_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_2" type="checkbox" id="__nav_4_2" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_2">
+        <label class="md-nav__link" for="__nav_4_2">
           Overlay Installation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Overlay Installation" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_2">
+        <label class="md-nav__title" for="__nav_4_2">
           <span class="md-nav__icon md-icon"></span>
           Overlay Installation
         </label>
@@ -543,18 +579,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" type="checkbox" id="__nav_3_3" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4_3" type="checkbox" id="__nav_4_3" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_3_3">
+        <label class="md-nav__link" for="__nav_4_3">
           Public Cloud Installation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Public Cloud Installation" data-md-level="2">
-        <label class="md-nav__title" for="__nav_3_3">
+        <label class="md-nav__title" for="__nav_4_3">
           <span class="md-nav__icon md-icon"></span>
           Public Cloud Installation
         </label>
@@ -568,6 +604,20 @@
     <li class="md-nav__item">
       <a href="../../cloud/get-started-alibaba/" class="md-nav__link">
         Alibaba Cloud
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cloud/get-started-aws/" class="md-nav__link">
+        AWS Cloud
       </a>
     </li>
   
@@ -640,18 +690,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_4" type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_4">
+        <label class="md-nav__link" for="__nav_5">
           Usage
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Usage" data-md-level="1">
-        <label class="md-nav__title" for="__nav_4">
+        <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
           Usage
         </label>
@@ -677,8 +727,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ippool-namespace/" class="md-nav__link">
-        IPAM of IPPool Namespace
+      <a href="../../../spider-ippool/" class="md-nav__link">
+        IPAM of SpiderIPPool
       </a>
     </li>
   
@@ -693,20 +743,6 @@
     <li class="md-nav__item">
       <a href="../../../spider-affinity/" class="md-nav__link">
         IPAM of IPPool Affinity
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ippool-multi/" class="md-nav__link">
-        IPAM of Backup IPPool
       </a>
     </li>
   
@@ -803,8 +839,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../ipv6/" class="md-nav__link">
-        IPv6 Support
+      <a href="../../../cilium-chaining/" class="md-nav__link">
+        Network Policy Support
       </a>
     </li>
   
@@ -819,48 +855,6 @@
     <li class="md-nav__item">
       <a href="../../../route/" class="md-nav__link">
         Route Support
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../service/" class="md-nav__link">
-        Service Support
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../coordinator/" class="md-nav__link">
-        Plugin coordinator
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../ifacer/" class="md-nav__link">
-        Plugin ifacer
       </a>
     </li>
   
@@ -901,6 +895,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../underlay_cni_service/" class="md-nav__link">
+        Access Service for Underlay CNI
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../kubevirt/" class="md-nav__link">
         Kubevirt
       </a>
@@ -915,7 +923,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../debug/" class="md-nav__link">
+      <a href="../../../faq/" class="md-nav__link">
         FAQ
       </a>
     </li>
@@ -940,18 +948,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5">
+        <label class="md-nav__link" for="__nav_6">
           Concepts
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Concepts" data-md-level="1">
-        <label class="md-nav__title" for="__nav_5">
+        <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
           Concepts
         </label>
@@ -977,7 +985,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../concepts/ipam/" class="md-nav__link">
+      <a href="../../../../concepts/ipam-des/" class="md-nav__link">
         IPAM
       </a>
     </li>
@@ -993,6 +1001,20 @@
     <li class="md-nav__item">
       <a href="../../../../concepts/ipam-performance/" class="md-nav__link">
         IPAM Performance
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../concepts/coordinator/" class="md-nav__link">
+        Plugin coordinator
       </a>
     </li>
   
@@ -1044,18 +1066,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_6">
+        <label class="md-nav__link" for="__nav_7">
           Reference
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Reference" data-md-level="1">
-        <label class="md-nav__title" for="__nav_6">
+        <label class="md-nav__title" for="__nav_7">
           <span class="md-nav__icon md-icon"></span>
           Reference
         </label>
@@ -1221,22 +1243,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../../reference/plugin-coordinator/" class="md-nav__link">
-        Coordinatorr plugin
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../../../reference/plugin-ifacer/" class="md-nav__link">
-        ifacer plugin
+        Ifacer plugin
       </a>
     </li>
   
@@ -1274,18 +1282,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_7">
+        <label class="md-nav__link" for="__nav_8">
           Development
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Development" data-md-level="1">
-        <label class="md-nav__title" for="__nav_7">
+        <label class="md-nav__title" for="__nav_8">
           <span class="md-nav__icon md-icon"></span>
           Development
         </label>
@@ -1428,8 +1436,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#install-spiderpool-on-cilium-overlay-cni-cluster" class="md-nav__link">
-    Install Spiderpool on Cilium Overlay CNI cluster
+  <a href="#install-spiderpool-in-cilium-cluster-with-kube-proxy-enabled" class="md-nav__link">
+    Install Spiderpool in Cilium cluster with kube-proxy enabled
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installing-spiderpool-in-cilium-cluster-with-ebpf-enabled" class="md-nav__link">
+    Installing Spiderpool in Cilium cluster with ebpf enabled
   </a>
   
 </li>
@@ -1485,8 +1500,8 @@
 </code></pre></div>
 </li>
 <li>
-<p>Get the latest image of Spiderpool.</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nv">SPIDERPOOL_LATEST_IMAGE_TAG</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/spidernet-io/spiderpool/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.[].tag_name | select((&quot;^v1.[0-9]*.[0-9]*$&quot;))&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+<p>Get the latest image tag of Spiderpool.</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nv">SPIDERPOOL_LATEST_IMAGE_TAG</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/spidernet-io/spiderpool/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.[].tag_name&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
 </code></pre></div>
 </li>
 <li>
@@ -1501,8 +1516,17 @@
 <h3 id="install-spiderpool-on-calico-overlay-cni-cluster">Install Spiderpool on Calico Overlay CNI cluster</h3>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>e2e_init_overlay_calico<span class="w"> </span>-e<span class="w"> </span><span class="nv">E2E_SPIDERPOOL_TAG</span><span class="o">=</span><span class="nv">$SPIDERPOOL_LATEST_IMAGE_TAG</span>
 </code></pre></div>
-<h2 id="install-spiderpool-on-cilium-overlay-cni-cluster">Install Spiderpool on Cilium Overlay CNI cluster</h2>
+<h2 id="install-spiderpool-in-cilium-cluster-with-kube-proxy-enabled">Install Spiderpool in Cilium cluster with kube-proxy enabled</h2>
+<ul>
+<li>Confirm whether the operating system Kernel version number is &gt;= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.</li>
+</ul>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>e2e_init_overlay_cilium<span class="w"> </span>-e<span class="w"> </span><span class="nv">E2E_SPIDERPOOL_TAG</span><span class="o">=</span><span class="nv">$SPIDERPOOL_LATEST_IMAGE_TAG</span>
+</code></pre></div>
+<h2 id="installing-spiderpool-in-cilium-cluster-with-ebpf-enabled">Installing Spiderpool in Cilium cluster with ebpf enabled</h2>
+<ul>
+<li>Confirm whether the operating system Kernel version number is &gt;= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>e2e_init_cilium_with_ebpf<span class="w"> </span>-e<span class="w"> </span><span class="nv">E2E_SPIDERPOOL_TAG</span><span class="o">=</span><span class="nv">$SPIDERPOOL_LATEST_IMAGE_TAG</span>
 </code></pre></div>
 <h2 id="check-that-everything-is-working">Check that everything is working</h2>
 <p>Execute the following command in the root directory of the Spiderpool project to configure KUBECONFIG for the Kind cluster for kubectl.</p>
@@ -1605,7 +1629,7 @@ test-app-84d5699474-dbtl5<span class="w">   </span><span class="m">1</span>/1<sp
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../get-started-weave/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Weave" rel="prev">
+        <a href="../get-started-sriov/" class="md-footer__link md-footer__link--prev" aria-label="Previous: SR-IOV" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1614,20 +1638,20 @@ test-app-84d5699474-dbtl5<span class="w">   </span><span class="m">1</span>/1<sp
               <span class="md-footer__direction">
                 Previous
               </span>
-              Weave
+              SR-IOV
             </div>
           </div>
         </a>
       
       
         
-        <a href="../get-started-ovs/" class="md-footer__link md-footer__link--next" aria-label="Next: Ovs" rel="next">
+        <a href="../../overlay/get-started-calico/" class="md-footer__link md-footer__link--next" aria-label="Next: Calico" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Ovs
+              Calico
             </div>
           </div>
           <div class="md-footer__button md-icon">
