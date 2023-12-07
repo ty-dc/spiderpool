@@ -1357,29 +1357,42 @@
 </li>
 </ul>
 <h2 id="_2">快速启动</h2>
+<p>如果您在中国大陆，安装时可以额外指定参数 <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> ，以帮助您更快的拉取镜像。</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">创建基于 Spiderpool 单 CNI 环境</label><label for="__tabbed_1_2">创建基于 Spiderpool 和 Calico 的双 CNI 环境</label><label for="__tabbed_1_3">创建基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <p>如下命令将创建一个 Macvlan 的单 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_singleCni_macvlan
 </code></pre></div>
+<p>在该场景下，你可以通过简易运维，即可让应用可分配到固定的 Underlay IP 地址，同时 Pod 能够通过 Pod IP、clusterIP、nodePort 等方式通信。</p>
 </div>
 <div class="tabbed-block">
-<p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。</p>
+<p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的双 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
+<p>在这个场景下，你可以体验 Pod 可以具备双 CNI 网卡的效果。在该环境中 Calico作为集群的缺省 CNI，通过 Multus 为 Pod 额外附加一张由 <code>Macvlan</code> 创建的网卡，并通过 <code>coordinator</code> 解决 Pod 多网卡之间路由调协问题。该方案可实现 Pod 访问集群内东西向流量从 Calico 创建的网卡转发(eth0)， 它的好处是：</p>
+<ul>
+<li>当 Pod 附加了 Calico 和 Macvlan 多张网卡时，帮助解决 Macvlan 访问 ClusterIP 的问题</li>
+<li>集群外部访问 NodePort 时，可借助 Calico 数据路径进行转发，无需外部路由。否则 Macvlan 作为 CNI 时，只能借助外部路由转发才能实现。</li>
+<li>当 Pod 附加了 Calico 和 Macvlan 多张网卡时，调谐 Pod 的子网路由，保证 Pod 访问时来回路径一致，确保网络联通性正常。</li>
+</ul>
 </div>
 <div class="tabbed-block">
 <p>如下命令将创建一个 Cilium 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_cilium
-</code></pre></div>
 <blockquote>
 <p>确认操作系统 Kernel 版本号是是否 &gt;= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。</p>
 </blockquote>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_cilium
+</code></pre></div>
+<p>在这个场景下，你可以体验 Pod 可以具备双 CNI 网卡的效果。在该环境中 Cilium 作为集群的缺省 CNI，通过 Multus 为 Pod 额外附加一张由 <code>Macvlan</code> 创建的网卡，并通过 <code>coordinator</code> 解决 Pod 多网卡之间路由调协问题。该方案可实现 Pod 访问集群内东西向流量从 Cilium 创建的网卡转发(eth0)， 它的好处是：</p>
+<ul>
+<li>当 Pod 附加了 Cilium 和 Macvlan 多张网卡时，帮助解决 Macvlan 访问 ClusterIP 的问题</li>
+<li>集群外部访问 NodePort 时，可借助 Cilium 数据路径进行转发，无需外部路由。否则 Macvlan 作为 CNI 时，只能借助外部路由转发才能实现。</li>
+<li>当 Pod 附加了 Cilium 和 Macvlan 多张网卡时，调谐 Pod 的子网路由，保证 Pod 访问时来回路径一致，确保网络联通性正常。</li>
+</ul>
 </div>
 </div>
 </div>
-<p>如果您在中国大陆，安装时可以额外指定参数 <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> ，以帮助您更快的拉取镜像。</p>
 <h2 id="_3">验证安装</h2>
 <p>在 Spiderpool 工程的根目录下执行如下命令，为 kubectl 配置 Kind 集群的 KUBECONFIG。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/test/.cluster/spider/.kube/config
@@ -1413,6 +1426,9 @@ NAME<span class="w">                       </span>READY<span class="w">   </span
 test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>5m34s<span class="w">   </span><span class="m">172</span>.18.40.63<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
 </code></pre></div>
 <p>您也可以手动创建应用验证 Kind 集群是否能够正常工作，以下命令会创建 1 个副本 Deployment：</p>
+<ul>
+<li><code>k8s.v1.cni.cncf.io/networks</code>：该注解会为应用额外增加一张网卡，应用将拥有两张网卡，默认网卡为集群缺省的 CNI Macvlan、Calico 或 Cilium 配置，新增网卡为 Underlay Macvlan 配置。</li>
+</ul>
 <div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
 <span class="s">apiVersion: apps/v1</span>
 <span class="s">kind: Deployment</span>
@@ -1427,6 +1443,8 @@ test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<spa
 <span class="s">    metadata:</span>
 <span class="s">      labels:</span>
 <span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-vlan0</span>
 <span class="s">    spec:</span>
 <span class="s">      containers:</span>
 <span class="s">      - name: test-app</span>
@@ -1451,11 +1469,11 @@ test-app-84d5699474-dbtl5<span class="w">   </span><span class="m">1</span>/1<sp
 </li>
 <li>
 <p>删除测试镜像</p>
-</li>
-</ul>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>docker<span class="w"> </span>rmi<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>images<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>spiderpool<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $3}&#39;</span><span class="k">)</span>
 ~#<span class="w"> </span>docker<span class="w"> </span>rmi<span class="w"> </span>-f<span class="w"> </span><span class="k">$(</span>docker<span class="w"> </span>images<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>multus<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $3}&#39;</span><span class="k">)</span>
 </code></pre></div>
+</li>
+</ul>
 
 
 
