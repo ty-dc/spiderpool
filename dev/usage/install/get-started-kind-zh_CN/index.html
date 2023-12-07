@@ -1370,7 +1370,7 @@
 <p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的双 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
-<p>在这个场景下，你可以体验 Pod 可以具备双 CNI 网卡的效果。在该环境中 Calico作为集群的缺省 CNI，通过 Multus 为 Pod 额外附加一张由 <code>Macvlan</code> 创建的网卡，并通过 <code>coordinator</code> 解决 Pod 多网卡之间路由调协问题。该方案可实现 Pod 访问集群内东西向流量从 Calico 创建的网卡转发(eth0)， 它的好处是：</p>
+<p>在这个场景下，你可以体验 Pod 可以具备双 CNI 网卡的效果。在该环境中 Calico 作为集群的缺省 CNI，通过 Multus 为 Pod 额外附加一张由 <code>Macvlan</code> 创建的网卡，并通过 <code>coordinator</code> 解决 Pod 多网卡之间路由调协问题。该方案可实现 Pod 访问集群内东西向流量从 Calico 创建的网卡转发(eth0)， 它的好处是：</p>
 <ul>
 <li>当 Pod 附加了 Calico 和 Macvlan 多张网卡时，帮助解决 Macvlan 访问 ClusterIP 的问题</li>
 <li>集群外部访问 NodePort 时，可借助 Calico 数据路径进行转发，无需外部路由。否则 Macvlan 作为 CNI 时，只能借助外部路由转发才能实现。</li>
@@ -1424,41 +1424,6 @@ vlan200-v6<span class="w">          </span><span class="m">6</span><span class="
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>test-pod<span class="w"> </span>-o<span class="w"> </span>wide
 NAME<span class="w">                       </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">             </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
 test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>5m34s<span class="w">   </span><span class="m">172</span>.18.40.63<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
-</code></pre></div>
-<p>您也可以手动创建应用验证 Kind 集群是否能够正常工作，以下命令会创建 1 个副本 Deployment：</p>
-<ul>
-<li><code>k8s.v1.cni.cncf.io/networks</code>：该注解会为应用额外增加一张网卡，应用将拥有两张网卡，默认网卡为集群缺省的 CNI Macvlan、Calico 或 Cilium 配置，新增网卡为 Underlay Macvlan 配置。</li>
-</ul>
-<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
-<span class="s">apiVersion: apps/v1</span>
-<span class="s">kind: Deployment</span>
-<span class="s">metadata:</span>
-<span class="s">  name: test-app</span>
-<span class="s">spec:</span>
-<span class="s">  replicas: 1</span>
-<span class="s">  selector:</span>
-<span class="s">    matchLabels:</span>
-<span class="s">      app: test-app</span>
-<span class="s">  template:</span>
-<span class="s">    metadata:</span>
-<span class="s">      labels:</span>
-<span class="s">        app: test-app</span>
-<span class="s">      annotations:</span>
-<span class="s">        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-vlan0</span>
-<span class="s">    spec:</span>
-<span class="s">      containers:</span>
-<span class="s">      - name: test-app</span>
-<span class="s">        image: nginx</span>
-<span class="s">        imagePullPolicy: IfNotPresent</span>
-<span class="s">        ports:</span>
-<span class="s">        - name: http</span>
-<span class="s">          containerPort: 80</span>
-<span class="s">          protocol: TCP</span>
-<span class="s">EOF</span>
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>test-app<span class="w"> </span>-o<span class="w"> </span>wide
-NAME<span class="w">                        </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">              </span>NODE<span class="w">                   </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
-test-app-84d5699474-dbtl5<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>6m23s<span class="w">   </span><span class="m">172</span>.18.40.112<span class="w">   </span>spider-control-plane<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
 </code></pre></div>
 <p>通过测试，Kind 集群一切正常，您可以基于它测试与体验 Spiderpool 的更多功能。</p>
 <h2 id="_4">卸载</h2>
