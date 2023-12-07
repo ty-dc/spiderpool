@@ -1357,33 +1357,28 @@
 </li>
 </ul>
 <h2 id="_2">快速启动</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">创建基于 Spiderpool 单 CNI 环境</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">创建基于 Spiderpool 单 CNI 环境</label><label for="__tabbed_1_2">创建基于 Spiderpool 和 Calico 的双 CNI 环境</label><label for="__tabbed_1_3">创建基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
-</div>
-</div>
+<div class="tabbed-block">
 <p>如下命令将创建一个 Macvlan 的单 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_singleCni_macvlan
 </code></pre></div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">创建基于 Spiderpool 和 Calico 的双 CNI 环境</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block"></div>
 </div>
-</div>
+<div class="tabbed-block">
 <p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">创建基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block"></div>
 </div>
-</div>
+<div class="tabbed-block">
 <p>如下命令将创建一个 Cilium 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_cilium
 </code></pre></div>
 <blockquote>
 <p>确认操作系统 Kernel 版本号是是否 &gt;= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。</p>
 </blockquote>
+</div>
+</div>
+</div>
 <p>如果您在中国大陆，安装时可以额外指定参数 <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> ，以帮助您更快的拉取镜像。</p>
 <h2 id="_3">验证安装</h2>
 <p>在 Spiderpool 工程的根目录下执行如下命令，为 kubectl 配置 Kind 集群的 KUBECONFIG。</p>
