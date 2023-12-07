@@ -1419,31 +1419,34 @@
 </li>
 </ul>
 <h2 id="quick-start">Quick Start</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Create a single CNI environment based on Spiderpool</label><label for="__tabbed_1_2">Create a dual CNI environment based on Spiderpool and Calico</label><label for="__tabbed_1_3">Create a dual CNI environment based on Spiderpool and Cilium</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Create a single CNI environment based on Spiderpool</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block">
-<p>A Macvlan single CNI network environment will be built.</p>
+<div class="tabbed-block"></div>
+</div>
+</div>
+<p>The following command will create a Macvlan single-CNI network environment.</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_singleCni_macvlan
 </code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Create a dual CNI environment based on Spiderpool and Calico</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
 </div>
-<div class="tabbed-block">
-<p>A multi-CNI network environment with Calico as the main CNI and Macvlan will be built.</p>
+</div>
+<p>The following command will create a multi-CNI network environment with Calico as the main CNI and Macvlan.</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Create a dual CNI environment based on Spiderpool and Cilium</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
 </div>
-<div class="tabbed-block">
-<p>A multi-CNI network environment with Cilium as the main CNI and Macvlan will be built.</p>
+</div>
+<p>The following command will create a multi-CNI network environment with Cilium as the main CNI and Macvlan.</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_cilium
 </code></pre></div>
 <blockquote>
 <p>Confirm whether the operating system Kernel version number is &gt;= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.</p>
 </blockquote>
-</div>
-</div>
-</div>
-<blockquote>
 <p>If you are mainland user who is not available to access ghcr.io, Additional parameter <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> can be specified during installation to help you pull images faster.</p>
-</blockquote>
 <h2 id="check-that-everything-is-working">Check that everything is working</h2>
 <p>Execute the following command in the root directory of the Spiderpool project to configure KUBECONFIG for the Kind cluster for kubectl.</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/test/.cluster/spider/.kube/config
@@ -1502,6 +1505,7 @@ test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<spa
 <span class="s">          protocol: TCP</span>
 <span class="s">EOF</span>
 </code></pre></div>
+<p>Verify creation</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>test-app<span class="w"> </span>-o<span class="w"> </span>wide
 NAME<span class="w">                        </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">              </span>NODE<span class="w">                   </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
 test-app-84d5699474-dbtl5<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>6m23s<span class="w">   </span><span class="m">172</span>.18.40.112<span class="w">   </span>spider-control-plane<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
