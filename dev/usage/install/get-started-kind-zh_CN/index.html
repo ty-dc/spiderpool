@@ -1374,7 +1374,7 @@
 <p>在该场景下，你可以通过简易运维，即可让应用可分配到固定的 Underlay IP 地址，同时 Pod 能够通过 Pod IP、clusterIP、nodePort 等方式通信。</p>
 </div>
 <div class="tabbed-block">
-<p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的双 CNI 网络环境。</p>
+<p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的双 CNI 网络环境，其中 Calico 基于 iptables datapath 工作，基于 kube-proxy 实现 service 解析。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
 <p>在这个场景下，你可以体验 Pod 可以具备双 CNI 网卡的效果。在该环境中 Calico 作为集群的缺省 CNI，通过 Multus 为 Pod 额外附加一张由 <code>Macvlan</code> 创建的网卡，并通过 <code>coordinator</code> 解决 Pod 多网卡之间路由调协问题。该方案可实现 Pod 访问集群内东西向流量从 Calico 创建的网卡转发(eth0)， 它的好处是：</p>
@@ -1385,7 +1385,7 @@
 </ul>
 </div>
 <div class="tabbed-block">
-<p>如下命令将创建一个 Cilium 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境。</p>
+<p>如下命令将创建一个 Cilium 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境，其中开启了 Cilium 的 eBPF 加速，并禁用了 kube-proxy ，基于 eBPF 实现 service 解析。</p>
 <blockquote>
 <p>确认操作系统 Kernel 版本号是是否 &gt;= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。</p>
 </blockquote>
