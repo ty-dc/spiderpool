@@ -1310,6 +1310,13 @@
       
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
+    使用
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
     卸载
   </a>
   
@@ -1345,10 +1352,10 @@
 <ul>
 <li>
 <p>获取 Spiderpool 稳定版本的代码到本地主机上，并进入 Spiderpool 工程的根目录。</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nv">LATEST_RELEASE_VERISON</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/spidernet-io/spiderpool/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;&quot;tag_name&quot;:&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>rc<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Eo<span class="w"> </span><span class="s2">&quot;(v[0-9]+\.[0-9]+\.[0-9])&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
-~#<span class="w"> </span>curl<span class="w"> </span>-Lo<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>https://github.com/spidernet-io/spiderpool/archive/refs/tags/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz
-~#<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/spiderpool<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xvf<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/spiderpool
-~#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/spiderpool
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nv">LATEST_RELEASE_VERISON</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/spidernet-io/spiderpool/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;&quot;tag_name&quot;:&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>rc<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Eo<span class="w"> </span><span class="s2">&quot;([0-9]+\.[0-9]+\.[0-9])&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+~#<span class="w"> </span>curl<span class="w"> </span>-Lo<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>https://github.com/spidernet-io/spiderpool/archive/refs/tags/v<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz
+~#<span class="w"> </span>tar<span class="w"> </span>-xvf<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/
+~#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/spiderpool-<span class="nv">$LATEST_RELEASE_VERISON</span>
 </code></pre></div>
 </li>
 <li>
@@ -1410,23 +1417,246 @@ spiderpool-agent-4fkm4<span class="w">                         </span><span clas
 spiderpool-controller-7864477fc7-c5dk4<span class="w">         </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">     </span><span class="m">0</span><span class="w">          </span>3m
 spiderpool-controller-7864477fc7-wpgjn<span class="w">         </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">     </span><span class="m">0</span><span class="w">          </span>3m
 spiderpool-init<span class="w">                                </span><span class="m">0</span>/1<span class="w">     </span>Completed<span class="w">   </span><span class="m">0</span><span class="w">          </span>3m
-
-~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
-NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
-default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
-default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
-vlan100-v4<span class="w">          </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.100.0.0/16<span class="w">            </span><span class="m">0</span><span class="w">                    </span><span class="m">2559</span><span class="w">             </span><span class="nb">false</span>
-vlan100-v6<span class="w">          </span><span class="m">6</span><span class="w">         </span>fd00:172:100::/64<span class="w">         </span><span class="m">0</span><span class="w">                    </span><span class="m">65009</span><span class="w">            </span><span class="nb">false</span>
-vlan100-v4<span class="w">          </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.200.0.0/16<span class="w">            </span><span class="m">0</span><span class="w">                    </span><span class="m">2559</span><span class="w">             </span><span class="nb">false</span>
-vlan200-v6<span class="w">          </span><span class="m">6</span><span class="w">         </span>fd00:172:200::/64<span class="w">         </span><span class="m">0</span><span class="w">                    </span><span class="m">65009</span><span class="w">            </span><span class="nb">false</span>
 </code></pre></div>
 <p>Spiderpool 提供的快速安装 Kind 集群脚本会自动为您创建一个应用，以验证您的 Kind 集群是否能够正常工作，以下是应用的运行状态：</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>test-pod<span class="w"> </span>-o<span class="w"> </span>wide
 NAME<span class="w">                       </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">             </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
 test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>5m34s<span class="w">   </span><span class="m">172</span>.18.40.63<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
 </code></pre></div>
-<p>通过测试，Kind 集群一切正常，您可以基于它测试与体验 Spiderpool 的更多功能。</p>
-<h2 id="_4">卸载</h2>
+<h2 id="_4">使用</h2>
+<p>通过上述检查，Kind 集群一切正常。在本章节，将介绍在不同的环境下，如何去使用 Spiderpool 。</p>
+<blockquote>
+<p>Spiderpool 提供了 <a href="../../spider-multus-config-zh_CN/">Spidermultusconfig</a> CR 来自动管理 Multus NetworkAttachmentDefinition CR ，实现了对开源项目 Multus CNI 配置管理的扩展。</p>
+</blockquote>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">基于 Spiderpool 单 CNI 环境</label><label for="__tabbed_2_2">基于 Spiderpool 和 Calico 的双 CNI 环境</label><label for="__tabbed_2_3">基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>获取集群的 Spidermultusconfig CR 与 IPPool CR</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
+NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
+kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>1h
+kube-system<span class="w">   </span>macvlan-vlan100<span class="w">   </span>1h
+kube-system<span class="w">   </span>macvlan-vlan200<span class="w">   </span>1h
+
+~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
+NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
+default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
+default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
+...
+</code></pre></div>
+<p>创建应用，以下命令会创建 1 个副本 Deployment，其中：</p>
+<ul>
+<li>
+<p><code>v1.multus-cni.io/default-network</code>：通过它指定 Spidermultusconfig CR: <code>kube-system/macvlan-vlan0</code>，并通过该配置为应用创建一张由 Macvlan 配置网络的默认网卡 (eth0) 。</p>
+</li>
+<li>
+<p><code>ipam.spidernet.io/ippool</code>：用于指定 Spiderpool 的 IP 池，Spiderpool 会自动在该池中选择 IP 与应用的默认网卡形成绑定。</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 1</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        ipam.spidernet.io/ippool: |-</span>
+<span class="s">          {      </span>
+<span class="s">            &quot;ipv4&quot;: [&quot;default-v4-ippool&quot;],</span>
+<span class="s">            &quot;ipv6&quot;: [&quot;default-v6-ippool&quot;]</span>
+<span class="s">          }</span>
+<span class="s">        v1.multus-cni.io/default-network: kube-system/macvlan-vlan0</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: alpine</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        command:</span>
+<span class="s">        - &quot;/bin/sh&quot;</span>
+<span class="s">        args:</span>
+<span class="s">        - &quot;-c&quot;</span>
+<span class="s">        - &quot;sleep infinity&quot;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>验证应用创建成功。</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-owide
+NAME<span class="w">                        </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">    </span>IP<span class="w">              </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-7fdbb59666-4k5m7<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">       </span><span class="m">0</span><span class="w">          </span>9s<span class="w">    </span><span class="m">172</span>.18.40.223<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+
+~#<span class="w"> </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>test-app-7fdbb59666-4k5m7<span class="w"> </span>--<span class="w"> </span>ip<span class="w"> </span>a
+...
+<span class="m">3</span>:<span class="w"> </span>eth0@if339:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span>0a:96:54:6f:76:b4<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">172</span>.18.40.223/16<span class="w"> </span>brd<span class="w"> </span><span class="m">172</span>.18.255.255<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>eth0
+<span class="w">       </span>valid_lft<span class="w"> </span>forever<span class="w"> </span>preferred_lft<span class="w"> </span>forever
+<span class="m">4</span>:<span class="w"> </span>veth0@if11:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span>4a:8b:09:d9:4c:0a<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>获取集群的 Spidermultusconfig CR 与 IPPool CR</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
+NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
+kube-system<span class="w">   </span>calico<span class="w">            </span>3m11s
+kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>2m20s
+kube-system<span class="w">   </span>macvlan-vlan100<span class="w">   </span>2m19s
+kube-system<span class="w">   </span>macvlan-vlan200<span class="w">   </span>2m19s
+
+~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
+NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
+default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+...
+</code></pre></div>
+<p>创建应用，以下命令会创建一个具备两张网卡的 Deployment 应用，其中：</p>
+<ul>
+<li>
+<p>默认网卡（eth0）由集群缺省 CNI Calico 配置。</p>
+</li>
+<li>
+<p><code>k8s.v1.cni.cncf.io/networks</code>：通过该注解额外为应用额外再创建一张由 Macvlan 配置网络的网卡 (net1) 。</p>
+</li>
+<li>
+<p><code>ipam.spidernet.io/ippools</code>：用于指定 Spiderpool 的 IP 池，Spiderpool 会自动在该池中选择 IP 与应用的 net1 网卡形成绑定。</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 1</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        ipam.spidernet.io/ippools: |-</span>
+<span class="s">          [{</span>
+<span class="s">            &quot;interface&quot;: &quot;net1&quot;,</span>
+<span class="s">            &quot;ipv4&quot;: [&quot;default-v4-ippool&quot;],</span>
+<span class="s">            &quot;ipv6&quot;: [&quot;default-v6-ippool&quot;]</span>
+<span class="s">          }]</span>
+<span class="s">        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-vlan0</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: alpine</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        command:</span>
+<span class="s">        - &quot;/bin/sh&quot;</span>
+<span class="s">        args:</span>
+<span class="s">        - &quot;-c&quot;</span>
+<span class="s">        - &quot;sleep infinity&quot;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>验证应用创建成功</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-owide
+NAME<span class="w">                      </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">   </span>IP<span class="w">               </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-86dd478b-bv6rm<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>12s<span class="w">   </span><span class="m">10</span>.243.104.211<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+
+~#<span class="w"> </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>test-app-7fdbb59666-4k5m7<span class="w"> </span>--<span class="w"> </span>ip<span class="w"> </span>a
+...
+<span class="m">4</span>:<span class="w"> </span>eth0@if148:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1480</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>qlen<span class="w"> </span><span class="m">1000</span>
+<span class="w">    </span>link/ether<span class="w"> </span>1a:1e:e1:f3:f9:4b<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">10</span>.243.104.211/32<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>eth0
+<span class="m">5</span>:<span class="w"> </span>net1@if347:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span><span class="m">56</span>:b4:3d:a6:d2:d1<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">172</span>.18.40.154/16<span class="w"> </span>brd<span class="w"> </span><span class="m">172</span>.18.255.255<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>net1
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>获取集群的 Spidermultusconfig CR 与 IPPool CR</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
+NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
+kube-system<span class="w">   </span>cilium<span class="w">            </span>5m32s
+kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>5m12s
+kube-system<span class="w">   </span>macvlan-vlan100<span class="w">   </span>5m17s
+kube-system<span class="w">   </span>macvlan-vlan200<span class="w">   </span>5m18s
+
+~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
+NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
+default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+...
+</code></pre></div>
+<p>创建应用，以下命令会创建一个具备两张网卡的 Deployment 应用，其中：</p>
+<ul>
+<li>
+<p>默认网卡（eth0）由集群缺省 CNI Cilium 配置。</p>
+</li>
+<li>
+<p><code>k8s.v1.cni.cncf.io/networks</code>：通过该注解额外为应用额外再创建一张由 Macvlan 配置网络的网卡 (net1) 。</p>
+</li>
+<li>
+<p><code>ipam.spidernet.io/ippools</code>：用于指定 Spiderpool 的 IP 池，Spiderpool 会自动在该池中选择 IP 与应用的 net1 网卡形成绑定。</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 1</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        ipam.spidernet.io/ippools: |-</span>
+<span class="s">          [{</span>
+<span class="s">            &quot;interface&quot;: &quot;net1&quot;,</span>
+<span class="s">            &quot;ipv4&quot;: [&quot;default-v4-ippool&quot;],</span>
+<span class="s">            &quot;ipv6&quot;: [&quot;default-v6-ippool&quot;]</span>
+<span class="s">          }]</span>
+<span class="s">        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-vlan0</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: alpine</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        command:</span>
+<span class="s">        - &quot;/bin/sh&quot;</span>
+<span class="s">        args:</span>
+<span class="s">        - &quot;-c&quot;</span>
+<span class="s">        - &quot;sleep infinity&quot;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>验证应用创建成功</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-owide
+NAME<span class="w">                      </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">   </span>IP<span class="w">               </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-86dd478b-ml8d9<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>58s<span class="w">   </span><span class="m">10</span>.244.102.212<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+
+~#<span class="w"> </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>test-app-7fdbb59666-4k5m7<span class="w"> </span>--<span class="w"> </span>ip<span class="w"> </span>a
+...
+<span class="m">4</span>:<span class="w"> </span>eth0@if148:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1480</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>qlen<span class="w"> </span><span class="m">1000</span>
+<span class="w">    </span>link/ether<span class="w"> </span><span class="m">26</span>:f1:88:f9:7d:d7<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">10</span>.244.102.212/32<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>eth0
+<span class="m">5</span>:<span class="w"> </span>net1@if347:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span>ca:71:99:ec:ec:28<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">172</span>.18.40.228/16<span class="w"> </span>brd<span class="w"> </span><span class="m">172</span>.18.255.255<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>net1
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>现在您可以基于 Kind 测试与体验 Spiderpool 的<a href="../../readme-zh_CN/">更多功能</a>。</p>
+<h2 id="_5">卸载</h2>
 <ul>
 <li>
 <p>卸载 Kind 集群</p>

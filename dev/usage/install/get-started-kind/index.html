@@ -297,6 +297,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#uninstall" class="md-nav__link">
     Uninstall
   </a>
@@ -1371,6 +1378,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    usage
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#uninstall" class="md-nav__link">
     Uninstall
   </a>
@@ -1407,10 +1421,10 @@
 <ul>
 <li>
 <p>Get the Spiderpool stable version code to the local host and enter the root directory of the Spiderpool project.</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nv">LATEST_RELEASE_VERISON</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/spidernet-io/spiderpool/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;&quot;tag_name&quot;:&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>rc<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Eo<span class="w"> </span><span class="s2">&quot;(v[0-9]+\.[0-9]+\.[0-9])&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
-~#<span class="w"> </span>curl<span class="w"> </span>-Lo<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>https://github.com/spidernet-io/spiderpool/archive/refs/tags/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz
-~#<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/spiderpool<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xvf<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/spiderpool
-~#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/spiderpool
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nv">LATEST_RELEASE_VERISON</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>https://api.github.com/repos/spidernet-io/spiderpool/releases<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;&quot;tag_name&quot;:&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-v<span class="w"> </span>rc<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Eo<span class="w"> </span><span class="s2">&quot;([0-9]+\.[0-9]+\.[0-9])&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-r<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+~#<span class="w"> </span>curl<span class="w"> </span>-Lo<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>https://github.com/spidernet-io/spiderpool/archive/refs/tags/v<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz
+~#<span class="w"> </span>tar<span class="w"> </span>-xvf<span class="w"> </span>/tmp/<span class="nv">$LATEST_RELEASE_VERISON</span>.tar.gz<span class="w"> </span>-C<span class="w"> </span>/tmp/
+~#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/spiderpool-<span class="nv">$LATEST_RELEASE_VERISON</span>
 </code></pre></div>
 </li>
 <li>
@@ -1446,11 +1460,11 @@
 </blockquote>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_cilium
 </code></pre></div>
-<p>In this scenario, you can experience the effect of Pod having dual CNI network cards. In this environment, Calico serves as the default CNI of the cluster. Multus is used to attach an additional network card created by <code>Macvlan</code> to the Pod, and <code>coordinator</code> is used to solve the problem of routing coordination between multiple network cards in the Pod. This solution can forward the east-west traffic within the Pod access cluster from the network card created by Calico (eth0). Its benefits are:</p>
+<p>In this scenario, you can experience the effect of Pod having dual CNI network cards. In this environment, Cilium serves as the default CNI of the cluster. Multus is used to attach an additional network card created by <code>Macvlan</code> to the Pod, and <code>coordinator</code> is used to solve the problem of routing coordination between multiple network cards in the Pod. This solution can forward the east-west traffic within the Pod access cluster from the network card created by Cilium (eth0). Its benefits are:</p>
 <ul>
-<li>Solve Macvlan's problem for accessing ClusterIP when Pods have both Calico and Macvlan NICs attached.</li>
-<li>Facilitate the forwarding of external access to NodePort through Calico's data path, eliminating the need for external routing. Whereas, external routing is typically required for forwarding when Macvlan is used as the CNI.</li>
-<li>Coordinate subnet routing for Pods with multiple Calico and Macvlan NICs, guaranteeing consistent traffic forwarding path for Pods and uninterrupted network connectivity.</li>
+<li>Solve Macvlan's problem for accessing ClusterIP when Pods have both Cilium and Macvlan NICs attached.</li>
+<li>Facilitate the forwarding of external access to NodePort through Cilium's data path, eliminating the need for external routing. Whereas, external routing is typically required for forwarding when Macvlan is used as the CNI.</li>
+<li>Coordinate subnet routing for Pods with multiple Cilium and Macvlan NICs, guaranteeing consistent traffic forwarding path for Pods and uninterrupted network connectivity.</li>
 </ul>
 </div>
 </div>
@@ -1472,22 +1486,241 @@ spiderpool-agent-4fkm4<span class="w">                         </span><span clas
 spiderpool-controller-7864477fc7-c5dk4<span class="w">         </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">     </span><span class="m">0</span><span class="w">          </span>3m
 spiderpool-controller-7864477fc7-wpgjn<span class="w">         </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">     </span><span class="m">0</span><span class="w">          </span>3m
 spiderpool-init<span class="w">                                </span><span class="m">0</span>/1<span class="w">     </span>Completed<span class="w">   </span><span class="m">0</span><span class="w">          </span>3m
-
-~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
-NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
-default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
-default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
-vlan100-v4<span class="w">          </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.100.0.0/16<span class="w">            </span><span class="m">0</span><span class="w">                    </span><span class="m">2559</span><span class="w">             </span><span class="nb">false</span>
-vlan100-v6<span class="w">          </span><span class="m">6</span><span class="w">         </span>fd00:172:100::/64<span class="w">         </span><span class="m">0</span><span class="w">                    </span><span class="m">65009</span><span class="w">            </span><span class="nb">false</span>
-vlan100-v4<span class="w">          </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.200.0.0/16<span class="w">            </span><span class="m">0</span><span class="w">                    </span><span class="m">2559</span><span class="w">             </span><span class="nb">false</span>
-vlan200-v6<span class="w">          </span><span class="m">6</span><span class="w">         </span>fd00:172:200::/64<span class="w">         </span><span class="m">0</span><span class="w">                    </span><span class="m">65009</span><span class="w">            </span><span class="nb">false</span>
 </code></pre></div>
 <p>The Quick Install Kind Cluster script provided by Spiderpool will automatically create an application for you to verify that your Kind cluster is working properly and the following is the running state of the application:</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span><span class="nv">app</span><span class="o">=</span>test-pod<span class="w"> </span>-o<span class="w"> </span>wide
 NAME<span class="w">                       </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">             </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
 test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>5m34s<span class="w">   </span><span class="m">172</span>.18.40.63<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
 </code></pre></div>
-<p>As tested, everything works fine with the Kind cluster. You can test and experience more features of Spiderpool based on kind clusters.</p>
+<h2 id="usage">usage</h2>
+<p>Through the above checks, everything is normal in the Kind cluster. In this chapter, we will introduce how to use Spiderpool in different environments.</p>
+<blockquote>
+<p>Spiderpool introduces the <a href="../../spider-multus-config/">Spidermultusconfig</a> CR to automate the management of Multus NetworkAttachmentDefinition CR and extend the capabilities of Multus CNI configurations. </p>
+</blockquote>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Based on Spiderpool single CNI environment</label><label for="__tabbed_2_2">Dual CNI environment based on Spiderpool and Calico</label><label for="__tabbed_2_3">Dual CNI environment based on Spiderpool and Cilium"</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Get the Spidermultusconfig CR and IPPool CR of the cluster</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
+NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
+kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>1h
+kube-system<span class="w">   </span>macvlan-vlan100<span class="w">   </span>1h
+kube-system<span class="w">   </span>macvlan-vlan200<span class="w">   </span>1h
+
+~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
+NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
+default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
+default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">5</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span><span class="w">      </span>
+...
+</code></pre></div>
+<p>Create an application. The following command will create a single NIC Deployment application:</p>
+<ul>
+<li><code>v1.multus-cni.io/default-network</code>：Specify Spidermultusconfig CR: <code>kube-system/macvlan-vlan0</code> through it, and use this configuration to create a default network card (eth0) configured by Macvlan for the application.</li>
+<li><code>ipam.spidernet.io/ippool</code>：Used to specify Spiderpool's IP pool. Spiderpool will automatically select an IP in the pool to bind to the application's default network card.</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 1</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        ipam.spidernet.io/ippool: |-</span>
+<span class="s">          {      </span>
+<span class="s">            &quot;ipv4&quot;: [&quot;default-v4-ippool&quot;],</span>
+<span class="s">            &quot;ipv6&quot;: [&quot;default-v6-ippool&quot;]</span>
+<span class="s">          }</span>
+<span class="s">        v1.multus-cni.io/default-network: kube-system/macvlan-vlan0</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: alpine</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        command:</span>
+<span class="s">        - &quot;/bin/sh&quot;</span>
+<span class="s">        args:</span>
+<span class="s">        - &quot;-c&quot;</span>
+<span class="s">        - &quot;sleep infinity&quot;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>Verify that the application was created successfully.</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-owide
+NAME<span class="w">                        </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">    </span>IP<span class="w">              </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-7fdbb59666-4k5m7<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">       </span><span class="m">0</span><span class="w">          </span>9s<span class="w">    </span><span class="m">172</span>.18.40.223<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+
+~#<span class="w"> </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>test-app-7fdbb59666-4k5m7<span class="w"> </span>--<span class="w"> </span>ip<span class="w"> </span>a
+...
+<span class="m">3</span>:<span class="w"> </span>eth0@if339:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span>0a:96:54:6f:76:b4<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">172</span>.18.40.223/16<span class="w"> </span>brd<span class="w"> </span><span class="m">172</span>.18.255.255<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>eth0
+<span class="w">       </span>valid_lft<span class="w"> </span>forever<span class="w"> </span>preferred_lft<span class="w"> </span>forever
+<span class="m">4</span>:<span class="w"> </span>veth0@if11:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span>4a:8b:09:d9:4c:0a<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Get the Spidermultusconfig CR and IPPool CR of the cluster</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
+NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
+kube-system<span class="w">   </span>calico<span class="w">            </span>3m11s
+kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>2m20s
+kube-system<span class="w">   </span>macvlan-vlan100<span class="w">   </span>2m19s
+kube-system<span class="w">   </span>macvlan-vlan200<span class="w">   </span>2m19s
+
+~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
+NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
+default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+...
+</code></pre></div>
+<p>Create an application. The following command will create a Deployment application with two NICs.</p>
+<ul>
+<li>
+<p>The default NIC(eth0) is configured by the cluster default CNI Calico.</p>
+</li>
+<li>
+<p><code>k8s.v1.cni.cncf.io/networks</code>：Use this annotation to create an additional NIC (net1) configured by Macvlan for the application.</p>
+</li>
+<li>
+<p><code>ipam.spidernet.io/ippools</code>：Used to specify Spiderpool's IPPool. Spiderpool will automatically select an IP in the pool to bind to the application's net1 NIC</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 1</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        ipam.spidernet.io/ippools: |-</span>
+<span class="s">          [{</span>
+<span class="s">            &quot;interface&quot;: &quot;net1&quot;,</span>
+<span class="s">            &quot;ipv4&quot;: [&quot;default-v4-ippool&quot;],</span>
+<span class="s">            &quot;ipv6&quot;: [&quot;default-v6-ippool&quot;]</span>
+<span class="s">          }]</span>
+<span class="s">        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-vlan0</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: alpine</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        command:</span>
+<span class="s">        - &quot;/bin/sh&quot;</span>
+<span class="s">        args:</span>
+<span class="s">        - &quot;-c&quot;</span>
+<span class="s">        - &quot;sleep infinity&quot;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>Verify that the application was created successfully.</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-owide
+NAME<span class="w">                      </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">   </span>IP<span class="w">               </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-86dd478b-bv6rm<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>12s<span class="w">   </span><span class="m">10</span>.243.104.211<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+
+~#<span class="w"> </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>test-app-7fdbb59666-4k5m7<span class="w"> </span>--<span class="w"> </span>ip<span class="w"> </span>a
+...
+<span class="m">4</span>:<span class="w"> </span>eth0@if148:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1480</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>qlen<span class="w"> </span><span class="m">1000</span>
+<span class="w">    </span>link/ether<span class="w"> </span>1a:1e:e1:f3:f9:4b<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">10</span>.243.104.211/32<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>eth0
+<span class="m">5</span>:<span class="w"> </span>net1@if347:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span><span class="m">56</span>:b4:3d:a6:d2:d1<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">172</span>.18.40.154/16<span class="w"> </span>brd<span class="w"> </span><span class="m">172</span>.18.255.255<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>net1
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<p>Get the Spidermultusconfig CR and IPPool CR of the cluster</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
+NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
+kube-system<span class="w">   </span>cilium<span class="w">            </span>5m32s
+kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>5m12s
+kube-system<span class="w">   </span>macvlan-vlan100<span class="w">   </span>5m17s
+kube-system<span class="w">   </span>macvlan-vlan200<span class="w">   </span>5m18s
+
+~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
+NAME<span class="w">                </span>VERSION<span class="w">   </span>SUBNET<span class="w">                    </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
+default-v4-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">172</span>.18.0.0/16<span class="w">             </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+default-v6-ippool<span class="w">   </span><span class="m">6</span><span class="w">         </span>fc00:f853:ccd:e793::/64<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">253</span><span class="w">              </span><span class="nb">true</span>
+...
+</code></pre></div>
+<p>Create an application. The following command will create a Deployment application with two NICs.</p>
+<ul>
+<li>
+<p>The default NIC(eth0) is configured by the cluster default CNI Cilium.</p>
+</li>
+<li>
+<p><code>k8s.v1.cni.cncf.io/networks</code>：Use this annotation to create an additional NIC (net1) configured by Macvlan for the application.</p>
+</li>
+<li>
+<p><code>ipam.spidernet.io/ippools</code>：Used to specify Spiderpool's IPPool. Spiderpool will automatically select an IP in the pool to bind to the application's net1 NIC</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 1</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">      annotations:</span>
+<span class="s">        ipam.spidernet.io/ippools: |-</span>
+<span class="s">          [{</span>
+<span class="s">            &quot;interface&quot;: &quot;net1&quot;,</span>
+<span class="s">            &quot;ipv4&quot;: [&quot;default-v4-ippool&quot;],</span>
+<span class="s">            &quot;ipv6&quot;: [&quot;default-v6-ippool&quot;]</span>
+<span class="s">          }]</span>
+<span class="s">        k8s.v1.cni.cncf.io/networks: kube-system/macvlan-vlan0</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: alpine</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        command:</span>
+<span class="s">        - &quot;/bin/sh&quot;</span>
+<span class="s">        args:</span>
+<span class="s">        - &quot;-c&quot;</span>
+<span class="s">        - &quot;sleep infinity&quot;</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>Verify that the application was created successfully.</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-owide
+NAME<span class="w">                      </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">   </span>IP<span class="w">               </span>NODE<span class="w">            </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-86dd478b-ml8d9<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>58s<span class="w">   </span><span class="m">10</span>.244.102.212<span class="w">   </span>spider-worker<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+
+~#<span class="w"> </span>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-ti<span class="w"> </span>test-app-7fdbb59666-4k5m7<span class="w"> </span>--<span class="w"> </span>ip<span class="w"> </span>a
+...
+<span class="m">4</span>:<span class="w"> </span>eth0@if148:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1480</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>qlen<span class="w"> </span><span class="m">1000</span>
+<span class="w">    </span>link/ether<span class="w"> </span><span class="m">26</span>:f1:88:f9:7d:d7<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">10</span>.244.102.212/32<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>eth0
+<span class="m">5</span>:<span class="w"> </span>net1@if347:<span class="w"> </span>&lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt;<span class="w"> </span>mtu<span class="w"> </span><span class="m">1500</span><span class="w"> </span>qdisc<span class="w"> </span>noqueue<span class="w"> </span>state<span class="w"> </span>UP<span class="w"> </span>
+<span class="w">    </span>link/ether<span class="w"> </span>ca:71:99:ec:ec:28<span class="w"> </span>brd<span class="w"> </span>ff:ff:ff:ff:ff:ff
+<span class="w">    </span>inet<span class="w"> </span><span class="m">172</span>.18.40.228/16<span class="w"> </span>brd<span class="w"> </span><span class="m">172</span>.18.255.255<span class="w"> </span>scope<span class="w"> </span>global<span class="w"> </span>net1
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Now you can test and experience Spiderpool's <a href="../../readme/">more features</a> based on Kind.</p>
 <h2 id="uninstall">Uninstall</h2>
 <ul>
 <li>
