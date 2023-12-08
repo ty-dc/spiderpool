@@ -1365,15 +1365,20 @@
 </ul>
 <h2 id="_2">快速启动</h2>
 <p>如果您在中国大陆，安装时可以额外指定参数 <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> ，以帮助您更快的拉取镜像。</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">创建基于 Spiderpool 单 CNI 环境</label><label for="__tabbed_1_2">创建基于 Spiderpool 和 Calico 的双 CNI 环境</label><label for="__tabbed_1_3">创建基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">创建基于 Spiderpool 单 CNI 环境</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block">
+<div class="tabbed-block"></div>
+</div>
+</div>
 <p>如下命令将创建一个 Macvlan 的单 CNI 网络环境。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_singleCni_macvlan
 </code></pre></div>
 <p>在该场景下，你可以通过简易运维，即可让应用可分配到固定的 Underlay IP 地址，同时 Pod 能够通过 Pod IP、clusterIP、nodePort 等方式通信。</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">创建基于 Spiderpool 和 Calico 的双 CNI 环境</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
 </div>
-<div class="tabbed-block">
+</div>
 <p>如下命令将创建一个 Calico 为 main CNI 并搭配 Macvlan 的双 CNI 网络环境，其中 Calico 基于 iptables datapath 工作，基于 kube-proxy 实现 service 解析。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
@@ -1383,8 +1388,11 @@
 <li>集群外部访问 NodePort 时，可借助 Calico 数据路径进行转发，无需外部路由。否则 Macvlan 作为 CNI 时，只能借助外部路由转发才能实现。</li>
 <li>当 Pod 附加了 Calico 和 Macvlan 多张网卡时，调谐 Pod 的子网路由，保证 Pod 访问时来回路径一致，确保网络联通性正常。</li>
 </ul>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">创建基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
 </div>
-<div class="tabbed-block">
+</div>
 <p>如下命令将创建一个 Cilium 为 main CNI 并搭配 Macvlan 的多 CNI 网络环境，其中开启了 Cilium 的 eBPF 加速，并禁用了 kube-proxy ，基于 eBPF 实现 service 解析。</p>
 <blockquote>
 <p>确认操作系统 Kernel 版本号是是否 &gt;= 4.9.17，内核过低时将会导致安装失败，推荐 Kernel 5.10+ 。</p>
@@ -1397,9 +1405,6 @@
 <li>集群外部访问 NodePort 时，可借助 Cilium 数据路径进行转发，无需外部路由。否则 Macvlan 作为 CNI 时，只能借助外部路由转发才能实现。</li>
 <li>当 Pod 附加了 Cilium 和 Macvlan 多张网卡时，调谐 Pod 的子网路由，保证 Pod 访问时来回路径一致，确保网络联通性正常。</li>
 </ul>
-</div>
-</div>
-</div>
 <h2 id="_3">验证安装</h2>
 <p>在 Spiderpool 工程的根目录下执行如下命令，为 kubectl 配置 Kind 集群的 KUBECONFIG。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span><span class="nb">export</span><span class="w"> </span><span class="nv">KUBECONFIG</span><span class="o">=</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>/test/.cluster/spider/.kube/config
@@ -1428,10 +1433,10 @@ test-pod-856f9689d-876nm<span class="w">   </span><span class="m">1</span>/1<spa
 <blockquote>
 <p>Spiderpool 提供了 <a href="../../spider-multus-config-zh_CN/">Spidermultusconfig</a> CR 来自动管理 Multus NetworkAttachmentDefinition CR ，实现了对开源项目 Multus CNI 配置管理的扩展。</p>
 </blockquote>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">基于 Spiderpool 单 CNI 环境</label><label for="__tabbed_2_2">基于 Spiderpool 和 Calico 的双 CNI 环境</label><label for="__tabbed_2_3">基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:3"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><input id="__tabbed_4_3" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">基于 Spiderpool 单 CNI 环境</label><label for="__tabbed_4_2">基于 Spiderpool 和 Calico 的双 CNI 环境</label><label for="__tabbed_4_3">基于 Spiderpool 和 Cilium 的双 CNI 环境</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<p>获取集群的 Spidermultusconfig CR 与 IPPool CR</p>
+<p>获取集群的 Spidermultusconfig CR 与 IPPool CR。</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spidermultusconfigs.spiderpool.spidernet.io<span class="w"> </span>-A
 NAMESPACE<span class="w">     </span>NAME<span class="w">              </span>AGE
 kube-system<span class="w">   </span>macvlan-vlan0<span class="w">     </span>1h
