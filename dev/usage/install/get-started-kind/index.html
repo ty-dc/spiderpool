@@ -1443,7 +1443,7 @@
 <p>In this scenario, through simple operation and maintenance, the application can be assigned a fixed Underlay IP address, and the Pod can communicate through Pod IP, clusterIP, nodePort, etc.</p>
 </div>
 <div class="tabbed-block">
-<p>The following command will create a multi-CNI network environment with Calico as the main CNI and Macvlan.</p>
+<p>The following command will create a multi-CNI network environment with Calico as the main CNI and Macvlan. Calico works based on iptables datapath and implements service resolution based on kube-proxy.</p>
 <div class="highlight"><pre><span></span><code>~#<span class="w"> </span>make<span class="w"> </span>setup_dualCni_calico
 </code></pre></div>
 <p>In this scenario, you can experience the effect of Pod having dual CNI network cards. In this environment, Calico serves as the default CNI of the cluster. Multus is used to attach an additional network card created by <code>Macvlan</code> to the Pod, and <code>coordinator</code> is used to solve the problem of routing coordination between multiple network cards in the Pod. This solution can forward the east-west traffic within the Pod access cluster from the network card created by Calico (eth0). Its benefits are:</p>
@@ -1454,7 +1454,7 @@
 </ul>
 </div>
 <div class="tabbed-block">
-<p>The following command will create a multi-CNI network environment with Cilium as the main CNI and Macvlan.</p>
+<p>The following command will create a multi-CNI network environment with Cilium as the main CNI and Macvlan, Cilium's eBPF acceleration is enabled, kube-proxy is disabled, and service resolution is implemented based on eBPF.</p>
 <blockquote>
 <p>Confirm whether the operating system Kernel version number is &gt;= 4.9.17. If the kernel is too low, the installation will fail. Kernel 5.10+ is recommended.</p>
 </blockquote>
