@@ -13,7 +13,7 @@
     
     
       
-        <title>Kubevirt - spiderpool</title>
+        <title>Multi-Cluster Networking - spiderpool</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#kubevirt" class="md-skip">
+        <a href="#multi-cluster-networking" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Kubevirt
+              Multi-Cluster Networking
             
           </span>
         </div>
@@ -781,11 +781,107 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../submariner/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Multi-Cluster Networking
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Multi-Cluster Networking
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#backaround" class="md-nav__link">
+    Backaround
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    Prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#network-topology-diagram" class="md-nav__link">
+    Network Topology Diagram
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick Start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#install-spiderpool" class="md-nav__link">
+    Install Spiderpool
+  </a>
+  
+    <nav class="md-nav" aria-label="Install Spiderpool">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-subamriner" class="md-nav__link">
+    Install Subamriner
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#create-deployment" class="md-nav__link">
+    Create Deployment
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    Summary
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -809,127 +905,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Kubevirt
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../kubevirt/" class="md-nav__link">
         Kubevirt
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#integrate-with-kubevirt-networking" class="md-nav__link">
-    Integrate with KubeVirt Networking
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fix-ip-address-for-kubevirt-vms" class="md-nav__link">
-    Fix IP Address for KubeVirt VMs
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
-    Prerequisites
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#steps" class="md-nav__link">
-    Steps
-  </a>
-  
-    <nav class="md-nav" aria-label="Steps">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#install-spiderpool" class="md-nav__link">
-    Install Spiderpool
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#create-kubevirt-vm-applications" class="md-nav__link">
-    Create KubeVirt VM Applications
-  </a>
-  
-    <nav class="md-nav" aria-label="Create KubeVirt VM Applications">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#underlay-single-nic-situation" class="md-nav__link">
-    underlay single NIC situation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#underlay-multiple-nics-situation" class="md-nav__link">
-    underlay multiple NICs situation
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#summary" class="md-nav__link">
-    Summary
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1420,22 +1400,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#integrate-with-kubevirt-networking" class="md-nav__link">
-    Integrate with KubeVirt Networking
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#fix-ip-address-for-kubevirt-vms" class="md-nav__link">
-    Fix IP Address for KubeVirt VMs
+  <a href="#backaround" class="md-nav__link">
+    Backaround
   </a>
   
 </li>
@@ -1448,38 +1414,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#steps" class="md-nav__link">
-    Steps
+  <a href="#network-topology-diagram" class="md-nav__link">
+    Network Topology Diagram
   </a>
   
-    <nav class="md-nav" aria-label="Steps">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start" class="md-nav__link">
+    Quick Start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#install-spiderpool" class="md-nav__link">
     Install Spiderpool
   </a>
   
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#create-kubevirt-vm-applications" class="md-nav__link">
-    Create KubeVirt VM Applications
-  </a>
-  
-    <nav class="md-nav" aria-label="Create KubeVirt VM Applications">
+    <nav class="md-nav" aria-label="Install Spiderpool">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#underlay-single-nic-situation" class="md-nav__link">
-    underlay single NIC situation
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#underlay-multiple-nics-situation" class="md-nav__link">
-    underlay multiple NICs situation
+  <a href="#install-subamriner" class="md-nav__link">
+    Install Subamriner
   </a>
   
 </li>
@@ -1488,9 +1446,11 @@
     </nav>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#create-deployment" class="md-nav__link">
+    Create Deployment
+  </a>
   
 </li>
       
@@ -1518,245 +1478,288 @@
 
 
 
-  <a href="https://github.com/spidernet-io/spiderpool/edit/master/docs/usage/kubevirt.md" title="Edit this page" class="md-content__button md-icon">
+  <a href="https://github.com/spidernet-io/spiderpool/edit/master/docs/usage/submariner.md" title="Edit this page" class="md-content__button md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
   </a>
 
 
-<h1 id="kubevirt">KubeVirt</h1>
-<p><strong>English</strong> ｜ <a href="../kubevirt-zh_CN/"><strong>简体中文</strong></a></p>
-<h2 id="introduction">Introduction</h2>
-<p><em>Spiderpool ensures that KubeVirt VM Pods consistently obtain the same IP addresses during restart and rebuild processes.</em></p>
-<h2 id="integrate-with-kubevirt-networking">Integrate with KubeVirt Networking</h2>
-<p>The Spiderpool underlay networking solution provides the ability to integrate with KubeVirt:</p>
-<ol>
-<li>
-<p>For KubeVirt's passt network mode, it can be used in conjunction with the Spiderpool macvlan integrated solution. In this network mode, all Service Mesh functionalities are <strong>supported</strong>. However, only <strong>single NIC</strong> is supported, and live migration is not available.</p>
-</li>
-<li>
-<p>For KubeVirt's bridge network mode, it can be used in conjunction with OVS CNI. In this network mode, Service Mesh functionalities are <strong>not supported</strong>, but <strong>multiple NICs</strong> can be used, and live migration is not available.</p>
-</li>
-</ol>
-<h2 id="fix-ip-address-for-kubevirt-vms">Fix IP Address for KubeVirt VMs</h2>
-<p>KubeVirt VMs may require fixed IP addresses in the following scenarios:</p>
-<ol>
-<li>During VM live migration, it is expected that the VM retains its previous IP address after migration.</li>
-<li>When the Pod associated with the VM resource undergoes a restart.</li>
-<li>When the VMI (VirtualMachineInstance) resource corresponding to the VM resource is deleted.</li>
-</ol>
-<p>It is important to note that the pattern of fixed IP addresses for KubeVirt VMs differs from that of StatefulSets:</p>
-<ol>
-<li>For VMs, the Pod name changes between restarts, but the VMI name remains unchanged regardless of restarts. Therefore, the fixed IPs will be recorded based on VMs. Specifically, SpiderEndpoint resource will be associated with the VM resource's namespace and name to record its fixed IP address.</li>
-<li>For StatefulSets, the Pod name remains the same between restarts, so Spiderpool records the fixed IP addresses based on Pods.</li>
-</ol>
-<blockquote>
-<p>This feature is enabled by default. When enabled, there are no restrictions. VMs can use a limited set of IP addresses from an IP pool to assign fixed IPs. However, regardless of whether a VM uses a fixed IP pool, its Pod can consistently obtain the same IP address. If disabled, Pods associated with VMs will be treated as stateless. During installation of Spiderpool using Helm, you can disable it by using <code>--set ipam.enableKubevirtStaticIP=false</code>.</p>
-</blockquote>
+<h1 id="multi-cluster-networking">Multi-Cluster Networking</h1>
+<p><strong>English</strong> | <a href="../submariner-zh_CN/"><strong>简体中文</strong></a></p>
+<h2 id="backaround">Backaround</h2>
+<p>Why Spiderpool need a multi-cluster network connectivity solution? Spiderpool requires a multi-cluster network connectivity solution for the following reasons: if our different clusters are distributed in the same data center, their networks are naturally interconnected. However, if they are spread across different data centers, the cluster subnets are isolated from each other and cannot communicate directly across data centers. Therefore, Spiderpool needs a multi-cluster network connectivity solution to address the issue of cross-data center multi-cluster network access.</p>
+<p><a href="https://github.com/submariner-io/submariner">Submariner</a> is an open-source multi-cluster network connectivity solution that uses tunneling technology to establish direct communication between Pods and Services in different Kubernetes clusters (running locally or in the public cloud). For more information, please refer to the <a href="https://submariner.io/">Submariner Document</a>. We can leverage Submariner to assist Spiderpool in addressing cross-data center multi-cluster network access issues.</p>
+<p>we will provide a detailed explanation of this feature.</p>
 <h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li>At least two Kubernetes clusters without CNI installed.</li>
+<li><a href="https://helm.sh/docs/intro/install/">Helm</a> and <a href="https://submariner.io/operations/deployment/subctl/">Subctl</a> tools are already installed.</li>
+</ul>
+<h2 id="network-topology-diagram">Network Topology Diagram</h2>
+<p><img alt="spiderpool_submariner.png" src="../../images/submariner.png" /></p>
+<p>This network topology diagram provides the following information:</p>
+<ul>
+<li>
+<p>Clusters ClusterA and ClusterB are distributed across different data centers, and their respective cluster underlay subnets (172.110.0.0/16 and 172.111.0.0/16) cannot communicate directly due to network isolation in different data center networks. The gateway nodes can communicate with each other through the ens192 interface (10.6.0.0/16).</p>
+</li>
+<li>
+<p>The two clusters are connected through an IPSec tunnel established by Submariner. The tunnel is based on the ens192 interface of the gateway nodes, and it also accesses the Submariner Broker component through the ens192 interface.</p>
+</li>
+</ul>
+<h2 id="quick-start">Quick Start</h2>
+<h2 id="install-spiderpool">Install Spiderpool</h2>
 <ol>
 <li>
-<p>A ready Kubernetes cluster.</p>
+<p>You can refer to the <a href="../readme-zh_CN/">installation guide</a> to install Spiderpool.</p>
 </li>
 <li>
-<p><a href="https://helm.sh/docs/intro/install/">Helm</a> has been installed.</p>
+<p>Configure SpiderIPPool</p>
+<p>Since Submariner currently does not support multiple subnets, you can split the PodCIDR of each cluster into smaller subnets. Specify MacVlan Pods to get IP addresses from their respective smaller subnets for Underlay communication. Note: Ensure that these smaller subnets correspond to the connected Underlay subnets.</p>
+<p>For example, the PodCIDR of cluster-a is 172.110.0.0/16, you can create multiple smaller subnets (e.g., 172.110.1.0/24) within this larger subnet for Pod usage:</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -f -</span>
+<span class="s">apiVersion: spiderpool.spidernet.io/v2beta1</span>
+<span class="s">kind: SpiderIPPool</span>
+<span class="s">metadata:</span>
+<span class="s">  name: cluster-a</span>
+<span class="s">spec:</span>
+<span class="s">  default: true</span>
+<span class="s">  ips:</span>
+<span class="s">  - &quot;172.110.1.1-172.110.1.200&quot;</span>
+<span class="s">  subnet: 172.110.1.0/24</span>
+<span class="s">  gateway: 172.110.0.1</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>the PodCIDR of cluster-b is 172.111.0.0/16, you can create multiple smaller subnets (e.g., 172.111.1.0/24) within this larger subnet for Pod usage:</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -f -</span>
+<span class="s">apiVersion: spiderpool.spidernet.io/v2beta1</span>
+<span class="s">kind: SpiderIPPool</span>
+<span class="s">metadata:</span>
+<span class="s">  name: cluster-b</span>
+<span class="s">spec:</span>
+<span class="s">  default: true</span>
+<span class="s">  ips:</span>
+<span class="s">  - &quot;172.111.1.1-172.111.1.200&quot;</span>
+<span class="s">  subnet: 172.111.1.0/24</span>
+<span class="s">  gateway: 172.111.0.1</span>
+<span class="s">EOF</span>
+</code></pre></div>
+</li>
+<li>
+<p>Configure SpiderMultusConfig</p>
+<p>Configure an SpiderMultusConfig in Cluster-a:</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -f -</span>
+<span class="s">apiVersion: spiderpool.spidernet.io/v2beta1</span>
+<span class="s">kind: SpiderMultusConfig</span>
+<span class="s">metadata:</span>
+<span class="s">  name: macvlan-conf</span>
+<span class="s">  namespace: kube-system</span>
+<span class="s">spec:</span>
+<span class="s">  cniType: macvlan</span>
+<span class="s">  macvlan:</span>
+<span class="s">    master:</span>
+<span class="s">    - ens224</span>
+<span class="s">    ippools:</span>
+<span class="s">      ipv4:</span>
+<span class="s">      - cluster-a</span>
+<span class="s">  coordinator:</span>
+<span class="s">    hijackCIDR:</span>
+<span class="s">    - 10.243.0.0/18</span>
+<span class="s">    - 172.111.0.0/16</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<p>Configure an SpiderMultusConfig in Cluster-b:</p>
+<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -f -</span>
+<span class="s">apiVersion: spiderpool.spidernet.io/v2beta1</span>
+<span class="s">kind: SpiderMultusConfig</span>
+<span class="s">metadata:</span>
+<span class="s">  name: macvlan-conf</span>
+<span class="s">  namespace: kube-system</span>
+<span class="s">spec:</span>
+<span class="s">  cniType: macvlan</span>
+<span class="s">  macvlan:</span>
+<span class="s">    master:</span>
+<span class="s">    - ens224</span>
+<span class="s">    ippools:</span>
+<span class="s">      ipv4:</span>
+<span class="s">      - cluster-b</span>
+<span class="s">  coordinator:</span>
+<span class="s">    hijackCIDR:</span>
+<span class="s">    - 10.233.0.0/18</span>
+<span class="s">    - 172.110.0.0/16</span>
+<span class="s">EOF</span>
+</code></pre></div>
+<blockquote>
+<ul>
+<li>Configuration of the host interface ens224 as the parent interface for Macvlan. Macvlan will create sub-interfaces on this network card for Pod use.</li>
+<li>Configuration of coordinator.hijackCIDR to specify the subnet information for the Service and Pods in the remote cluster. When a Pod is started, the coordinator will insert routes for these subnets into the Pod, enabling traffic to these destinations to be forwarded from the node. This facilitates better collaboration with Submariner.</li>
+</ul>
+</blockquote>
 </li>
 </ol>
-<h2 id="steps">Steps</h2>
-<p>The following steps demonstrate how to use the passt network mode of KubeVirt with macvlan CNI to enable VMs to access the underlay network and assign fixed IPs using Spiderpool.</p>
+<h3 id="install-subamriner">Install Subamriner</h3>
+<p>To install Submariner using the Subctl tool, you can refer to the official <a href="https://submariner.io/operations/deployment/">Submariner documentation</a>. However, when executing <code>subctl join</code>, make sure to manually specify the subnet for the MacVlan Underlay Pods mentioned in the previous steps.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># clusterA</span>
+subctl<span class="w"> </span>join<span class="w"> </span>--kubeconfig<span class="w"> </span>cluster-a.config<span class="w"> </span>broker-info.subm<span class="w"> </span>--clusterid<span class="o">=</span>cluster-a<span class="w"> </span>--clustercidr<span class="o">=</span><span class="m">172</span>.110.0.0/16
+<span class="c1"># clusterB</span>
+subctl<span class="w"> </span>join<span class="w"> </span>--kubeconfig<span class="w"> </span>cluster-b.config<span class="w"> </span>broker-info.subm<span class="w"> </span>--clusterid<span class="o">=</span>cluster-b<span class="w"> </span>--clustercidr<span class="o">=</span><span class="m">172</span>.111.0.0/16
+</code></pre></div>
 <blockquote>
-<p>Currently, macvlan and ipvlan are not suitable for KubeVirt's bridge network mode because in bridge network mode, the MAC address of the Pod interface is moved to the VM, causing the Pod to use a different address. However, macvlan and ipvlan CNI require the Pod's network interface to have the original MAC address.</p>
+<p>Currently, Submariner only supports specifying a single Pod subnet and does not support multiple subnets.</p>
 </blockquote>
-<h3 id="install-spiderpool">Install Spiderpool</h3>
-<p>Please refer to <a href="../install/underlay/get-started-macvlan/">Macvlan Quick Start</a> for installing Spiderpool. Make sure to set the Helm installation option <code>ipam.enableKubevirtStaticIP=true</code>.</p>
-<h3 id="create-kubevirt-vm-applications">Create KubeVirt VM Applications</h3>
-<h4 id="underlay-single-nic-situation">underlay single NIC situation</h4>
-<p>In the example YAML below, we create 1 KubeVirt VM application with KubeVirt passt network mode + macvlan:</p>
+<p>After the installation is complete, check the status of the Submariner components:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># subctl show all</span>
+Cluster<span class="w"> </span><span class="s2">&quot;cluster.local&quot;</span>
+<span class="w"> </span>✓<span class="w"> </span>Detecting<span class="w"> </span>broker<span class="o">(</span>s<span class="o">)</span>
+NAMESPACE<span class="w">               </span>NAME<span class="w">                </span>COMPONENTS<span class="w">                        </span>GLOBALNET<span class="w">   </span>GLOBALNET<span class="w"> </span>CIDR<span class="w">   </span>DEFAULT<span class="w"> </span>GLOBALNET<span class="w"> </span>SIZE<span class="w">   </span>DEFAULT<span class="w"> </span>DOMAINS<span class="w">   </span>
+submariner-k8s-broker<span class="w">   </span>submariner-broker<span class="w">   </span>service-discovery,<span class="w"> </span>connectivity<span class="w">   </span>no<span class="w">          </span><span class="m">242</span>.0.0.0/8<span class="w">      </span><span class="m">65536</span><span class="w">                                      </span>
+
+<span class="w"> </span>✓<span class="w"> </span>Showing<span class="w"> </span>Connections
+GATEWAY<span class="w">             </span>CLUSTER<span class="w">     </span>REMOTE<span class="w"> </span>IP<span class="w">     </span>NAT<span class="w">   </span>CABLE<span class="w"> </span>DRIVER<span class="w">   </span>SUBNETS<span class="w">                         </span>STATUS<span class="w">      </span>RTT<span class="w"> </span>avg.<span class="w">     </span>
+controller-node-1<span class="w">   </span>cluster-b<span class="w">   </span><span class="m">10</span>.6.168.74<span class="w">   </span>no<span class="w">    </span>libreswan<span class="w">      </span><span class="m">10</span>.243.0.0/18,<span class="w"> </span><span class="m">172</span>.111.0.0/16<span class="w">   </span>connected<span class="w">   </span><span class="m">661</span>.938µs<span class="w">    </span>
+
+<span class="w"> </span>✓<span class="w"> </span>Showing<span class="w"> </span>Endpoints
+CLUSTER<span class="w">     </span>ENDPOINT<span class="w"> </span>IP<span class="w">   </span>PUBLIC<span class="w"> </span>IP<span class="w">         </span>CABLE<span class="w"> </span>DRIVER<span class="w">   </span>TYPE<span class="w">     </span>
+cluster01<span class="w">   </span><span class="m">10</span>.6.168.73<span class="w">   </span><span class="m">140</span>.207.201.152<span class="w">   </span>libreswan<span class="w">      </span><span class="nb">local</span><span class="w">    </span>
+cluster02<span class="w">   </span><span class="m">10</span>.6.168.74<span class="w">   </span><span class="m">140</span>.207.201.152<span class="w">   </span>libreswan<span class="w">      </span>remote<span class="w">   </span>
+
+<span class="w"> </span>✓<span class="w"> </span>Showing<span class="w"> </span>Gateways
+NODE<span class="w">                </span>HA<span class="w"> </span>STATUS<span class="w">   </span>SUMMARY<span class="w">                               </span>
+controller-node-1<span class="w">   </span>active<span class="w">      </span>All<span class="w"> </span>connections<span class="w"> </span><span class="o">(</span><span class="m">1</span><span class="o">)</span><span class="w"> </span>are<span class="w"> </span>established<span class="w">   </span>
+
+<span class="w"> </span>✓<span class="w"> </span>Showing<span class="w"> </span>Network<span class="w"> </span>details
+<span class="w">    </span>Discovered<span class="w"> </span>network<span class="w"> </span>details<span class="w"> </span>via<span class="w"> </span>Submariner:
+<span class="w">        </span>Network<span class="w"> </span>plugin:<span class="w">  </span><span class="s2">&quot;&quot;</span>
+<span class="w">        </span>Service<span class="w"> </span>CIDRs:<span class="w">   </span><span class="o">[</span><span class="m">10</span>.233.0.0/18<span class="o">]</span>
+<span class="w">        </span>Cluster<span class="w"> </span>CIDRs:<span class="w">   </span><span class="o">[</span><span class="m">172</span>.110.0.0/16<span class="o">]</span>
+
+<span class="w"> </span>✓<span class="w"> </span>Showing<span class="w"> </span>versions<span class="w"> </span>
+COMPONENT<span class="w">                       </span>REPOSITORY<span class="w">           </span>CONFIGURED<span class="w">   </span>RUNNING<span class="w">                     </span>
+submariner-gateway<span class="w">              </span>quay.io/submariner<span class="w">   </span><span class="m">0</span>.16.0<span class="w">       </span>release-0.16-d1b6c9e194f8<span class="w">   </span>
+submariner-routeagent<span class="w">           </span>quay.io/submariner<span class="w">   </span><span class="m">0</span>.16.0<span class="w">       </span>release-0.16-d1b6c9e194f8<span class="w">   </span>
+submariner-metrics-proxy<span class="w">        </span>quay.io/submariner<span class="w">   </span><span class="m">0</span>.16.0<span class="w">       </span>release-0.16-d48224e08e06<span class="w">   </span>
+submariner-operator<span class="w">             </span>quay.io/submariner<span class="w">   </span><span class="m">0</span>.16.0<span class="w">       </span>release-0.16-0807883713b0<span class="w">   </span>
+submariner-lighthouse-agent<span class="w">     </span>quay.io/submariner<span class="w">   </span><span class="m">0</span>.16.0<span class="w">       </span>release-0.16-6f1d3f22e806<span class="w">   </span>
+submariner-lighthouse-coredns<span class="w">   </span>quay.io/submariner<span class="w">   </span><span class="m">0</span>.16.0<span class="w">       </span>release-0.16-6f1d3f22e806<span class="w">   </span>
+</code></pre></div>
+<p>As shown above, the Submariner components are running normally, and the tunnels have been successfully established.</p>
+<p>If you encounter issues with the tunnel not being established and the submariner-gateway pod remains in a CrashLoopBackOff state, potential reasons could include:</p>
+<blockquote>
 <ul>
-<li><code>v1.multus-cni.io/default-network</code>: select the default network CNI configuration for the application.</li>
+<li>Select suitable nodes as gateway nodes, ensuring they can communicate with each other. Otherwise, the tunnel will not be established.</li>
+<li>If the pod logs show: "Error creating local endpoint object error="error getting CNI Interface IP address: unable to find CNI Interface on the host which has IP from [\"172.100.0.0/16\"].Please disable the health check if your CNI does not expose a pod IP on the nodes", Please check if the gateway nodes are configured with addresses in the "172.100.0.0/16" subnet. If not, configure them. Alternatively, when executing subctl join, you can disable the health-check feature for the gateways: <code>subctl join --health-check=false ...</code></li>
 </ul>
-<div class="highlight"><pre><span></span><code>apiVersion:<span class="w"> </span>kubevirt.io/v1
-kind:<span class="w"> </span>VirtualMachine
-metadata:
-<span class="w">  </span>name:<span class="w"> </span>vm-cirros
-<span class="w">  </span>labels:
-<span class="w">    </span>kubevirt.io/vm:<span class="w"> </span>vm-cirros
-spec:
-<span class="w">  </span>runStrategy:<span class="w"> </span>Always
-<span class="w">  </span>template:
-<span class="w">    </span>metadata:
-<span class="w">      </span>annotations:
-<span class="w">        </span>v1.multus-cni.io/default-network:<span class="w"> </span>kube-system/macvlan-ens192
-<span class="w">      </span>labels:
-<span class="w">        </span>kubevirt.io/vm:<span class="w"> </span>vm-cirros
-<span class="w">    </span>spec:
-<span class="w">      </span>domain:
-<span class="w">        </span>devices:
-<span class="w">          </span>disks:
-<span class="w">            </span>-<span class="w"> </span>name:<span class="w"> </span>containerdisk
-<span class="w">              </span>disk:
-<span class="w">                </span>bus:<span class="w"> </span>virtio
-<span class="w">            </span>-<span class="w"> </span>name:<span class="w"> </span>cloudinitdisk
-<span class="w">              </span>disk:
-<span class="w">                </span>bus:<span class="w"> </span>virtio
-<span class="w">          </span>interfaces:
-<span class="w">            </span>-<span class="w"> </span>name:<span class="w"> </span>default
-<span class="w">              </span>passt:<span class="w"> </span><span class="o">{}</span>
-<span class="w">        </span>resources:
-<span class="w">          </span>requests:
-<span class="w">            </span>memory:<span class="w"> </span>64M
-<span class="w">      </span>networks:
-<span class="w">        </span>-<span class="w"> </span>name:<span class="w"> </span>default
-<span class="w">          </span>pod:<span class="w"> </span><span class="o">{}</span>
-<span class="w">      </span>volumes:
-<span class="w">        </span>-<span class="w"> </span>name:<span class="w"> </span>containerdisk
-<span class="w">          </span>containerDisk:
-<span class="w">            </span>image:<span class="w"> </span>quay.io/kubevirt/cirros-container-disk-demo
-<span class="w">        </span>-<span class="w"> </span>name:<span class="w"> </span>cloudinitdisk
-<span class="w">          </span>cloudInitNoCloud:
-<span class="w">            </span>userData:<span class="w"> </span><span class="p">|</span>
-<span class="w">              </span><span class="c1">#!/bin/sh</span>
-<span class="w">              </span><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;printed from cloud-init userdata&#39;</span>
+</blockquote>
+<h2 id="create-deployment">Create Deployment</h2>
+<ol>
+<li>
+<p>Use the following commands to create test Pods and Services in clusters cluster-a and cluster-b:</p>
+<div class="highlight"><pre><span></span><code>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl create -f -</span>
+<span class="s">apiVersion: apps/v1</span>
+<span class="s">kind: Deployment</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  replicas: 2</span>
+<span class="s">  selector:</span>
+<span class="s">    matchLabels:</span>
+<span class="s">      app: test-app</span>
+<span class="s">  template:</span>
+<span class="s">    metadata:</span>
+<span class="s">      annotations:</span>
+<span class="s">        v1.multus-cni.io/default-network: kube-system/macvlan-confg</span>
+<span class="s">      labels:</span>
+<span class="s">        app: test-app</span>
+<span class="s">    spec:</span>
+<span class="s">      containers:</span>
+<span class="s">      - name: test-app</span>
+<span class="s">        image: nginx</span>
+<span class="s">        imagePullPolicy: IfNotPresent</span>
+<span class="s">        ports:</span>
+<span class="s">        - name: http</span>
+<span class="s">          containerPort: 80</span>
+<span class="s">          protocol: TCP</span>
+<span class="s">---</span>
+<span class="s">apiVersion: v1</span>
+<span class="s">kind: Service</span>
+<span class="s">metadata:</span>
+<span class="s">  name: test-app-svc</span>
+<span class="s">  labels:</span>
+<span class="s">    app: test-app</span>
+<span class="s">spec:</span>
+<span class="s">  type: ClusterIP</span>
+<span class="s">  ports:</span>
+<span class="s">    - port: 80</span>
+<span class="s">      protocol: TCP</span>
+<span class="s">      targetPort: 80</span>
+<span class="s">  selector:</span>
+<span class="s">    app: test-app </span>
+<span class="s">EOF</span>
 </code></pre></div>
-<p>When creating a KubeVirt VM application, Spiderpool randomly selects an IP from the specified IP pool to establish a binding with the application.</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>spiderippool
-NAME<span class="w">          </span>VERSION<span class="w">   </span>SUBNET<span class="w">        </span>ALLOCATED-IP-COUNT<span class="w">   </span>TOTAL-IP-COUNT<span class="w">   </span>DEFAULT
-test-ippool<span class="w">   </span><span class="m">4</span><span class="w">         </span><span class="m">10</span>.6.0.0/16<span class="w">   </span><span class="m">1</span><span class="w">                    </span><span class="m">10</span><span class="w">               </span><span class="nb">false</span>
+</li>
+<li>
+<p>Check the running status of the Pods:</p>
+<p>View in Cluster-a:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl  get po -o wide</span>
+NAME<span class="w">                        </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">                </span>NODE<span class="w">                </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-696bf7cf7d-bkstk<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>20m<span class="w">     </span><span class="m">172</span>.110.1.131<span class="w">   </span>controller-node-1<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
 
-~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span>vm.kubevirt.io/name<span class="o">=</span>vm-cirros<span class="w"> </span>-o<span class="w"> </span>wide
-NAME<span class="w">                            </span>READY<span class="w">   </span>STATUS<span class="w">      </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">              </span>NODE<span class="w">                   </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
-virt-launcher-vm-cirros-rg6fs<span class="w">   </span><span class="m">2</span>/2<span class="w">     </span>Running<span class="w">     </span><span class="m">0</span><span class="w">          </span>3m43s<span class="w">   </span><span class="m">10</span>.6.168.105<span class="w">    </span>node2<span class="w">                  </span>&lt;none&gt;<span class="w">           </span><span class="m">1</span>/1
+<span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl get svc</span>
+NAME<span class="w">           </span>TYPE<span class="w">        </span>CLUSTER-IP<span class="w">     </span>EXTERNAL-IP<span class="w">   </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">   </span>AGE
+test-app-svc<span class="w">   </span>ClusterIP<span class="w">   </span><span class="m">10</span>.233.62.51<span class="w">   </span>&lt;none&gt;<span class="w">        </span><span class="m">80</span>/TCP<span class="w">    </span>20m
 </code></pre></div>
-<p>Upon restarting a Kubevirt VM Pod, the new Pod retains its original IP address as expected.</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>delete<span class="w"> </span>pod<span class="w"> </span>virt-launcher-vm-cirros-rg6fs
-pod<span class="w"> </span><span class="s2">&quot;virt-launcher-vm-cirros-rg6fs&quot;</span><span class="w"> </span>deleted
+<p>View in Cluster-b:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl  get po -o wide</span>
+NAME<span class="w">                       </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">                </span>NODE<span class="w">                </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
+test-app-8f5cdd468-5zr8n<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>21m<span class="w">     </span><span class="m">172</span>.111.1.136<span class="w">   </span>controller-node-1<span class="w">   </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
 
-~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span>vm.kubevirt.io/name<span class="o">=</span>vm-cirros<span class="w"> </span>-o<span class="w"> </span>wide
-NAME<span class="w">                            </span>READY<span class="w">   </span>STATUS<span class="w">      </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">              </span>NODE<span class="w">                   </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
-virt-launcher-vm-cirros-d68l2<span class="w">   </span><span class="m">2</span>/2<span class="w">     </span>Running<span class="w">     </span><span class="m">0</span><span class="w">          </span>1m21s<span class="w">   </span><span class="m">10</span>.6.168.105<span class="w">    </span>node2<span class="w">                  </span>&lt;none&gt;<span class="w">           </span><span class="m">1</span>/1
+<span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl  get svc</span>
+NAME<span class="w">           </span>TYPE<span class="w">        </span>CLUSTER-IP<span class="w">     </span>EXTERNAL-IP<span class="w">   </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">   </span>AGE
+test-app-svc<span class="w">   </span>ClusterIP<span class="w">   </span><span class="m">10</span>.243.2.135<span class="w">   </span>&lt;none&gt;<span class="w">        </span><span class="m">80</span>/TCP<span class="w">    </span>21m
 </code></pre></div>
-<p>When restarting a Kubevirt VMI, new Pods also maintain their assigned IP addresses as expected.</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>delete<span class="w"> </span>vmi<span class="w"> </span>vm-cirros
-virtualmachineinstance.kubevirt.io<span class="w"> </span><span class="s2">&quot;vm-cirros&quot;</span><span class="w"> </span>deleted
+</li>
+<li>
+<p>Test communication between Pods across clusters:</p>
+<p>First, enter the Pod and check the routing information to ensure that when accessing the remote Pod and Service, traffic goes through the host's network protocol stack for forwarding:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># In Cluster-a :</span>
+<span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl exec -it test-app-696bf7cf7d-bkstk -- ip route</span>
 
-~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-l<span class="w"> </span>vm.kubevirt.io/name<span class="o">=</span>vm-cirros<span class="w"> </span>-o<span class="w"> </span>wide
-NAME<span class="w">                            </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">    </span>IP<span class="w">              </span>NODE<span class="w">                   </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
-virt-launcher-vm-cirros-jjgrl<span class="w">   </span><span class="m">2</span>/2<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>104s<span class="w">   </span><span class="m">10</span>.6.168.105<span class="w">    </span>node2<span class="w">                  </span>&lt;none&gt;<span class="w">           </span><span class="m">1</span>/1
+<span class="m">10</span>.7.168.73<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">10</span>.233.0.0/18<span class="w"> </span>via<span class="w"> </span><span class="m">10</span>.7.168.73<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">10</span>.233.64.0/18<span class="w"> </span>via<span class="w"> </span><span class="m">10</span>.7.168.73<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">10</span>.233.74.89<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">10</span>.243.0.0/18<span class="w"> </span>via<span class="w"> </span><span class="m">10</span>.7.168.73<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">172</span>.110.1.0/24<span class="w"> </span>dev<span class="w"> </span>eth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">172</span>.110.168.73<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
+<span class="m">172</span>.111.0.0/16<span class="w"> </span>via<span class="w"> </span><span class="m">10</span>.7.168.73<span class="w"> </span>dev<span class="w"> </span>veth0<span class="w">  </span>src<span class="w"> </span><span class="m">172</span>.110.168.131<span class="w"> </span>
 </code></pre></div>
-<p>The VM can communicate with other underlay Pods</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-o<span class="w"> </span>wide
-NAME<span class="w">                             </span>READY<span class="w">   </span>STATUS<span class="w">    </span>RESTARTS<span class="w">   </span>AGE<span class="w">     </span>IP<span class="w">              </span>NODE<span class="w">                   </span>NOMINATED<span class="w"> </span>NODE<span class="w">   </span>READINESS<span class="w"> </span>GATES
-daocloud-2048-5855b45f44-bvmdr<span class="w">   </span><span class="m">1</span>/1<span class="w">     </span>Running<span class="w">   </span><span class="m">0</span><span class="w">          </span>5m55s<span class="w">   </span><span class="m">10</span>.6.168.108<span class="w">    </span>spider-worker<span class="w">          </span>&lt;none&gt;<span class="w">           </span>&lt;none&gt;
+<p>Confirm from the routing information that 10.243.0.0/18 and 172.111.0.0/16 are forwarded through veth0.</p>
+<p>Test access from a Pod in Cluster-A to a Pod in the remote Cluster-b:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl exec -it test-app-696bf7cf7d-bkstk -- ping -c2 172.111.168.136</span>
+PING<span class="w"> </span><span class="m">172</span>.111.168.136<span class="w"> </span><span class="o">(</span><span class="m">172</span>.111.168.136<span class="o">)</span>:<span class="w"> </span><span class="m">56</span><span class="w"> </span>data<span class="w"> </span>bytes
+<span class="m">64</span><span class="w"> </span>bytes<span class="w"> </span>from<span class="w"> </span><span class="m">172</span>.111.168.136:<span class="w"> </span><span class="nv">seq</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">ttl</span><span class="o">=</span><span class="m">62</span><span class="w"> </span><span class="nv">time</span><span class="o">=</span><span class="m">0</span>.900<span class="w"> </span>ms
+<span class="m">64</span><span class="w"> </span>bytes<span class="w"> </span>from<span class="w"> </span><span class="m">172</span>.111.168.136:<span class="w"> </span><span class="nv">seq</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">ttl</span><span class="o">=</span><span class="m">62</span><span class="w"> </span><span class="nv">time</span><span class="o">=</span><span class="m">0</span>.796<span class="w"> </span>ms
 
-~#<span class="w"> </span>kubectl<span class="w"> </span>virtctl<span class="w"> </span>console<span class="w"> </span>vm-cirros
-$<span class="w"> </span>ping<span class="w"> </span>-c<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">10</span>.6.168.108
-PING<span class="w"> </span><span class="m">10</span>.6.168.108<span class="w"> </span><span class="o">(</span><span class="m">10</span>.6.168.108<span class="o">)</span>:<span class="w"> </span><span class="m">56</span><span class="w"> </span>data<span class="w"> </span>bytes
-<span class="m">64</span><span class="w"> </span>bytes<span class="w"> </span>from<span class="w"> </span><span class="m">10</span>.6.168.108:<span class="w"> </span><span class="nv">seq</span><span class="o">=</span><span class="m">0</span><span class="w"> </span><span class="nv">ttl</span><span class="o">=</span><span class="m">255</span><span class="w"> </span><span class="nv">time</span><span class="o">=</span><span class="m">70</span>.554<span class="w"> </span>ms
-
----<span class="w"> </span><span class="m">10</span>.6.168.108<span class="w"> </span>ping<span class="w"> </span>statistics<span class="w"> </span>---
-<span class="m">1</span><span class="w"> </span>packets<span class="w"> </span>transmitted,<span class="w"> </span><span class="m">1</span><span class="w"> </span>packets<span class="w"> </span>received,<span class="w"> </span><span class="m">0</span>%<span class="w"> </span>packet<span class="w"> </span>loss
-round-trip<span class="w"> </span>min/avg/max<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">70</span>.554/70.554/70.554<span class="w"> </span>ms
+---<span class="w"> </span><span class="m">172</span>.111.168.136<span class="w"> </span>ping<span class="w"> </span>statistics<span class="w"> </span>---
+<span class="m">2</span><span class="w"> </span>packets<span class="w"> </span>transmitted,<span class="w"> </span><span class="m">2</span><span class="w"> </span>packets<span class="w"> </span>received,<span class="w"> </span><span class="m">0</span>%<span class="w"> </span>packet<span class="w"> </span>loss
+round-trip<span class="w"> </span>min/avg/max<span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>.796/0.848/0.900<span class="w"> </span>ms
 </code></pre></div>
-<p>The VM can access cluster IP addresses.</p>
-<div class="highlight"><pre><span></span><code>~#<span class="w"> </span>kubectl<span class="w"> </span>get<span class="w"> </span>svc<span class="w"> </span>-o<span class="w"> </span>wide
-NAME<span class="w">                </span>TYPE<span class="w">        </span>CLUSTER-IP<span class="w">     </span>EXTERNAL-IP<span class="w">   </span>PORT<span class="o">(</span>S<span class="o">)</span><span class="w">   </span>AGE<span class="w">     </span>SELECTOR
-daocloud-2048-svc<span class="w">   </span>ClusterIP<span class="w">   </span><span class="m">10</span>.233.36.38<span class="w">   </span>&lt;none&gt;<span class="w">        </span><span class="m">80</span>/TCP<span class="w">    </span>3m50s<span class="w">   </span><span class="nv">app</span><span class="o">=</span>daocloud-2048
+<p>Test access from a Pod in Cluster-a to a Service in the remote Cluster-b:</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>root@controller-node-1<span class="w"> </span>~<span class="o">]</span><span class="c1"># kubectl exec -it test-app-696bf7cf7d-bkstk -- curl -I 10.243.2.135</span>
 
-~#<span class="w"> </span>curl<span class="w"> </span>-I<span class="w"> </span><span class="m">10</span>.233.36.38:80
 HTTP/1.1<span class="w"> </span><span class="m">200</span><span class="w"> </span>OK
-Server:<span class="w"> </span>nginx/1.10.1
-Date:<span class="w"> </span>Tue,<span class="w"> </span><span class="m">17</span><span class="w"> </span>Oct<span class="w"> </span><span class="m">2023</span><span class="w"> </span><span class="m">06</span>:50:04<span class="w"> </span>GMT
+Server:<span class="w"> </span>nginx/1.23.1
+Date:<span class="w"> </span>Fri,<span class="w"> </span><span class="m">08</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">2023</span><span class="w"> </span><span class="m">03</span>:32:04<span class="w"> </span>GMT
 Content-Type:<span class="w"> </span>text/html
-Content-Length:<span class="w"> </span><span class="m">4090</span>
-Last-Modified:<span class="w"> </span>Tue,<span class="w"> </span><span class="m">17</span><span class="w"> </span>Oct<span class="w"> </span><span class="m">2023</span><span class="w"> </span><span class="m">06</span>:40:53<span class="w"> </span>GMT
+Content-Length:<span class="w"> </span><span class="m">4055</span>
+Last-Modified:<span class="w"> </span>Fri,<span class="w"> </span><span class="m">08</span><span class="w"> </span>Dec<span class="w"> </span><span class="m">2023</span><span class="w"> </span><span class="m">03</span>:32:04<span class="w"> </span>GMT
 Connection:<span class="w"> </span>keep-alive
-ETag:<span class="w"> </span><span class="s2">&quot;652e2c75-ffa&quot;</span>
+ETag:<span class="w"> </span><span class="s2">&quot;632d1faa-fd7&quot;</span>
 Accept-Ranges:<span class="w"> </span>bytes
 </code></pre></div>
-<h4 id="underlay-multiple-nics-situation">underlay multiple NICs situation</h4>
-<p>In the example YAML below, we create 1 KubeVirt VM application with KubeVirt bridge network mode + <a href="../install/underlay/get-started-ovs/">ovs-cni</a>:</p>
-<ul>
-<li><code>ipam.spidernet.io/ippools</code>: select IPPools for every NIC.(You can also use the multus resource CNI configuration level default IPPools)</li>
-<li>The multus resource <code>kube-system/ovs-vlan30</code> and <code>kube-system/ovs-vlan40</code> must enable the coordinator plugin to solve the multiple interfaces default route problem.</li>
-<li>ovs-cni doesn't support clusterIP network connectivity access.</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kubevirt.io/v1</span>
-<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">VirtualMachine</span>
-<span class="nt">metadata</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">vm-centos</span>
-<span class="nt">spec</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">runStrategy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Always</span>
-<span class="w">  </span><span class="nt">template</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">metadata</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">annotations</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">ipam.spidernet.io/ippools</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">          </span><span class="no">[{</span>
-<span class="w">             </span><span class="no">&quot;ipv4&quot;: [&quot;vlan30-v4-ippool&quot;],</span>
-<span class="w">             </span><span class="no">&quot;ipv6&quot;: [&quot;vlan30-v6-ippool&quot;]</span>
-<span class="w">           </span><span class="no">},{</span>
-<span class="w">             </span><span class="no">&quot;ipv4&quot;: [&quot;vlan40-v4-ippool&quot;],</span>
-<span class="w">             </span><span class="no">&quot;ipv6&quot;: [&quot;vlan40-v6-ippool&quot;]</span>
-<span class="w">          </span><span class="no">}]</span>
-<span class="w">    </span><span class="nt">spec</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">architecture</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">amd64</span>
-<span class="w">      </span><span class="nt">domain</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">cpu</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">cores</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">          </span><span class="nt">model</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">host-model</span>
-<span class="w">          </span><span class="nt">sockets</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">          </span><span class="nt">threads</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">        </span><span class="nt">devices</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">disks</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">disk</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">bus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">virtio</span>
-<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerdisk</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">disk</span><span class="p">:</span>
-<span class="w">              </span><span class="nt">bus</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">virtio</span>
-<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudinitdisk</span>
-<span class="w">          </span><span class="nt">interfaces</span><span class="p">:</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bridge</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ovs-bridge1</span>
-<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bridge</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
-<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ovs-bridge2</span>
-<span class="w">        </span><span class="nt">features</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">acpi</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">        </span><span class="nt">machine</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">q35</span>
-<span class="w">        </span><span class="nt">resources</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">requests</span><span class="p">:</span>
-<span class="w">            </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1Gi</span>
-<span class="w">      </span><span class="nt">networks</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">multus</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">          </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system/ovs-vlan30</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ovs-bridge1</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">multus</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">networkName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kube-system/ovs-vlan40</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ovs-bridge2</span>
-<span class="w">      </span><span class="nt">volumes</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">containerdisk</span>
-<span class="w">        </span><span class="nt">containerDisk</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">release-ci.daocloud.io/virtnest/system-images/centos-7.9-x86_64:v1</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cloudInitNoCloud</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">networkData</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">            </span><span class="no">version: 2</span>
-<span class="w">            </span><span class="no">ethernets:</span>
-<span class="w">              </span><span class="no">eth0:</span>
-<span class="w">                </span><span class="no">dhcp4: true</span>
-<span class="w">              </span><span class="no">eth1:</span>
-<span class="w">                </span><span class="no">dhcp4: true</span>
-<span class="w">          </span><span class="nt">userData</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">            </span><span class="no">#cloud-config</span>
-<span class="w">            </span><span class="no">ssh_pwauth: true</span>
-<span class="w">            </span><span class="no">disable_root: false</span>
-<span class="w">            </span><span class="no">chpasswd: {&quot;list&quot;: &quot;root:dangerous&quot;, expire: False}</span>
-<span class="w">            </span><span class="no">runcmd:</span>
-<span class="w">              </span><span class="no">- sed -i &quot;/#\?PermitRootLogin/s/^.*$/PermitRootLogin yes/g&quot; /etc/ssh/sshd_config</span>
-<span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cloudinitdisk</span>
-</code></pre></div>
+</li>
+</ol>
 <h2 id="summary">Summary</h2>
-<p>Spiderpool guarantees that KubeVirt VM Pods consistently acquire the same IP addresses during restart and rebuild processes, meeting the fixed IP address requirements for Kubevirt VMs. It seamlessly integrates with macvlan or OVS CNI to enable VMs to access underlay networks.</p>
+<p>Spiderpool can address the challenge of cross-datacenter multi-cluster network connectivity with the assistance of Submariner.</p>
 
 
 
@@ -1782,7 +1785,7 @@ Accept-Ranges:<span class="w"> </span>bytes
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
         
-        <a href="../underlay_cni_service/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Access Service for Underlay CNI" rel="prev">
+        <a href="../rdma/" class="md-footer__link md-footer__link--prev" aria-label="Previous: RDMA" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
           </div>
@@ -1791,20 +1794,20 @@ Accept-Ranges:<span class="w"> </span>bytes
               <span class="md-footer__direction">
                 Previous
               </span>
-              Access Service for Underlay CNI
+              RDMA
             </div>
           </div>
         </a>
       
       
         
-        <a href="../faq/" class="md-footer__link md-footer__link--next" aria-label="Next: FAQ" rel="next">
+        <a href="../underlay_cni_service/" class="md-footer__link md-footer__link--next" aria-label="Next: Access Service for Underlay CNI" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              FAQ
+              Access Service for Underlay CNI
             </div>
           </div>
           <div class="md-footer__button md-icon">
