@@ -13,7 +13,7 @@
     
     
       
-        <title>Spiderpool - spiderpool</title>
+        <title>README zh CN - spiderpool</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#spiderpool" class="md-skip">
+        <a href="#_1" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Spiderpool
+              README zh CN
             
           </span>
         </div>
@@ -228,7 +228,7 @@
   
     <li class="md-nav__item">
       <a href=".." class="md-nav__link">
-        Spiderpool
+        Home
       </a>
     </li>
   
@@ -781,6 +781,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../usage/submariner/" class="md-nav__link">
+        Multi-Cluster Networking
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../usage/underlay_cni_service/" class="md-nav__link">
         Access Service for Underlay CNI
       </a>
@@ -1288,28 +1302,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#spiderpool_1" class="md-nav__link">
+  <a href="#spiderpool" class="md-nav__link">
     Spiderpool 介绍
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#_2" class="md-nav__link">
     快速开始
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#spiderpool_2" class="md-nav__link">
+  <a href="#spiderpool_1" class="md-nav__link">
     Spiderpool 架构
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     核心功能
   </a>
   
@@ -1330,21 +1344,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#_4" class="md-nav__link">
     使用者
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#_5" class="md-nav__link">
     参与开发
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#_6" class="md-nav__link">
     联系我们
   </a>
   
@@ -1380,7 +1394,8 @@
   </a>
 
 
-<h1 id="spiderpool">Spiderpool</h1>
+<h1 id="_1"></h1>
+<p><img alt="Spiderpool" src="../images/spiderpool.png" /></p>
 <p><a href="https://goreportcard.com/report/github.com/spidernet-io/spiderpool"><img alt="Go Report Card" src="https://goreportcard.com/badge/github.com/spidernet-io/spiderpool" /></a>
 <a href="https://www.codefactor.io/repository/github/spidernet-io/spiderpool"><img alt="CodeFactor" src="https://www.codefactor.io/repository/github/spidernet-io/spiderpool/badge" /></a>
 <a href="https://codecov.io/gh/spidernet-io/spiderpool"><img alt="codecov" src="https://codecov.io/gh/spidernet-io/spiderpool/branch/main/graph/badge.svg?token=YKXY2E4Q8G" /></a>
@@ -1393,7 +1408,7 @@
 <img alt="badge" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/weizhoublue/38d00a872e830eedb46870c886549561/raw/spiderpoolperformance.json" /></p>
 <p><a href="../"><strong>English</strong></a> | <strong>简体中文</strong></p>
 <p><strong>作为一个 <a href="https://landscape.cncf.io/card-mode?category=cloud-native-network&amp;grouping=category">CNCF Landscape 项目</a>，Spiderpool 提供了一个 Kubernetes 的 underlay 和 RDMA 网络解决方案, 它能运行在裸金属、虚拟机和公有云上</strong></p>
-<h2 id="spiderpool_1">Spiderpool 介绍</h2>
+<h2 id="spiderpool">Spiderpool 介绍</h2>
 <p>Spiderpool 是一个 kubernetes 的 underlay 和 RDMA 网络解决方案，它增强了 <a href="https://github.com/containernetworking/plugins/tree/main/plugins/main/macvlan">Macvlan CNI</a>,
 <a href="https://github.com/containernetworking/plugins/tree/main/plugins/main/ipvlan">ipvlan CNI</a>,
 <a href="https://github.com/k8snetworkplumbingwg/sriov-cni">SR-IOV CNI</a> 的功能，满足了各种网络需求，使得 underlay 网络方案可应用在**裸金属、虚拟机和公有云环境**中，可为网络 I/O 密集性、低延时应用带来优秀的网络性能，包括**存储、中间件、AI 等应用**。详细的文档可参考<a href="https://spidernet-io.github.io/spiderpool/">文档站</a></p>
@@ -1436,7 +1451,7 @@
 <ul>
 <li>增强网络连通性</li>
 </ul>
-<p>打通 Pod 和宿主机的连通性，确保 Pod 健康检测工作正常，并可通过 kube-proxy 或 eBPF kube-proxy replacement 使得 Pod 访问 service，支持 Pod 的 IP 冲突检测、网关可达性检测等。</p>
+<p>打通 Pod 和宿主机的连通性，确保 Pod 健康检测工作正常，并可通过 kube-proxy 或 eBPF kube-proxy replacement 使得 Pod 访问 service，支持 Pod 的 IP 冲突检测、网关可达性检测等。多集群网络可基于相同的 underlay 网络或者 <a href="https://github.com/submariner-io/submariner">Submariner</a> 实现联通。</p>
 <ul>
 <li>eBPF 增强</li>
 </ul>
@@ -1472,9 +1487,10 @@
 <p>网络延时敏感型应用</p>
 </li>
 </ul>
-<h2 id="_1">快速开始</h2>
+<h2 id="_2">快速开始</h2>
 <p>可参考 <a href="../usage/install/get-started-kind-zh_CN/">快速搭建</a> 来使用 Spiderpool</p>
-<h2 id="spiderpool_2">Spiderpool 架构</h2>
+<p>参考 <a href="../usage/readme/">使用</a> 来了解各种功能的使用方法</p>
+<h2 id="spiderpool_1">Spiderpool 架构</h2>
 <p>Spiderpool 拥有清晰的架构设计，包括了如下应用场景：</p>
 <ul>
 <li>
@@ -1491,7 +1507,7 @@
 </li>
 </ul>
 <p>具体可参考 <a href="../concepts/arch-zh_CN/">架构</a></p>
-<h2 id="_2">核心功能</h2>
+<h2 id="_3">核心功能</h2>
 <table>
 <thead>
 <tr>
@@ -1503,25 +1519,25 @@
 </thead>
 <tbody>
 <tr>
-<td>service by kubeproxy</td>
+<td>Service By Kubeproxy</td>
 <td>Beta</td>
 <td>Beta</td>
 <td>Beta</td>
 </tr>
 <tr>
-<td>service by kubeproxy replacement</td>
+<td>Service By Kubeproxy Replacement</td>
 <td>Alpha</td>
 <td>Alpha</td>
 <td>Alpha</td>
 </tr>
 <tr>
-<td>network policy</td>
+<td>Network Policy</td>
 <td>In-plan</td>
 <td>Alpha</td>
 <td>In-plan</td>
 </tr>
 <tr>
-<td>bandwidth</td>
+<td>Bandwidth</td>
 <td>In-plan</td>
 <td>Alpha</td>
 <td>In-plan</td>
@@ -1539,7 +1555,13 @@
 <td>Beta</td>
 </tr>
 <tr>
-<td>egress policy</td>
+<td>Multi-Cluster</td>
+<td>Alpha</td>
+<td>Alpha</td>
+<td>Alpha</td>
+</tr>
+<tr>
+<td>Egress Policy</td>
 <td>Alpha</td>
 <td>Alpha</td>
 <td>Alpha</td>
@@ -1563,11 +1585,11 @@
 <p>可参考 <a href="../concepts/blog-zh_CN/">Blogs</a></p>
 <h2 id="governance">Governance</h2>
 <p><a href="../USERS/">Maintainers and Committers</a>， 遵循 <a href="../develop/CODE-OF-CONDUCT/">governance document</a>.</p>
-<h2 id="_3">使用者</h2>
+<h2 id="_4">使用者</h2>
 <p>使用了 Spiderpool 项目的 <a href="../USERS/">用户</a>.</p>
-<h2 id="_4">参与开发</h2>
+<h2 id="_5">参与开发</h2>
 <p>可参考 <a href="../develop/contributing/">开发搭建文档</a>.</p>
-<h2 id="_5">联系我们</h2>
+<h2 id="_6">联系我们</h2>
 <p>如果有任何关于 Spiderpool 的问题，欢迎您随时通过以下的方式联系我们👏:</p>
 <ul>
 <li>
@@ -1576,6 +1598,9 @@
 </li>
 <li>
 <p>邮件: 您可以查看 <a href="https://github.com/spidernet-io/spiderpool/blob/main/MAINTAINERS.md">MAINTAINERS.md</a> 获取所有维护者的邮箱地址， 联系邮箱地址以报告任何问题。</p>
+</li>
+<li>
+<p>社区会议: 欢迎加入到我们每个月1号举行的<a href="https://docs.google.com/document/d/1tpNzxRWOz9-jVd30xGS2n5X02uXQuvqJAdNZzwBLTmI/edit?usp=sharing">社区会议</a>，可以在这里讨论任何有关 Spiderpool 的问题。</p>
 </li>
 <li>
 <p>微信群: 您可以扫描微信二维码，加入到 Spiderpool 技术交流群与我们进一步交流。</p>
