@@ -1241,8 +1241,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unitest" class="md-nav__link">
-    unitest
+  <a href="#unittest" class="md-nav__link">
+    unittest
   </a>
   
 </li>
@@ -1300,20 +1300,6 @@
           <li class="md-nav__item">
   <a href="#action-lint-yaml-file" class="md-nav__link">
     Action: lint yaml file
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-lint-chart" class="md-nav__link">
-    Action: lint chart
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-lint-openapiyaml" class="md-nav__link">
-    Action: lint openapi.yaml
   </a>
   
 </li>
@@ -1435,8 +1421,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unitest" class="md-nav__link">
-    unitest
+  <a href="#unittest" class="md-nav__link">
+    unittest
   </a>
   
 </li>
@@ -1499,20 +1485,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#action-lint-chart" class="md-nav__link">
-    Action: lint chart
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-lint-openapiyaml" class="md-nav__link">
-    Action: lint openapi.yaml
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#action-check-code-spell" class="md-nav__link">
     Action: check code spell
   </a>
@@ -1556,9 +1528,9 @@
 
 <h1 id="contribution">Contribution</h1>
 <hr />
-<h2 id="unitest">unitest</h2>
-<p>run the following command to check unitest</p>
-<p><code>make unitest-tests</code></p>
+<h2 id="unittest">unittest</h2>
+<p>run the following command to check unittest</p>
+<p><code>make unittest-tests</code></p>
 <h2 id="setup-cluster-and-run-test">setup cluster and run test</h2>
 <ol>
 <li>
@@ -1569,7 +1541,6 @@ check e2e tools
 pass   'docker' installed
 pass   'kubectl' installed
 pass   'kind' installed
-pass   'p2ctl' installed
 finish checking e2e tools
 </code></pre>
 </li>
@@ -1717,11 +1688,21 @@ $ make e2e_test
 <h2 id="submit-pull-request">Submit Pull Request</h2>
 <p>A pull request will be checked by following workflow, which is required for merging.</p>
 <h3 id="action-your-pr-should-be-signed-off">Action: your PR should be signed off</h3>
-<p>When you commit your modification, add <code>-s</code> in your commit command <code>git commit -s</code></p>
+<ul>
+<li>When you commit your modification, add <code>-s</code> in your commit command <code>git commit -s</code></li>
+</ul>
 <h3 id="action-check-yaml-files">Action: check yaml files</h3>
+<ul>
+<li>
 <p>If this check fails, see the <a href="https://yamllint.readthedocs.io/en/stable/rules.html">yaml rule</a>.</p>
+</li>
+<li>
 <p>Once the issue is fixed, it could be verified on your local host by command <code>make lint-yaml</code>.</p>
+</li>
+</ul>
+<blockquote>
 <p>Note: To ignore a yaml rule, you can add it into <code>.github/yamllint-conf.yml</code>.</p>
+</blockquote>
 <h3 id="action-check-golang-source-code">Action: check golang source code</h3>
 <p>It checks the following items against any updated golang file.</p>
 <ul>
@@ -1732,7 +1713,7 @@ $ make e2e_test
 <p>Comment <code>// TODO</code> should follow the format: <code>// TODO (AuthorName) ...</code>, which easy to trace the owner of the remaining job</p>
 </li>
 <li>
-<p>Unitest and upload coverage to codecov</p>
+<p>unittest and upload coverage to codecov</p>
 </li>
 <li>
 <p>Each golang test file should mark ginkgo label</p>
@@ -1753,15 +1734,24 @@ $ make e2e_test
 <p>You can test it with the command <code>make lint-markdown-spell-colour</code>.</p>
 <p>If you believe it can be ignored, you can add it to <code>.github/.spelling</code>.</p>
 <h3 id="action-lint-yaml-file">Action: lint yaml file</h3>
-<p>If it fails, see <a href="https://yamllint.readthedocs.io/en/stable/rules.html">https://yamllint.readthedocs.io/en/stable/rules.html</a> for reasons.</p>
-<p>You can test it on your local machine with the command <code>make lint-yaml</code>.</p>
-<h3 id="action-lint-chart">Action: lint chart</h3>
-<h3 id="action-lint-openapiyaml">Action: lint openapi.yaml</h3>
+<ul>
+<li>If it fails, see <a href="https://yamllint.readthedocs.io/en/stable/rules.html">https://yamllint.readthedocs.io/en/stable/rules.html</a> for reasons. You can test it on your local machine with the command <code>make lint-yaml</code>.</li>
+</ul>
 <h3 id="action-check-code-spell">Action: check code spell</h3>
+<ul>
+<li>
 <p>Any code spell error of golang files will be checked.</p>
+</li>
+<li>
 <p>You can check it on your local machine with the command <code>make lint-code-spell</code>.</p>
+</li>
+<li>
 <p>It could be automatically fixed on your local machine with the command <code>make fix-code-spell</code>.</p>
+</li>
+<li>
 <p>If you believe it can be ignored, edit <code>.github/codespell-ignorewords</code> and make sure all letters are lower-case.</p>
+</li>
+</ul>
 <h2 id="changelog">Changelog</h2>
 <p>How to automatically generate changelogs:</p>
 <ol>
