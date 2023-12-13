@@ -1720,19 +1720,31 @@ $ make e2e_test
 </li>
 </ul>
 <h3 id="action-check-licenses">Action: check licenses</h3>
-<p>Any golang or shell file should be licensed correctly.</p>
+<ul>
+<li>Any golang or shell file should be licensed correctly.</li>
+</ul>
 <h3 id="action-check-markdown-file">Action: check markdown file</h3>
+<p>Check markdown format, if fails, See the <a href="https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md">Markdown Rule</a></p>
 <ul>
-<li>Check markdown format, if fails, See the <a href="https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md">Markdown Rule</a></li>
-</ul>
+<li>
 <p>You can test it on your local machine with the command <code>make lint-markdown-format</code>.</p>
+</li>
+<li>
 <p>You can fix it on your local machine with the command <code>make fix-markdown-format</code>.</p>
+</li>
+<li>
 <p>If you believe it can be ignored, you can add it to <code>.github/markdownlint.yaml</code>.</p>
-<ul>
-<li>Check markdown spell error.</li>
+</li>
 </ul>
+<p>Check markdown spell error.</p>
+<ul>
+<li>
 <p>You can test it with the command <code>make lint-markdown-spell-colour</code>.</p>
+</li>
+<li>
 <p>If you believe it can be ignored, you can add it to <code>.github/.spelling</code>.</p>
+</li>
+</ul>
 <h3 id="action-lint-yaml-file">Action: lint yaml file</h3>
 <ul>
 <li>If it fails, see <a href="https://yamllint.readthedocs.io/en/stable/rules.html">https://yamllint.readthedocs.io/en/stable/rules.html</a> for reasons. You can test it on your local machine with the command <code>make lint-yaml</code>.</li>
