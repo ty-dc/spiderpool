@@ -773,8 +773,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/third-party-controller/" class="md-nav__link">
-        IPAM for custom controllers
+      <a href="../../usage/operator/" class="md-nav__link">
+        IPAM for operator
       </a>
     </li>
   
@@ -1241,15 +1241,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unittest" class="md-nav__link">
-    unittest
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#setup-cluster-and-run-test" class="md-nav__link">
-    setup cluster and run test
+  <a href="#setup-cluster-and-run-e2e-test" class="md-nav__link">
+    setup cluster and run E2E test
   </a>
   
 </li>
@@ -1257,68 +1250,6 @@
         <li class="md-nav__item">
   <a href="#submit-pull-request" class="md-nav__link">
     Submit Pull Request
-  </a>
-  
-    <nav class="md-nav" aria-label="Submit Pull Request">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#action-your-pr-should-be-signed-off" class="md-nav__link">
-    Action: your PR should be signed off
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-yaml-files" class="md-nav__link">
-    Action: check yaml files
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-golang-source-code" class="md-nav__link">
-    Action: check golang source code
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-licenses" class="md-nav__link">
-    Action: check licenses
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-markdown-file" class="md-nav__link">
-    Action: check markdown file
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-lint-yaml-file" class="md-nav__link">
-    Action: lint yaml file
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-code-spell" class="md-nav__link">
-    Action: check code spell
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#changelog" class="md-nav__link">
-    Changelog
   </a>
   
 </li>
@@ -1421,15 +1352,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unittest" class="md-nav__link">
-    unittest
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#setup-cluster-and-run-test" class="md-nav__link">
-    setup cluster and run test
+  <a href="#setup-cluster-and-run-e2e-test" class="md-nav__link">
+    setup cluster and run E2E test
   </a>
   
 </li>
@@ -1437,68 +1361,6 @@
         <li class="md-nav__item">
   <a href="#submit-pull-request" class="md-nav__link">
     Submit Pull Request
-  </a>
-  
-    <nav class="md-nav" aria-label="Submit Pull Request">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#action-your-pr-should-be-signed-off" class="md-nav__link">
-    Action: your PR should be signed off
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-yaml-files" class="md-nav__link">
-    Action: check yaml files
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-golang-source-code" class="md-nav__link">
-    Action: check golang source code
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-licenses" class="md-nav__link">
-    Action: check licenses
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-markdown-file" class="md-nav__link">
-    Action: check markdown file
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-lint-yaml-file" class="md-nav__link">
-    Action: lint yaml file
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#action-check-code-spell" class="md-nav__link">
-    Action: check code spell
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#changelog" class="md-nav__link">
-    Changelog
   </a>
   
 </li>
@@ -1528,10 +1390,7 @@
 
 <h1 id="contribution">Contribution</h1>
 <hr />
-<h2 id="unittest">unittest</h2>
-<p>run the following command to check unittest</p>
-<p><code>make unittest-tests</code></p>
-<h2 id="setup-cluster-and-run-test">setup cluster and run test</h2>
+<h2 id="setup-cluster-and-run-e2e-test">setup cluster and run E2E test</h2>
 <ol>
 <li>
 <p>check required developing tools on you local host. If something missing, please run 'test/scripts/install-tools.sh' to install them</p>
@@ -1541,55 +1400,12 @@ check e2e tools
 pass   'docker' installed
 pass   'kubectl' installed
 pass   'kind' installed
+pass   'p2ctl' installed
 finish checking e2e tools
 </code></pre>
 </li>
 <li>
-<p>run the e2e</p>
-<pre><code># make e2e
-</code></pre>
-</li>
-</ol>
-<p>if your run it for the first time, it will download some images, you could set the http proxy</p>
-<pre><code>    # ADDR=10.6.0.1
-    # export https_proxy=http://${ADDR}:7890 http_proxy=http://${ADDR}:7890
-    # make e2e
-</code></pre>
-<p>run a specified case</p>
-<pre><code>    # make e2e -e E2E_GINKGO_LABELS="lable1,label2"
-</code></pre>
-<ol>
-<li>
-<p>you could do it step by step with the follow</p>
-<p>before start the test, you shoud know there are test scenes as following </p>
-<table>
-<thead>
-<tr>
-<th>kind</th>
-<th>setup cluster</th>
-<th>test</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>test underlay CNI</td>
-<td>make    e2e_init_underlay</td>
-<td>make e2e_test_underlay</td>
-</tr>
-<tr>
-<td>test overlay CNI for calico</td>
-<td>make    e2e_init_overlay_calico</td>
-<td>make e2e_test_overlay_calico</td>
-</tr>
-<tr>
-<td>test overlay CNI for cilium</td>
-<td>make    e2e_init_overlay_cilium</td>
-<td>make e2e_test_overlay_cilium</td>
-</tr>
-</tbody>
-</table>
-<p>if you are in China, it could add <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> to pull images from china image registry, add <code>-e HTTP_PROXY=http://${ADDR}</code> to get chart</p>
-<p>build the image</p>
+<p>build the local image</p>
 <pre><code># do some coding
 
 $ git add .
@@ -1600,7 +1416,38 @@ $ make build_image
 # or (if buildx fail to pull images)
 $ make build_docker_image
 </code></pre>
-<p>setup the cluster</p>
+</li>
+<li>
+<p>set up the cluster and run E2E test</p>
+<p>What you should know is that there are some scenarios for different test. There are three scenarios mapping to different setup and test commands</p>
+<table>
+<thead>
+<tr>
+<th>Goal</th>
+<th>Command for setup cluster</th>
+<th>Command for running E2E test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>test spiderpool</td>
+<td>make    e2e_init_underlay</td>
+<td>make e2e_test_underlay</td>
+</tr>
+<tr>
+<td>test for dual-CNI cluster with calico and spiderpool</td>
+<td>make    e2e_init_overlay_calico</td>
+<td>make e2e_test_overlay_calico</td>
+</tr>
+<tr>
+<td>test for dual-CNI cluster with calico and spiderpool</td>
+<td>make    e2e_init_overlay_cilium</td>
+<td>make e2e_test_overlay_cilium</td>
+</tr>
+</tbody>
+</table>
+<p>if you are in China, it could add <code>-e E2E_CHINA_IMAGE_REGISTRY=true</code> to pull images from china image registry, add <code>-e HTTP_PROXY=http://${ADDR}</code> to get chart</p>
+<p>Examples for setup :</p>
 <pre><code># setup the kind cluster of dual-stack
 # !!! images is tested by commit sha, so make sure the commit is submit locally
 $ make e2e_init_underlay
@@ -1628,7 +1475,23 @@ $ make e2e_init_calico -e E2E_CHINA_IMAGE_REGISTRY=true -e HTTP_PROXY=http://${A
 # setup cluster with cilium cni
 $ make e2e_init_cilium  -e E2E_CHINA_IMAGE_REGISTRY=true -e HTTP_PROXY=http://${ADDR}
 </code></pre>
-<p>run the e2e test</p>
+<p>if it is expected to test a specified released images, run following commands :</p>
+<pre><code># load images to docker
+$ docker pull ${AGENT_IMAGE_NAME}:${IMAGE_TAG}
+$ docker pull ${CONTROLLER_IMAGE_NAME}:${IMAGE_TAG}
+$ docker pull ${CONTROLLER_IMAGE_NAME}:${IMAGE_TAG}
+$ docker pull ${MULTUS_IMAGE_NAME}:${IMAGE_TAG}
+
+# setup the cluster with the specified image
+$ make e2e_init_underlay -e E2E_SPIDERPOOL_TAG=${IMAGE_TAG} \
+        -e SPIDERPOOL_AGENT_IMAGE_NAME=${AGENT_IMAGE_NAME}   \
+        -e SPIDERPOOL_CONTROLLER_IMAGE_NAME=${CONTROLLER_IMAGE_NAME} \
+        -e E2E_MULTUS_IMAGE_NAME=${MULTUS_IMAGE_NAME}
+
+# run all e2e test
+$ make e2e_test
+</code></pre>
+<p>Example for running the e2e test:</p>
 <pre><code># run all e2e test on dual-stack cluster
 $ make e2e_test_underlay
 
@@ -1660,25 +1523,7 @@ $ make clean_e2e
 </code></pre>
 </li>
 <li>
-<p>you could test specified images with the follow</p>
-<pre><code># load images to docker
-$ docker pull ${AGENT_IMAGE_NAME}:${IMAGE_TAG}
-$ docker pull ${CONTROLLER_IMAGE_NAME}:${IMAGE_TAG}
-$ docker pull ${CONTROLLER_IMAGE_NAME}:${IMAGE_TAG}
-$ docker pull ${MULTUS_IMAGE_NAME}:${IMAGE_TAG}
-
-# setup the cluster with the specified image
-$ make e2e_init_underlay -e E2E_SPIDERPOOL_TAG=${IMAGE_TAG} \
-        -e SPIDERPOOL_AGENT_IMAGE_NAME=${AGENT_IMAGE_NAME}   \
-        -e SPIDERPOOL_CONTROLLER_IMAGE_NAME=${CONTROLLER_IMAGE_NAME} \
-        -e E2E_MULTUS_IMAGE_NAME=${MULTUS_IMAGE_NAME}
-
-# run all e2e test
-$ make e2e_test
-</code></pre>
-</li>
-<li>
-<p>finally, you could visit "<a href="http://HostIp:4040">http://HostIp:4040</a>" the in the browser of your desktop, and get flamegraph</p>
+<p>It could visit "<a href="http://HostIp:4040">http://HostIp:4040</a>" from the browser of your computer and get flame graph</p>
 </li>
 <li>
 <p>clean <code>make clean_e2e</code></p>
@@ -1687,109 +1532,70 @@ $ make e2e_test
 <hr />
 <h2 id="submit-pull-request">Submit Pull Request</h2>
 <p>A pull request will be checked by following workflow, which is required for merging.</p>
-<h3 id="action-your-pr-should-be-signed-off">Action: your PR should be signed off</h3>
-<ul>
-<li>When you commit your modification, add <code>-s</code> in your commit command <code>git commit -s</code></li>
-</ul>
-<h3 id="action-check-yaml-files">Action: check yaml files</h3>
 <ul>
 <li>
-<p>If this check fails, see the <a href="https://yamllint.readthedocs.io/en/stable/rules.html">yaml rule</a>.</p>
+<p>Only the PR labeled with the following is allowed to be merged, which is used to generate changelog when releasing.</p>
+<table>
+<thead>
+<tr>
+<th>label name</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>release/bug</td>
+<td>this PR is to fix a bug</td>
+</tr>
+<tr>
+<td>release/none</td>
+<td>do not generate changelog when relasing</td>
+</tr>
+<tr>
+<td>release/feature-new</td>
+<td>this PR is to add a new feature</td>
+</tr>
+<tr>
+<td>release/feature-changed</td>
+<td>theis PR is to modify the implementation of an exsited feature</td>
+</tr>
+</tbody>
+</table>
+<p>When releasing, the changelog will be created automatically.</p>
+<p>The changelog will be attached to Github RELEASE and submitted to /changelogs of branch 'github_pages'.</p>
 </li>
 <li>
+<p>Your PR should be signed off. When you commit your modification, add <code>-s</code> in your commit command <code>git commit -s</code></p>
+</li>
+<li>
+<p>The CI check yaml format. If this check fails, see the <a href="https://yamllint.readthedocs.io/en/stable/rules.html">yaml rule</a>.</p>
 <p>Once the issue is fixed, it could be verified on your local host by command <code>make lint-yaml</code>.</p>
-</li>
-</ul>
-<blockquote>
 <p>Note: To ignore a yaml rule, you can add it into <code>.github/yamllint-conf.yml</code>.</p>
-</blockquote>
-<h3 id="action-check-golang-source-code">Action: check golang source code</h3>
-<p>It checks the following items against any updated golang file.</p>
-<ul>
-<li>
-<p>Mod dependency updated, golangci-lint, gofmt updated, go vet, use internal lock pkg</p>
 </li>
 <li>
-<p>Comment <code>// TODO</code> should follow the format: <code>// TODO (AuthorName) ...</code>, which easy to trace the owner of the remaining job</p>
+<p>Any golang or shell file should be licensed correctly.</p>
 </li>
 <li>
-<p>unittest and upload coverage to codecov</p>
-</li>
-<li>
-<p>Each golang test file should mark ginkgo label</p>
+<p>The CI check markdown format, if fails, See the <a href="https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md">Markdown Rule</a></p>
 </li>
 </ul>
-<h3 id="action-check-licenses">Action: check licenses</h3>
-<ul>
-<li>Any golang or shell file should be licensed correctly.</li>
-</ul>
-<h3 id="action-check-markdown-file">Action: check markdown file</h3>
-<p>Check markdown format, if fails, See the <a href="https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md">Markdown Rule</a></p>
-<ul>
-<li>
 <p>You can test it on your local machine with the command <code>make lint-markdown-format</code>.</p>
-</li>
-<li>
 <p>You can fix it on your local machine with the command <code>make fix-markdown-format</code>.</p>
-</li>
-<li>
 <p>If you believe it can be ignored, you can add it to <code>.github/markdownlint.yaml</code>.</p>
-</li>
-</ul>
-<p>Check markdown spell error.</p>
 <ul>
-<li>
-<p>You can test it with the command <code>make lint-markdown-spell-colour</code>.</p>
-</li>
-<li>
+<li>when markdown spell go error, you can test it with the command <code>make lint-markdown-spell-colour</code>.</li>
+</ul>
 <p>If you believe it can be ignored, you can add it to <code>.github/.spelling</code>.</p>
+<ul>
+<li>
+<p>when CI failing for lint yaml file, see <a href="https://yamllint.readthedocs.io/en/stable/rules.html">https://yamllint.readthedocs.io/en/stable/rules.html</a> for reasons.</p>
+<p>You can test it on your local machine with the command <code>make lint-yaml</code>.</p>
 </li>
-</ul>
-<h3 id="action-lint-yaml-file">Action: lint yaml file</h3>
-<ul>
-<li>If it fails, see <a href="https://yamllint.readthedocs.io/en/stable/rules.html">https://yamllint.readthedocs.io/en/stable/rules.html</a> for reasons. You can test it on your local machine with the command <code>make lint-yaml</code>.</li>
-</ul>
-<h3 id="action-check-code-spell">Action: check code spell</h3>
-<ul>
 <li>
 <p>Any code spell error of golang files will be checked.</p>
-</li>
-<li>
 <p>You can check it on your local machine with the command <code>make lint-code-spell</code>.</p>
-</li>
-<li>
 <p>It could be automatically fixed on your local machine with the command <code>make fix-code-spell</code>.</p>
-</li>
-<li>
 <p>If you believe it can be ignored, edit <code>.github/codespell-ignorewords</code> and make sure all letters are lower-case.</p>
-</li>
-</ul>
-<h2 id="changelog">Changelog</h2>
-<p>How to automatically generate changelogs:</p>
-<ol>
-<li>
-<p>All PRs should be labeled with "pr/release/***" and can be merged.</p>
-</li>
-<li>
-<p>When you add the label, the changelog will be created automatically.</p>
-</li>
-</ol>
-<p>The changelog contents include:</p>
-<ul>
-<li>
-<p>New Features: it includes all PRs labeled with "pr/release/feature-new"</p>
-</li>
-<li>
-<p>Changed Features: it includes all PRs labeled with "pr/release/feature-changed"</p>
-</li>
-<li>
-<p>Fixes: it includes all PRs labeled with "pr/release/bug"</p>
-</li>
-<li>
-<p>All historical commits within this version</p>
-</li>
-<li>
-<p>The changelog will be attached to Github RELEASE and submitted to /changelogs of branch 'github_pages'.</p>
 </li>
 </ul>
 
