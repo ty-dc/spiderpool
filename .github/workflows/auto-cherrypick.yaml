@@ -30,7 +30,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: crazy-max/ghaction-import-gpg@v5
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
       - name: cherry pick
+        id: cherry-pick
         env:
           GITHUB_TOKEN: ${{ secrets.WELAN_PAT }}
           JSON: ${{ toJSON(github) }}
@@ -184,7 +192,7 @@ jobs:
               if [ "$UPDATE" == "true" ] ; then
                   echo "succeeded to cherry pick to branch $BRANCH "
                   # create a pr
-                  git commit -s --amend --no-edit
+                  git commit -s -S --amend --no-edit
                   git push origin ${PR_BRANCH}:${PR_BRANCH} -f
                   gh pr create --title "${PR_TITLE}" \
                       --assignee "${PR_AUTHOR},${{ env.DEFAULT_REVIEWER }}" \
