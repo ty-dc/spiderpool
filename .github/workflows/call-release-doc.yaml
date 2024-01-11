@@ -93,6 +93,7 @@ jobs:
           if [ -e "${docVersion}" ]; then
               echo "doc version:${docVersion} already exists, just update it."
               echo "SET_LATEST=false" >> $GITHUB_ENV
+              echo "SET_LATEST=true" >> $GITHUB_ENV
           else
               echo "The doc version:${docVersion} does not exist yet, while generating the doc and set it to latest"
               echo "SET_LATEST=true" >> $GITHUB_ENV
