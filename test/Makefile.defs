@@ -60,6 +60,8 @@ INSTALL_SRIOV ?= false
 
 INSTALL_RDMA ?= false
 
+INSTALL_METALLB ?= false
+
 #============ ginkgo-custom-flag ====================
 E2E_CLUSTER_NAME ?= spider
 
@@ -220,3 +222,14 @@ endif
 DOCKER_ADDITIONAL_NETWORK := spider_eth1
 HOST_ADDITIONAL_INTERFACE := eth1
 BRIDGE_INTERFACE := br1
+
+#=========== metallb ============
+
+# empty for latest
+METALLB_VERSION := 0.13.10
+
+ifeq ($(E2E_CHINA_IMAGE_REGISTRY),true)
+    E2E_METALLB_IMAGE_REPO ?= quay.m.daocloud.io
+else
+    E2E_METALLB_IMAGE_REPO ?= quay.io
+endif

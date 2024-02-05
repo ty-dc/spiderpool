@@ -79,7 +79,7 @@ done
 helm upgrade --install kdoctor kdoctor/kdoctor -n kube-system --debug --kubeconfig ${E2E_KUBECONFIG} ${KDOCTOR_HELM_OPTIONS} --version ${KDOCTOR_VERSION}
 
 # no matching resources found
-sleep 3
+sleep 5
 
 kubectl wait --for=condition=ready -l app.kubernetes.io/instance=kdoctor --timeout=300s pod -n kube-system \
 --kubeconfig ${E2E_KUBECONFIG} 

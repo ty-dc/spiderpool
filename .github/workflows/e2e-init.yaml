@@ -150,7 +150,8 @@ jobs:
                 -e INSTALL_KDOCTOR=true \
                 -e INSTALL_OVS=${INSTALL_OVS_VALUE} \
                 -e INSTALL_RDMA=true \
-                -e INSTALL_SRIOV=true
+                -e INSTALL_SRIOV=true \
+                -e INSTALL_METALLB=true
 
       - name: Run e2e Test
         id: run_e2e

@@ -82,6 +82,16 @@ endif
 		CLUSTER_PATH=$(CLUSTER_DIR)/$(E2E_CLUSTER_NAME) \
 		E2E_SPIDERPOOL_ENABLE_SUBNET=${E2E_SPIDERPOOL_ENABLE_SUBNET} \
 		scripts/install-multus.sh $(E2E_CLUSTER_NAME) $(E2E_KUBECONFIG)
+ifeq ($(INSTALL_METALLB),true)
+	@echo -e "\033[35m [Step 8] Install metallb \033[0m"
+	E2E_KUBECONFIG=$(E2E_KUBECONFIG)  \
+		E2E_CLUSTER_NAME=$(E2E_CLUSTER_NAME) \
+		HTTP_PROXY=$(HTTP_PROXY) \
+		E2E_IP_FAMILY=$(E2E_IP_FAMILY) \
+		METALLB_VERSION=$(METALLB_VERSION) \
+		E2E_METALLB_IMAGE_REPO=$(E2E_METALLB_IMAGE_REPO) \
+		$(QUIET) bash scripts/install-metallb.sh
+endif
 ifeq ($(INSTALL_KRUISE),true)
 	@echo -e "\033[35m [Step 9] Install operator: kurise \033[0m"
 	@ make setup_kurise
