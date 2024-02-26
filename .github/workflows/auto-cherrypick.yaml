@@ -111,6 +111,7 @@ jobs:
           fi
           [ -z "$WANT_MERGE_BRANCH_LIST" ] && echo "no branch to cherry pick" && exit 0
           echo "cherry pick to $WANT_MERGE_BRANCH_LIST "
+          echo "INITIAL_LABEL: ${INITIAL_LABEL}"
           #
           #
           echo "============ begin to cherry pick ============ "
