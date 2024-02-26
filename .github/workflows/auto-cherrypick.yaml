@@ -103,8 +103,10 @@ jobs:
                 for LABEL in ${PR_LABEL} ; do
                     echo "checking label $LABEL "
                     PREFIX="${{ env.PR_LABEL_PREFIX_CHERRYPICK }}"
-                    grep -E "^${PREFIX}" <<< "${LABEL}" &>/dev/null || INITIAL_LABEL+="${LABEL},"
-                    continue
+                    if ! grep -E "^${PREFIX}" <<< "${LABEL}" &>/dev/null; then
+                        INITIAL_LABEL+="${LABEL},"
+                        continue
+                    fi
                     BRANCH_NAME=` sed 's?'"${PREFIX}"'??' <<< "$LABEL" `
                     WANT_MERGE_BRANCH_LIST+=" $BRANCH_NAME "
                 done
