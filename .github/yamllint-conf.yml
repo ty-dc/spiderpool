@@ -21,3 +21,5 @@ rules:
   truthy:
     ignore: |
       .github/
+
+# test-cp
