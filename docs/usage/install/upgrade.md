@@ -138,4 +138,38 @@ The following steps will describe how to upgrade all of the components from one 
 
     ~# kubectl get po -n kube-system spiderpool-agent-cjps5 -oyaml |grep image
 
-    ```
+### Upgrading from a version below 0.4.0 (Excludes 0.4.0) to a higher version
+
+Due to architecture adjustment, `SpiderEndpoint.Status.OwnerControllerType` property is changed from `None` to `Pod`. Therefore, find all SpiderEndpoint objects with `Status.OwnerControllerType` of `None` and replace the `SpiderEndpoint.Status.OwnerControllerType` property from `None` to `Pod`.
+
+### Upgrading from a version below 0.5.0 (Includes 0.5.0) to a higher version
+
+In versions higher than 0.5.0, the [SpiderMultusConfig](../spider-multus-config.md) and [Coordinator](../../concepts/coordinator.md) functions are added. However, due to helm upgrade, the corresponding CRDs cannot be automatically installed: `spidercoordinators.spiderpool.spidernet.io` and `spidermultusconfigs.spiderpool.spidernet.io`. Therefore, before upgrading, you can obtain the latest stable version through the following commands, decompress the chart package and apply all CRDs.
+
+```bash
+~# helm search repo spiderpool --versions
+# Please replace [upgraded-version] with the version you want to upgrade to.
+~# helm fetch spiderpool/spiderpool --version [upgraded-version]
+~# tar -xvf spiderpool-[upgraded-version].tgz && cd spiderpool/crds
+~# ls | grep '\.yaml$' | xargs -I {} kubectl apply -f {}
+```
+
+### Upgrading from a version below 0.7.3 (Includes 0.7.3) to a higher version
+
+In versions below 0.7.3, Spiderpool will enable a set of DaemonSet: `spiderpool-multus` to manage Multus related configurations. In later versions, the DaemonSet was deprecated, and the Muluts configuration was moved to `spiderpool-agent` for management. At the same time, the function of `automatically cleaning up the Muluts configuration during uninstallation` was added, which is enabled by default. Disable it by `--set multus.multusCNI.uninstall=false` when upgrading to avoid CNI configuration files, CRDs, etc. being deleted during the upgrade phase, causing Pod creation to fail.
+
+### Upgrading from a version below 0.9.0 (Excludes 0.9.0) to a higher version
+
+Due to the addition of the `txQueueLen` field to the [SpiderCoordinator CRD](./../../reference/crd-spidercoordinator.md) in version 0.9.0, you need to manually update the CRD before upgrading as Helm does not support upgrading or deleting CRDs during the upgrade process.(We suggest skipping version 0.9.0 and upgrading directly to version 0.9.1)
+
+### More notes on version upgrades
+
+*TODO.*
+
+## FAQ
+
+Due to your high availability requirements for Spiderpool, you may set multiple replicas of the spiderpool-controller Pod through `--set spiderpoolController.replicas=5` during installation. The Pod of spiderpool-controller will occupy some port addresses of the node by default. The default port Please refer to [System Configuration](./system-requirements-zh_CN.md) for occupancy. If your number of replicas is exactly the same as the number of nodes, then the Pod will fail to start because the node has no available ports during the upgrade. You can refer to the following Modifications can be made in two ways.
+
+1. When executing the upgrade command, you can change the port by appending the helm parameter `--set spiderpoolController.httpPort`, and you can change the port through [helm Values.yaml](https://github.com/spidernet-io/spiderpool/blob/main/charts/spiderpool/values.yaml) and [System Configuration](./system-requirements-zh_CN.md) to check the ports that need to be modified.
+
+2. The type of spiderpool-controller is `Deployment`. You can reduce the number of replicas and restore the number of replicas after the Pod starts normally.
