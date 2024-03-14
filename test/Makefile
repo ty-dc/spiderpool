@@ -389,6 +389,32 @@ uninstall_spiderpool:
 	@ make helm_uninstall_spiderpool
 	@ make clean_spiderpool_crd
 
+.PHONY: upgrade_spiderpool
+upgrade_spiderpool:
+	@echo -e "\033[35m [upgrade spiderpool] \033[0m"
+	@make helm_upgrade_spiderpool
+
+.PHONY: helm_upgrade_spiderpool
+helm_upgrade_spiderpool:
+	@echo -e "\033[35m [helm upgrade spiderpool] \033[0m"
+	cd $(ROOT_DIR)/charts/spiderpool/crds ; \
+	ls | grep '\.yaml$$' | xargs -n1 -P0 -i kubectl --kubeconfig $(E2E_KUBECONFIG) apply -f {} ; \
+	kubectl delete po -n $(RELEASE_NAMESPACE) spiderpool-init --kubeconfig $(E2E_KUBECONFIG) || true ;\
+	HELM_OPTION="";\
+	HELM_OPTION+=" 	--set spiderpoolAgent.image.registry="" \
+		--set spiderpoolAgent.image.repository=$(SPIDERPOOL_AGENT_IMAGE_NAME) \
+		--set spiderpoolAgent.image.tag=$(E2E_SPIDERPOOL_TAG) \
+		--set spiderpoolController.image.registry="" \
+		--set spiderpoolController.image.repository=$(SPIDERPOOL_CONTROLLER_IMAGE_NAME) \
+		--set spiderpoolController.image.tag=$(E2E_SPIDERPOOL_TAG) \
+		--set spiderpoolInit.image.registry="" \
+		--set spiderpoolInit.image.repository=$(SPIDERPOOL_CONTROLLER_IMAGE_NAME) \
+		--set spiderpoolInit.image.tag=$(E2E_SPIDERPOOL_TAG) \
+		--set rdma.rdmaSharedDevicePlugin.image.registry=$(E2E_RDMA_DP_IMAGE_REPO) \
+		--set sriov.image.registry=$(E2E_SRIOV_IMAGE_REPO)   " \
+	helm --kubeconfig $(E2E_KUBECONFIG) upgrade  $(RELEASE_NAME) $(ROOT_DIR)/charts/spiderpool $${HELM_OPTION} \
+		-n $(RELEASE_NAMESPACE) --reuse-values || { KIND_CLUSTER_NAME=$(E2E_CLUSTER_NAME) ./scripts/debugEnv.sh $(E2E_KUBECONFIG) "detail"; exit 1; }
+    
 .PHONY: clean
 clean:
 	@rm -rf $(CLUSTER_DIR)
