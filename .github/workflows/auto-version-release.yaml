@@ -117,6 +117,14 @@ jobs:
       dest_tag: ${{ needs.get-tag.outputs.tag }}
     secrets: inherit
 
+  release-notes:
+    needs: [build-release-image, get-tag]
+    uses: ./.github/workflows/call-release-notes.yaml
+    with:
+      dest_tag: ${{ needs.get-tag.outputs.tag }}
+      branch: ${{ needs.get-tag.outputs.tag }}
+    secrets: inherit
+
   create-release:
     needs: [release-chart, release-changelog, get-tag]
     name: create release
