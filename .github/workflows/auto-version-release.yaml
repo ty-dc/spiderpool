@@ -117,6 +117,13 @@ jobs:
       dest_tag: ${{ needs.get-tag.outputs.tag }}
     secrets: inherit
 
+  call-upgrade-test:
+    needs: [build-release-image, get-tag]
+    uses: ./.github/workflows/auto-upgrade-ci.yaml
+    with:
+      dest_tag: ${{ needs.get-tag.outputs.tag }}
+    secrets: inherit
+
   update-release-version:
     needs: [build-release-image, get-tag]
     uses: ./.github/workflows/call-release-version.yaml
@@ -150,7 +157,7 @@ jobs:
               exit 1
           fi
           chart_path=$( ls chart-package/*.tgz )
-          echo ::set-output name=chart_path::${chart_path}
+          echo "chart_path=${chart_path}" >> $GITHUB_ENV
           # ========== changelog
           if ! ls changelog-result/*.md &>/dev/null ; then
               echo "error, failed to find changelog "
@@ -160,7 +167,7 @@ jobs:
           cat changelog-result/*.md
           changelog_file=$( ls changelog-result/ )
           changelog_path=./changelog-result/${changelog_file}
-          echo ::set-output name=changelog_path::${changelog_path}
+          echo "changelog_path=${changelog_path}" >> $GITHUB_ENV
           cp ./changelog-result/${changelog_file} ./changelog-result/changelog.md
 
       - name: Create Release
