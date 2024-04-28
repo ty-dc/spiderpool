@@ -121,7 +121,7 @@ jobs:
     needs: [build-release-image, get-tag]
     uses: ./.github/workflows/auto-upgrade-ci.yaml
     with:
-      ref: ${{ needs.get-tag.outputs.tag }}
+      dest_tag: ${{ needs.get-tag.outputs.tag }}
     secrets: inherit
 
   update-release-version:
