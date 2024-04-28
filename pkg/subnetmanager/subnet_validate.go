@@ -8,14 +8,14 @@ import (
 	"fmt"
 	"strconv"
 
-	"k8s.io/apimachinery/pkg/util/validation/field"
-
 	"github.com/spidernet-io/spiderpool/pkg/constant"
 	spiderpoolip "github.com/spidernet-io/spiderpool/pkg/ip"
 	"github.com/spidernet-io/spiderpool/pkg/ippoolmanager"
 	spiderpoolv2beta1 "github.com/spidernet-io/spiderpool/pkg/k8s/apis/spiderpool.spidernet.io/v2beta1"
 	"github.com/spidernet-io/spiderpool/pkg/types"
 	"github.com/spidernet-io/spiderpool/pkg/utils/convert"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/validation/field"
 )
 
 var (
@@ -192,8 +192,10 @@ func (sw *SubnetWebhook) validateSubnetCIDR(ctx context.Context, subnet *spiderp
 
 	for _, s := range subnetList.Items {
 		if *s.Spec.IPVersion == *subnet.Spec.IPVersion {
+			// since we met already exist Subnet resource, we just return the error to avoid the following taxing operations.
+			// the user can also use k8s 'errors.IsAlreadyExists' to get the right error type assertion.
 			if s.Name == subnet.Name {
-				return field.InternalError(subnetField, fmt.Errorf("subnet %s already exists", subnet.Name))
+				return field.InternalError(subnetField, fmt.Errorf("subnet %s %s", subnet.Name, metav1.StatusReasonAlreadyExists))
 			}
 
 			overlap, err := spiderpoolip.IsCIDROverlap(*subnet.Spec.IPVersion, subnet.Spec.Subnet, s.Spec.Subnet)
