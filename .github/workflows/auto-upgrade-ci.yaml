@@ -10,7 +10,7 @@ on:
   schedule:
     - cron: "0 20 * * *"
   workflow_call:
-    inputs:
+    dest_tag:
       ref:
         required: true
         type: string
@@ -57,12 +57,12 @@ jobs:
             else
               echo "RUN_E2E_ENABLED=false" >> $GITHUB_ENV
             fi
-          elif ${{ inputs.ref != '' }}; then
+          elif ${{ inputs.dest_tag != '' }}; then
               echo "call by workflow_call"
-              echo "RUN_TAG=${{ inputs.ref }}" >> $GITHUB_ENV
-              echo "NEW_VERSION=${{ inputs.ref }}" >> $GITHUB_ENV
+              echo "RUN_TAG=${{ inputs.dest_tag }}" >> $GITHUB_ENV
+              echo "NEW_VERSION=${{ inputs.dest_tag }}" >> $GITHUB_ENV
               echo "RUN_E2E_ENABLED=true" >> $GITHUB_ENV
-              YBranchName=` grep -Eo "v[0-9]+\.[0-9]+" <<< "${{ inputs.ref }}" `
+              YBranchName=` grep -Eo "v[0-9]+\.[0-9]+" <<< "${{ inputs.dest_tag }}" `
               # Get the previous minor version of version y
               LATEST_RELEASE_VERISON=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | grep '"tag_name":' | grep -Eo "v([0-9]+\.[0-9]+\.[0-9])" | grep ${YBranchName} | sort -r | head -n 1)
               if [ -z "${LATEST_RELEASE_VERISON}" ]; then
