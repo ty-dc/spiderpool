@@ -9,6 +9,11 @@ env:
 on:
   schedule:
     - cron: "0 20 * * *"
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - reopened
   workflow_call:
     inputs:
       dest_tag:
@@ -74,13 +79,19 @@ jobs:
                   echo "LATEST_RELEASE_VERISON: ${LATEST_RELEASE_VERISON} "
                   echo "OLD_VERSION=${LATEST_RELEASE_VERISON}" >> $GITHUB_ENV
               fi
+          elif ${{ github.event_name == 'push' }} ; then
+            echo "trigger by push"
+            echo "RUN_TAG=${{ github.sha }}" >> $GITHUB_ENV
+          elif ${{ github.event_name == 'pull_request_target' }} ; then
+            echo "trigger by pull_request_target"
+            echo "RUN_TAG=${{ github.sha }}" >> $GITHUB_ENV
           else
             # schedule event
             # use main sha for ci image tag
             echo "trigger by schedule"
             echo "RUN_TAG=main" >> $GITHUB_ENV
             echo "NEW_VERSION=main" >> $GITHUB_ENV
-            LATEST_RELEASE_VERISON=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | grep '"tag_name":' | grep -Eo "v([0-9]+\.[0-9]+\.[0-9])" | sort -r | head -n 1)
+            LATEST_RELEASE_VERISON=$(curl -s https://api.github.com/repos/spidernet-io/spiderpool/releases | grep '"tag_name":' | grep -v "rc" | grep -Eo "v([0-9]+\.[0-9]+\.[0-9])" | sort -r | head -n 1)
             echo "OLD_VERSION=${LATEST_RELEASE_VERISON}" >> $GITHUB_ENV
             echo "RUN_E2E_ENABLED=true" >> $GITHUB_ENV
           fi
@@ -96,6 +107,16 @@ jobs:
         run: |
           ref=$( git show -s --format='format:%H')
           echo "RUN_REF=${ref}" >> $GITHUB_ENV
+          if ${{ github.event_name == 'push' }} ; then
+            echo "trigger by push"
+            echo "NEW_VERSION=${{ github.sha }}" >> $GITHUB_ENV
+            old_version=$(git log --pretty=format:"%H" | sed -n '2p')
+            echo "OLD_VERSION=${old_version}" >> $GITHUB_ENV
+          elif ${{ github.event_name == 'pull_request_target' }} ; then
+            echo "trigger by pull_request_target"
+            echo "NEW_VERSION=${{ github.sha }}" >> $GITHUB_ENV
+            old_version=$(git log --pretty=format:"%H" | sed -n '2p')
+            echo "OLD_VERSION=${old_version}" >> $GITHUB_ENV
 
   call_build_ci_image:
     needs: [get_ref]
