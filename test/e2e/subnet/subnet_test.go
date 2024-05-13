@@ -2158,8 +2158,8 @@ var _ = Describe("test subnet", Label("subnet"), func() {
 				constant.LabelIPPoolOwnerApplicationName:      newDeployObject.Name,
 			}
 			poolList, err := common.GetAllIppool(frame, autoPoolMatchLabels)
-			Expect(err).NotTo(HaveOccurred())
 			Expect(poolList.Items).To(HaveLen(0))
+			Expect(err).NotTo(HaveOccurred())
 		})
 	})
 })
