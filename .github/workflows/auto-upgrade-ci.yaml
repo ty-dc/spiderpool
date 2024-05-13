@@ -121,6 +121,17 @@ jobs:
         run: |
           ref=$( git show -s --format='format:%H')
           echo "RUN_REF=${ref}" >> $GITHUB_ENV
+          if ${{ github.event_name == 'push' }} ; then
+            echo "trigger by push"
+            echo "NEW_VERSION=${{ github.sha }}" >> $GITHUB_ENV
+            # for PR scenarios, the latest version of the main branch will be used as old-version 
+            echo "OLD_VERSION=main" >> $GITHUB_ENV
+          elif ${{ github.event_name == 'pull_request_target' }} ; then
+            echo "trigger by pull_request_target"
+            echo "NEW_VERSION=${{ github.sha }}" >> $GITHUB_ENV
+            # for PR scenarios, the latest version of the main branch will be used as old-version 
+            echo "OLD_VERSION=main" >> $GITHUB_ENV
+          fi
 
   call_build_ci_image:
     needs: [get_ref]
