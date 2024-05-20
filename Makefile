@@ -499,3 +499,10 @@ lint_chart_trivy:
 .PHONY: build-chart
 build-chart:
 	@ cd charts ; make
+
+update-authors:
+	@echo "Updating AUTHORS file..."
+	@echo "The following people, in alphabetical order, have either authored or signed" > AUTHORS
+	@echo "off on commits in the Spiderpool repository:" >> AUTHORS
+	@echo "" >> AUTHORS
+	@tools/scripts/extract_authors.sh >> AUTHORS
