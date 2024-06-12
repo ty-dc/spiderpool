@@ -299,7 +299,7 @@ func checkMetrics(ctx context.Context, metricsPort string) error {
 
 	nodeList, err := frame.GetNodeList()
 	if err != nil {
-		return fmt.Errorf("failed to get node information")
+		return fmt.Errorf("Failed to get node information")
 	}
 
 	var metricsHealthyCheck string
