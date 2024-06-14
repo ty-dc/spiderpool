@@ -41,7 +41,7 @@ func (i *ipam) getPoolCandidates(ctx context.Context, addArgs *models.IpamAddArg
 		} else {
 			hasSubnetsAnnotation := applicationinformers.HasSubnetsAnnotation(pod.Annotations)
 			if hasSubnetsAnnotation {
-				return nil, fmt.Errorf("it's invalid to use '%s' or '%s' annotation when Auto-Pool feature is disabled", constant.AnnoSpiderSubnets, constant.AnnoSpiderSubnet)
+				return nil, fmt.Errorf("'%s' or '%s' annotation when Auto-Pool feature is disabled", constant.AnnoSpiderSubnets, constant.AnnoSpiderSubnet)
 			}
 		}
 	}
