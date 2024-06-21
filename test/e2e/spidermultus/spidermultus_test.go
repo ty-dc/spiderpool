@@ -38,7 +38,6 @@ var _ = Describe("test spidermultus", Label("SpiderMultusConfig", "overlay"), fu
 				GinkgoWriter.Println("If the use case fails, the cleanup step will be skipped")
 				return
 			}
-
 			err := frame.DeleteNamespace(namespace)
 			Expect(err).NotTo(HaveOccurred(), "Failed to delete namespace %v")
 		})

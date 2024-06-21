@@ -165,6 +165,7 @@ jobs:
   call_build_old_ci_image:
     needs: [get_ref]
     if: ${{ needs.get_ref.outputs.run_upgrade_enabled == 'true' }}
+    # get  image:${{ needs.get_ref.outputs.ref }} and image-ci:${{ needs.get_ref.outputs.ref }}
     uses: ./.github/workflows/build-image-ci.yaml
     with:
       ref: ${{ needs.get_ref.outputs.old_version }}
@@ -198,8 +199,9 @@ jobs:
           docker-images: true
           swap-storage: true
 
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Download old spiderpool-agent image
+        if: ${{ needs.get_ref.outputs.build_old_image_tag == 'true' }}
+        uses: actions/download-artifact@v3
         with:
           persist-credentials: false
           ref: ${{ needs.get_ref.outputs.old_version }}
