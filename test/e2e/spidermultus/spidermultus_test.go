@@ -27,13 +27,11 @@ var _ = Describe("test spidermultus", Label("spiderMultus", "overlay"), func() {
 		namespace = "ns-" + common.GenerateString(10, true)
 		err := frame.CreateNamespaceUntilDefaultServiceAccountReady(namespace, common.ServiceAccountReadyTimeout)
 		Expect(err).NotTo(HaveOccurred())
-
 		DeferCleanup(func() {
 			if CurrentSpecReport().Failed() {
 				GinkgoWriter.Println("If the use case fails, the cleanup step will be skipped")
 				return
 			}
-
 			err := frame.DeleteNamespace(namespace)
 			Expect(err).NotTo(HaveOccurred(), "Failed to delete namespace %v")
 		})
