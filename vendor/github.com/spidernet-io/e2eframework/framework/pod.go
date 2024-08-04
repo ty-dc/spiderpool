@@ -292,7 +292,7 @@ func (f *Framework) DeletePodListRepeatedly(label map[string]string, interval ti
 	}
 }
 
-func (f *Framework) DeletePodListUntilReady(podList *corev1.PodList, timeOut time.Duration, opts ...client.DeleteOption) (*corev1.PodList, error) {
+func (f *Framework) DeletePodListUntilReady(podList *corev1.PodList, expectedPodNum int, timeOut time.Duration, opts ...client.DeleteOption) (*corev1.PodList, error) {
 	if podList == nil {
 		return nil, ErrWrongInput
 	}
@@ -315,18 +315,21 @@ OUTER:
 		}
 		f.Log("checking restarted pod ")
 
+		f.Log("podList.Items[0].Labels label %v", podList.Items[0].Labels)
 		podListWithLabel, err := f.GetPodListByLabel(podList.Items[0].Labels)
 		if err != nil {
 			f.Log("failed to GetPodListByLabel , reason=%v", err)
 			continue
 		}
 
-		if len(podListWithLabel.Items) != len(podList.Items) {
+		if len(podListWithLabel.Items) == 0 || len(podListWithLabel.Items) != expectedPodNum {
+			f.Log("len(podListWithLabel.Items) %v", len(podListWithLabel.Items))
 			continue
 		}
 
 		for _, newPod := range podListWithLabel.Items {
 			if !podutils.IsPodReady(&newPod) {
+				f.Log("pod %s is not ready", newPod.Name)
 				continue OUTER
 			}
 			for _, oldPod := range podList.Items {

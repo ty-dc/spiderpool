@@ -566,11 +566,12 @@ var _ = Describe("test ip with reclaim ip case", Label("reclaim"), func() {
 				Expect(err).NotTo(HaveOccurred())
 				Expect(spiderpoolControllerPodList).NotTo(BeNil(), "failed to get spiderpool controller podList \n")
 				Expect(spiderpoolControllerPodList.Items).NotTo(BeEmpty(), "failed to get spiderpool controller podList \n")
-				spiderpoolControllerPodList, err = frame.DeletePodListUntilReady(spiderpoolControllerPodList, common.PodReStartTimeout)
+				GinkgoWriter.Printf("len(spiderpoolControllerPodList.Items) %v \n", len(spiderpoolControllerPodList.Items))
+
+				spiderpoolControllerPodList, err = frame.DeletePodListUntilReady(spiderpoolControllerPodList, 2, common.PodReStartTimeout)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(spiderpoolControllerPodList).NotTo(BeNil(), "failed to get spiderpool controller podList after restart \n")
 				Expect(spiderpoolControllerPodList.Items).NotTo(HaveLen(0), "failed to get spiderpool controller podList \n")
-
 				// Check wbehook service ready after restarting the controller
 				ctx, cancel := context.WithTimeout(context.Background(), common.PodReStartTimeout)
 				defer cancel()

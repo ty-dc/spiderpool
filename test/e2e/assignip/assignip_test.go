@@ -176,7 +176,7 @@ var _ = Describe("test pod", Label("assignip"), func() {
 				// the IP can be assigned to a pod and a record of that pod IP can be checked in the ippool.
 				podList, err := frame.GetPodListByLabel(deploy.Spec.Selector.MatchLabels)
 				Expect(err).NotTo(HaveOccurred())
-				newPodList, err := frame.DeletePodListUntilReady(podList, common.PodReStartTimeout)
+				newPodList, err := frame.DeletePodListUntilReady(podList, int(*deploy.Spec.Replicas), common.PodReStartTimeout)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(len(newPodList.Items)).Should(Equal(deployScaleupNum))
 				ok2, _, _, err := common.CheckPodIpRecordInIppool(frame, v4PoolNameList, v6PoolNameList, newPodList)

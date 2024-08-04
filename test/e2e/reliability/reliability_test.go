@@ -52,19 +52,17 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 	})
 
 	DescribeTable("reliability test table",
-		func(componentName string, label map[string]string, startupTimeRequired time.Duration) {
+		func(componentName string, label map[string]string, expectPodNum int, startupTimeRequired time.Duration) {
 
 			// get component pod list
 			GinkgoWriter.Printf("get %v pod list \n", componentName)
 			podList, e := frame.GetPodListByLabel(label)
 			Expect(e).NotTo(HaveOccurred())
 			Expect(podList.Items).NotTo(HaveLen(0))
-			expectPodNum := len(podList.Items)
-			GinkgoWriter.Printf("the %v pod number is: %v \n", componentName, expectPodNum)
 
 			// delete component pod
 			GinkgoWriter.Printf("now time: %s, restart %v %v pod  \n", time.Now().Format(time.RFC3339Nano), expectPodNum, componentName)
-			podList, e = frame.DeletePodListUntilReady(podList, startupTimeRequired)
+			podList, e = frame.DeletePodListUntilReady(podList, expectPodNum, startupTimeRequired)
 			GinkgoWriter.Printf("pod %v recovery time: %s \n", componentName, time.Now().Format(time.RFC3339Nano))
 			Expect(e).NotTo(HaveOccurred())
 			Expect(podList).NotTo(BeNil())
@@ -85,7 +83,7 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 				// delete component pod
 				startT1 := time.Now()
 				GinkgoWriter.Printf("now time: %s, restart %v %v pod \n", time.Now().Format(time.RFC3339Nano), expectPodNum, componentName)
-				podList, e1 := frame.DeletePodListUntilReady(podList, startupTimeRequired)
+				podList, e1 := frame.DeletePodListUntilReady(podList, expectPodNum, startupTimeRequired)
 				GinkgoWriter.Printf("pod %v recovery time: %s \n", componentName, time.Now().Format(time.RFC3339Nano))
 				Expect(e1).NotTo(HaveOccurred())
 				Expect(podList).NotTo(BeNil())
@@ -128,16 +126,16 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 			}
 		},
 		Entry("Successfully run a pod during the ETCD is restarting",
-			Label("R00002"), "etcd", map[string]string{"component": "etcd"}, common.PodStartTimeout),
+			Label("R00002"), "etcd", map[string]string{"component": "etcd"}, 1, common.PodStartTimeout),
 		Entry("Successfully run a pod during the API-server is restarting",
-			Label("R00003"), "apiserver", map[string]string{"component": "kube-apiserver"}, common.PodStartTimeout),
+			Label("R00003"), "apiserver", map[string]string{"component": "kube-apiserver"}, 1, common.PodStartTimeout),
 		// https://github.com/spidernet-io/spiderpool/issues/1916
 		Entry("Successfully run a pod during the coreDns is restarting",
-			Label("R00005"), "coredns", map[string]string{"k8s-app": "kube-dns"}, common.PodStartTimeout),
+			Label("R00005"), "coredns", map[string]string{"k8s-app": "kube-dns"}, 2, common.PodStartTimeout),
 		Entry("Successfully run a pod during the Spiderpool agent is restarting",
-			Label("R00004", "G00008"), constant.SpiderpoolAgent, map[string]string{"app.kubernetes.io/component": constant.SpiderpoolAgent}, common.PodStartTimeout),
+			Label("R00004", "G00008"), constant.SpiderpoolAgent, map[string]string{"app.kubernetes.io/component": constant.SpiderpoolAgent}, 2, common.PodStartTimeout),
 		Entry("Successfully run a pod during the Spiderpool controller is restarting",
-			Label("R00001", "G00008"), constant.SpiderpoolController, map[string]string{"app.kubernetes.io/component": constant.SpiderpoolController}, common.PodStartTimeout),
+			Label("R00001", "G00008"), constant.SpiderpoolController, map[string]string{"app.kubernetes.io/component": constant.SpiderpoolController}, 2, common.PodStartTimeout),
 	)
 
 	DescribeTable("check ip assign after reboot node",
