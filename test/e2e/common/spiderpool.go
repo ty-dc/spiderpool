@@ -515,7 +515,7 @@ func DeleteIPPoolUntilFinish(f *frame.Framework, poolName string, ctx context.Co
 		default:
 			_, err := GetIppoolByName(f, poolName)
 			if err != nil {
-				GinkgoWriter.Printf("IPPool '%s' has been removed，error: %v", poolName, err)
+				GinkgoWriter.Printf("IPPool '%s' has been removed, error: %v \n", poolName, err)
 				return nil
 			}
 			time.Sleep(ForcedWaitingTime)

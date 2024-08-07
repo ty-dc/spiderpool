@@ -165,6 +165,13 @@ jobs:
                 -e INSTALL_RDMA=true \
                 -e INSTALL_SRIOV=true
 
+      - name: check Free Disk Space (Ubuntu)
+        run: |
+          echo "df -h"
+          df -h
+          echo "lsblk"
+          lsblk
+
       - name: Run e2e Test
         id: run_e2e
         continue-on-error: true
