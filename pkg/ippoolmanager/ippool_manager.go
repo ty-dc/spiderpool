@@ -215,7 +215,9 @@ func (im *ipPoolManager) genRandomIP(ctx context.Context, ipPool *spiderpoolv2be
 		ipPool.Status.AllocatedIPCount = new(int64)
 	}
 
-	*ipPool.Status.AllocatedIPCount++
+	// Adding a newly assigned IP
+	usedIPs = append(usedIPs, resIP)
+	*ipPool.Status.AllocatedIPCount = int64(len(usedIPs))
 	if *ipPool.Status.AllocatedIPCount > int64(*im.config.MaxAllocatedIPs) {
 		return nil, fmt.Errorf("%w, threshold of IP records(<=%d) for IPPool %s exceeded", constant.ErrIPUsedOut, im.config.MaxAllocatedIPs, ipPool.Name)
 	}
@@ -253,7 +255,7 @@ func (im *ipPoolManager) ReleaseIP(ctx context.Context, poolName string, ipAndUI
 			if record, ok := allocatedRecords[iu.IP]; ok {
 				if record.PodUID == iu.UID {
 					delete(allocatedRecords, iu.IP)
-					*ipPool.Status.AllocatedIPCount--
+					*ipPool.Status.AllocatedIPCount = int64(len(allocatedRecords))
 					release = true
 				}
 			}
