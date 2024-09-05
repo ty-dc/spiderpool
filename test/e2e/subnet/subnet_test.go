@@ -1915,7 +1915,6 @@ var _ = Describe("test subnet", Label("subnet"), func() {
 		Expect(frame.CreatePod(podYaml)).To(Succeed())
 		ctx, cancel := context.WithTimeout(context.Background(), time.Minute*1)
 		defer cancel()
-		GinkgoWriter.Printf("wait for one minute that pod %v/%v would not ready. \n", namespace, podName)
 		_, err = frame.WaitPodStarted(podName, namespace, ctx)
 		Expect(err).To(HaveOccurred())
 	})
