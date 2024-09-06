@@ -8,23 +8,30 @@ import "unsafe"
 
 // A profMap is a map from (stack, tag) to mapEntry.
 // It grows without bound, but that's assumed to be OK.
-type profMap[PREV any, ACC any] struct {
-	hash    map[uintptr]*profMapEntry[PREV, ACC]
-	free    []profMapEntry[PREV, ACC]
+type profMap struct {
+	hash    map[uintptr]*profMapEntry
+	all     *profMapEntry
+	last    *profMapEntry
+	free    []profMapEntry
 	freeStk []uintptr
 }
 
-// A profMapEntry is a single entry in the profMap.
-// todo use unsafe.Pointer + len for stk ?
-type profMapEntry[PREV any, ACC any] struct {
-	nextHash *profMapEntry[PREV, ACC] // next in hash list
-	stk      []uintptr
-	tag      uintptr
-	prev     PREV
-	acc      ACC
+type count struct {
+	// alloc_objects, alloc_bytes for heap
+	// mutex_count, mutex_duration for mutex
+	v1, v2 int64
 }
 
-func (m *profMap[PREV, ACC]) Lookup(stk []uintptr, tag uintptr) *profMapEntry[PREV, ACC] {
+// A profMapEntry is a single entry in the profMap.
+type profMapEntry struct {
+	nextHash *profMapEntry // next in hash list
+	nextAll  *profMapEntry // next in list of all entries
+	stk      []uintptr
+	tag      uintptr
+	count    count
+}
+
+func (m *profMap) Lookup(stk []uintptr, tag uintptr) *profMapEntry {
 	// Compute hash of (stk, tag).
 	h := uintptr(0)
 	for _, x := range stk {
@@ -35,7 +42,7 @@ func (m *profMap[PREV, ACC]) Lookup(stk []uintptr, tag uintptr) *profMapEntry[PR
 	h += uintptr(tag) * 41
 
 	// Find entry if present.
-	var last *profMapEntry[PREV, ACC]
+	var last *profMapEntry
 Search:
 	for e := m.hash[h]; e != nil; last, e = e, e.nextHash {
 		if len(e.stk) != len(stk) || e.tag != tag {
@@ -57,7 +64,7 @@ Search:
 
 	// Add new entry.
 	if len(m.free) < 1 {
-		m.free = make([]profMapEntry[PREV, ACC], 128)
+		m.free = make([]profMapEntry, 128)
 	}
 	e := &m.free[0]
 	m.free = m.free[1:]
@@ -75,8 +82,15 @@ Search:
 		e.stk[j] = uintptr(stk[j])
 	}
 	if m.hash == nil {
-		m.hash = make(map[uintptr]*profMapEntry[PREV, ACC])
+		m.hash = make(map[uintptr]*profMapEntry)
 	}
 	m.hash[h] = e
+	if m.all == nil {
+		m.all = e
+		m.last = e
+	} else {
+		m.last.nextAll = e
+		m.last = e
+	}
 	return e
 }
