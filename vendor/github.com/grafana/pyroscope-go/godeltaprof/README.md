@@ -91,11 +91,8 @@ CPU profiles: [BenchmarkOG](https://flamegraph.com/share/a8f68312-98c7-11ee-a502
 
 # upstreaming
 
-In the perfect world, this functionality exists in golang runtime/stdlib and we don't need godeltaprof library at all.
-
-See golang proposals:
-https://github.com/golang/go/issues/57765
-https://github.com/golang/go/issues/67942
+TODO(korniltsev): create golang issue and ask if godeltaprof is something that could be considered merging to upstream golang repo
+in some way(maybe not as is, maybe with different APIs)
 
 
 

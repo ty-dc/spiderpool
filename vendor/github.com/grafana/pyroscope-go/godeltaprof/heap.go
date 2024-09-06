@@ -28,28 +28,28 @@ import (
 //	...
 //	err := hp.Profile(someWriter)
 type HeapProfiler struct {
-	impl    pprof.DeltaHeapProfiler
-	mutex   sync.Mutex
-	options pprof.ProfileBuilderOptions
+	impl  pprof.DeltaHeapProfiler
+	mutex sync.Mutex
 }
 
 func NewHeapProfiler() *HeapProfiler {
 	return &HeapProfiler{
-		impl: pprof.DeltaHeapProfiler{},
-		options: pprof.ProfileBuilderOptions{
-			GenericsFrames: true,
-			LazyMapping:    true,
+		impl: pprof.DeltaHeapProfiler{
+			Options: pprof.ProfileBuilderOptions{
+				GenericsFrames: true,
+				LazyMapping:    true,
+			},
 		}}
 }
 
 func NewHeapProfilerWithOptions(options ProfileOptions) *HeapProfiler {
 	return &HeapProfiler{
-		impl: pprof.DeltaHeapProfiler{},
-		options: pprof.ProfileBuilderOptions{
-			GenericsFrames: options.GenericsFrames,
-			LazyMapping:    options.LazyMappings,
-		},
-	}
+		impl: pprof.DeltaHeapProfiler{
+			Options: pprof.ProfileBuilderOptions{
+				GenericsFrames: options.GenericsFrames,
+				LazyMapping:    options.LazyMappings,
+			},
+		}}
 }
 
 func (d *HeapProfiler) Profile(w io.Writer) error {
@@ -76,7 +76,6 @@ func (d *HeapProfiler) Profile(w io.Writer) error {
 		}
 		// Profile grew; try again.
 	}
-	rate := int64(runtime.MemProfileRate)
-	b := pprof.NewProfileBuilder(w, &d.options, pprof.HeapProfileConfig(rate))
-	return d.impl.WriteHeapProto(b, p, rate)
+
+	return d.impl.WriteHeapProto(w, p, int64(runtime.MemProfileRate), "")
 }
