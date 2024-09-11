@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/spidernet-io/spiderpool/pkg/constant"
-	"github.com/spidernet-io/spiderpool/pkg/election"
 	clientset "github.com/spidernet-io/spiderpool/pkg/k8s/client/clientset/versioned"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
@@ -19,8 +18,7 @@ func StartController(ctx context.Context,
 	leaderRetryElectGap time.Duration,
 	spiderClientset clientset.Interface,
 	kubeClient kubernetes.Interface,
-	informerFactory informers.SharedInformerFactory,
-	leader election.SpiderLeaseElector) error {
+	informerFactory informers.SharedInformerFactory) error {
 
 	driver := NewDriver(spiderClientset)
 	controller := controller.New(ctx, constant.DRADriverName, driver, kubeClient, informerFactory)
@@ -32,29 +30,8 @@ func StartController(ctx context.Context,
 				return
 			default:
 			}
-
-			if !leader.IsElected() {
-				time.Sleep(leaderRetryElectGap)
-				continue
-			}
-
 			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						innerCancel()
-						return
-					}
-					time.Sleep(leaderRetryElectGap)
-				}
-			}()
-
+			defer innerCancel()
 			informerFactory.Start(innerCtx.Done())
 			controller.Run(1)
 		}

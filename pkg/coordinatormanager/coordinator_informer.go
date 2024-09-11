@@ -40,7 +40,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller"
 
 	"github.com/spidernet-io/spiderpool/pkg/constant"
-	"github.com/spidernet-io/spiderpool/pkg/election"
 	"github.com/spidernet-io/spiderpool/pkg/event"
 	spiderpoolv2beta1 "github.com/spidernet-io/spiderpool/pkg/k8s/apis/spiderpool.spidernet.io/v2beta1"
 	clientset "github.com/spidernet-io/spiderpool/pkg/k8s/client/clientset/versioned"
@@ -113,16 +112,12 @@ func (cc *CoordinatorController) SetupInformer(
 	ctx context.Context,
 	spiderClientset clientset.Interface,
 	k8sClientset *kubernetes.Clientset,
-	leader election.SpiderLeaseElector,
 ) error {
 	if spiderClientset == nil {
 		return fmt.Errorf("spiderpoolv2beta1 clientset %w", constant.ErrMissingRequiredParam)
 	}
 	if k8sClientset == nil {
 		return fmt.Errorf("kubernetes clientset %w", constant.ErrMissingRequiredParam)
-	}
-	if leader == nil {
-		return fmt.Errorf("controller leader %w", constant.ErrMissingRequiredParam)
 	}
 
 	InformerLogger = logutils.Logger.Named("Coordinator-Informer")
@@ -134,29 +129,8 @@ func (cc *CoordinatorController) SetupInformer(
 				return
 			default:
 			}
-
-			if !leader.IsElected() {
-				time.Sleep(cc.LeaderRetryElectGap)
-				continue
-			}
-
 			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						InformerLogger.Warn("Leader lost, stop Coordinator informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(cc.LeaderRetryElectGap)
-				}
-			}()
+			defer innerCancel()
 
 			cc.Workqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), constant.KindSpiderCoordinator)
 
@@ -187,7 +161,6 @@ func (cc *CoordinatorController) SetupInformer(
 			InformerLogger.Info("Coordinator informer down")
 		}
 	}()
-
 	return nil
 }
 

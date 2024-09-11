@@ -31,7 +31,6 @@ import (
 
 	"github.com/spidernet-io/spiderpool/pkg/applicationcontroller/applicationinformers"
 	"github.com/spidernet-io/spiderpool/pkg/constant"
-	"github.com/spidernet-io/spiderpool/pkg/election"
 	spiderpoolv2beta1 "github.com/spidernet-io/spiderpool/pkg/k8s/apis/spiderpool.spidernet.io/v2beta1"
 	"github.com/spidernet-io/spiderpool/pkg/logutils"
 	"github.com/spidernet-io/spiderpool/pkg/subnetmanager"
@@ -98,11 +97,7 @@ func NewSubnetAppController(client client.Client, apiReader client.Reader, subne
 	return c, nil
 }
 
-func (sac *SubnetAppController) SetupInformer(ctx context.Context, client kubernetes.Interface, leader election.SpiderLeaseElector) error {
-	if leader == nil {
-		return fmt.Errorf("failed to start SpiderSubnet App informer, controller leader must be specified")
-	}
-
+func (sac *SubnetAppController) SetupInformer(ctx context.Context, client kubernetes.Interface) error {
 	logger.Info("try to register SpiderSubnet App informer")
 	go func() {
 		for {
@@ -111,31 +106,9 @@ func (sac *SubnetAppController) SetupInformer(ctx context.Context, client kubern
 				return
 			default:
 			}
-
-			if !leader.IsElected() {
-				time.Sleep(sac.LeaderRetryElectGap)
-				continue
-			}
-
-			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						logger.Warn("Leader lost, stop Subnet App informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(sac.LeaderRetryElectGap)
-				}
-			}()
-
 			logger.Info("create SpiderSubnet App informer")
+			innerCtx, innerCancel := context.WithCancel(ctx)
+			defer innerCancel()
 			factory := kubeinformers.NewSharedInformerFactory(client, 0)
 			err := sac.addEventHandlers(factory)
 			if nil != err {

@@ -27,7 +27,6 @@ import (
 	"github.com/spidernet-io/spiderpool/cmd/spiderpool/cmd"
 	spiderpoolcmd "github.com/spidernet-io/spiderpool/cmd/spiderpool/cmd"
 	"github.com/spidernet-io/spiderpool/pkg/constant"
-	"github.com/spidernet-io/spiderpool/pkg/election"
 	spiderpoolv2beta1 "github.com/spidernet-io/spiderpool/pkg/k8s/apis/spiderpool.spidernet.io/v2beta1"
 	crdclientset "github.com/spidernet-io/spiderpool/pkg/k8s/client/clientset/versioned"
 	"github.com/spidernet-io/spiderpool/pkg/k8s/client/informers/externalversions"
@@ -65,10 +64,7 @@ func NewMultusConfigController(multusConfigControllerConfig MultusConfigControll
 	return m
 }
 
-func (mcc *MultusConfigController) SetupInformer(ctx context.Context, client crdclientset.Interface, leader election.SpiderLeaseElector) error {
-	if leader == nil {
-		return fmt.Errorf("controller leader %w", constant.ErrMissingRequiredParam)
-	}
+func (mcc *MultusConfigController) SetupInformer(ctx context.Context, client crdclientset.Interface) error {
 
 	informerLogger.Info("try to register MultusConfig informer")
 	go func() {
@@ -78,29 +74,8 @@ func (mcc *MultusConfigController) SetupInformer(ctx context.Context, client crd
 				return
 			default:
 			}
-
-			if !leader.IsElected() {
-				time.Sleep(mcc.LeaderRetryElectGap)
-				continue
-			}
-
 			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						informerLogger.Warn("Leader lost, stop MultusConfig informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(mcc.LeaderRetryElectGap)
-				}
-			}()
+			defer innerCancel()
 
 			informerLogger.Info("create MultusConfig informer")
 			factory := externalversions.NewSharedInformerFactory(client, mcc.ResyncPeriod)

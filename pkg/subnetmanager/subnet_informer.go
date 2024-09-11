@@ -29,7 +29,6 @@ import (
 
 	"github.com/spidernet-io/spiderpool/pkg/applicationcontroller/applicationinformers"
 	"github.com/spidernet-io/spiderpool/pkg/constant"
-	"github.com/spidernet-io/spiderpool/pkg/election"
 	spiderpoolip "github.com/spidernet-io/spiderpool/pkg/ip"
 	"github.com/spidernet-io/spiderpool/pkg/ippoolmanager"
 	spiderpoolv2beta1 "github.com/spidernet-io/spiderpool/pkg/k8s/apis/spiderpool.spidernet.io/v2beta1"
@@ -81,16 +80,12 @@ type thirdControllerKey struct {
 	AppUID           types.UID
 }
 
-func (sc *SubnetController) SetupInformer(ctx context.Context, client clientset.Interface, leader election.SpiderLeaseElector) error {
+func (sc *SubnetController) SetupInformer(ctx context.Context, client clientset.Interface) error {
 	if client == nil {
 		return fmt.Errorf("spiderpoolv2beta1 clientset %w", constant.ErrMissingRequiredParam)
 	}
-	if leader == nil {
-		return fmt.Errorf("controller leader %w", constant.ErrMissingRequiredParam)
-	}
 
 	InformerLogger = logutils.Logger.Named("Subnet-Informer")
-
 	go func() {
 		for {
 			select {
@@ -98,29 +93,8 @@ func (sc *SubnetController) SetupInformer(ctx context.Context, client clientset.
 				return
 			default:
 			}
-
-			if !leader.IsElected() {
-				time.Sleep(sc.LeaderRetryElectGap)
-				continue
-			}
-
 			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						InformerLogger.Warn("Leader lost, stop Subnet informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(sc.LeaderRetryElectGap)
-				}
-			}()
+			defer innerCancel()
 
 			InformerLogger.Info("Initialize Dynamic informer")
 			sc.dynamicFactory = dynamicinformer.NewDynamicSharedInformerFactory(sc.DynamicClient, 0)
