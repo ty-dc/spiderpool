@@ -418,11 +418,6 @@ uninstall_spiderpool:
 			done ; \
 		done
 
-.PHONY: upgrade_spiderpool
-upgrade_spiderpool:
-	@echo -e "\033[35m [upgrade spiderpool] \033[0m"
-	@make helm_upgrade_spiderpool
-
 .PHONY: helm_upgrade_spiderpool
 helm_upgrade_spiderpool:
 	@echo -e "\033[35m [helm upgrade spiderpool] \033[0m"
@@ -456,7 +451,7 @@ helm_upgrade_spiderpool:
 	set -x ; \
 	helm --kubeconfig $(E2E_KUBECONFIG) upgrade $(RELEASE_NAME) $(ROOT_DIR)/charts/spiderpool \
 	    $${HELM_OPTION} \
-		-n $(RELEASE_NAMESPACE) --debug --reuse-values ; \
+		-n $(RELEASE_NAMESPACE) --debug ; \
     cd $(ROOT_DIR)/charts/spiderpool/crds ; \
 	ls | grep '\.yaml$$' | xargs -I {} kubectl apply -f {} --kubeconfig $(E2E_KUBECONFIG) ; \
 	kubectl wait --for=condition=ready -l app.kubernetes.io/instance=spiderpool --timeout=300s pod -n $(RELEASE_NAMESPACE) --kubeconfig $(E2E_KUBECONFIG) || true; \
