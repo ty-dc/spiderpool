@@ -451,7 +451,7 @@ helm_upgrade_spiderpool:
 	set -x ; \
 	helm --kubeconfig $(E2E_KUBECONFIG) upgrade $(RELEASE_NAME) $(ROOT_DIR)/charts/spiderpool \
 	    $${HELM_OPTION} \
-		-n $(RELEASE_NAMESPACE) --debug --reuse-values ; \
+		-n $(RELEASE_NAMESPACE) --debug ; \
     cd $(ROOT_DIR)/charts/spiderpool/crds ; \
 	ls | grep '\.yaml$$' | xargs -I {} kubectl apply -f {} --kubeconfig $(E2E_KUBECONFIG) ; \
 	kubectl wait --for=condition=ready -l app.kubernetes.io/instance=spiderpool --timeout=300s pod -n $(RELEASE_NAMESPACE) --kubeconfig $(E2E_KUBECONFIG) || true; \
