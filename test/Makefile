@@ -418,11 +418,6 @@ uninstall_spiderpool:
 			done ; \
 		done
 
-.PHONY: upgrade_spiderpool
-upgrade_spiderpool:
-	@echo -e "\033[35m [upgrade spiderpool] \033[0m"
-	@make helm_upgrade_spiderpool
-
 .PHONY: helm_upgrade_spiderpool
 helm_upgrade_spiderpool:
 	@echo -e "\033[35m [helm upgrade spiderpool] \033[0m"
