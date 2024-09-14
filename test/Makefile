@@ -437,7 +437,7 @@ helm_upgrade_spiderpool:
 	--set spiderpoolInit.image.registry="" \
 	--set spiderpoolInit.image.repository=$(SPIDERPOOL_CONTROLLER_IMAGE_NAME) \
 	--set spiderpoolInit.image.tag=$(E2E_SPIDERPOOL_TAG) \
-	--set multus.multusCNI.uninstall=false " \
+	--set multus.multusCNI.uninstall=false " ; \
 	if [ "$(E2E_SPIDERPOOL_ENABLE_SUBNET)" == "true" ] ; then \
 		HELM_OPTION+=" --set ipam.spiderSubnet.enable=true " ; \
 	else \
