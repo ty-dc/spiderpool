@@ -440,8 +440,12 @@ helm_upgrade_spiderpool:
 	--set multus.multusCNI.uninstall=false " ; \
 	if [ "$(E2E_SPIDERPOOL_ENABLE_SUBNET)" == "true" ] ; then \
 		HELM_OPTION+=" --set ipam.spiderSubnet.enable=true " ; \
+		HELM_OPTION+=" --set ipam.spiderSubnet.autoPool.enable=true " ; \
+		HELM_OPTION+=" --set ipam.spiderSubnet.autoPool.defaultRedundantIPNumber=1 " ; \
 	else \
 		HELM_OPTION+=" --set ipam.spiderSubnet.enable=false " ; \
+		HELM_OPTION+=" --set ipam.spiderSubnet.autoPool.enable=false " ; \
+		HELM_OPTION+=" --set ipam.spiderSubnet.autoPool.defaultRedundantIPNumber=1 " ; \
 	fi ; \
 	ALL_IMAGES=`helm template $(RELEASE_NAME) $(ROOT_DIR)/charts/spiderpool $${HELM_OPTION} | grep ' image: ' | tr -d '"' | awk -F 'image: ' '{print $$2}' | sort | uniq | tr '\n' ' '` ; \
 	echo "ALL_IMAGES: $${ALL_IMAGES} " ; \
