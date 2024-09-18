@@ -46,11 +46,15 @@ func (g *_httpGetControllerReadiness) Handle(params runtime.GetRuntimeReadinessP
 		return runtime.NewGetRuntimeReadinessInternalServerError()
 	}
 
-	if g.Leader.IsElected() {
-		if gcIPConfig.EnableGCIP && !g.GCManager.Health() {
-			logger.Warn("failed to check spiderpool-controller readiness probe: the IP GC is still not ready, please wait for a while")
-			return runtime.NewGetRuntimeReadinessInternalServerError()
+	select {
+	case isLeader := <-g.Leader.IsElected():
+		if isLeader {
+			if gcIPConfig.EnableGCIP && !g.GCManager.Health() {
+				logger.Warn("failed to check spiderpool-controller readiness probe: the IP GC is still not ready, please wait for a while")
+				return runtime.NewGetRuntimeReadinessInternalServerError()
+			}
 		}
+	default:
 	}
 
 	return runtime.NewGetRuntimeReadinessOK()

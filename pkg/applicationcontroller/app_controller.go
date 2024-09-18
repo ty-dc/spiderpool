@@ -109,12 +109,11 @@ func (sac *SubnetAppController) SetupInformer(ctx context.Context, client kubern
 			select {
 			case <-ctx.Done():
 				return
-			default:
-			}
-
-			if !leader.IsElected() {
-				time.Sleep(sac.LeaderRetryElectGap)
-				continue
+			case isLeader := <-leader.IsElected():
+				if !isLeader {
+					time.Sleep(sac.LeaderRetryElectGap)
+					continue
+				}
 			}
 
 			innerCtx, innerCancel := context.WithCancel(ctx)
@@ -123,12 +122,13 @@ func (sac *SubnetAppController) SetupInformer(ctx context.Context, client kubern
 					select {
 					case <-innerCtx.Done():
 						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						logger.Warn("Leader lost, stop Subnet App informer")
-						innerCancel()
+					case isLeader := <-leader.IsElected():
+						if !isLeader {
+							logger.Warn("Leader lost, stop SpiderSubnet informer")
+							innerCancel()
+							return
+						}
+					case <-ctx.Done():
 						return
 					}
 					time.Sleep(sac.LeaderRetryElectGap)

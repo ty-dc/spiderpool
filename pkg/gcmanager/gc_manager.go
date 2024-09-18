@@ -185,7 +185,12 @@ func (s *SpiderGC) Health() bool {
 	ctx, cancelFunc := context.WithTimeout(context.TODO(), waitForCacheSyncTimeout)
 	defer cancelFunc()
 
-	if s.leader.IsElected() {
+	select {
+	case isLeader := <-s.leader.IsElected():
+		if !isLeader {
+			return true
+		}
+
 		if s.informerFactory == nil {
 			logger.Warn("the IP-GC manager pod informer is not ready")
 			return false
@@ -197,7 +202,8 @@ func (s *SpiderGC) Health() bool {
 				return false
 			}
 		}
+		return true
+	case <-ctx.Done():
+		return false
 	}
-
-	return true
 }

@@ -25,7 +25,7 @@ var logger *zap.Logger
 type SpiderLeaseElector interface {
 	Run(ctx context.Context, clientSet kubernetes.Interface) error
 	// IsElected returns a boolean value to check current Elector whether is a leader
-	IsElected() bool
+	IsElected() chan bool
 	GetLeader() string
 }
 
@@ -40,7 +40,7 @@ type SpiderLeader struct {
 	leaseRetryPeriod    time.Duration
 	leaderRetryElectGap time.Duration
 
-	isLeader      bool
+	isLeader      chan bool
 	leaderElector *leaderelection.LeaderElector
 }
 
@@ -81,7 +81,7 @@ func NewLeaseElector(leaseLockNS, leaseLockName, leaseLockIdentity string,
 	}
 
 	sl := &SpiderLeader{
-		isLeader:            false,
+		isLeader:            make(chan bool, 1),
 		leaseLockName:       leaseLockName,
 		leaseLockNamespace:  leaseLockNS,
 		leaseLockIdentity:   leaseLockIdentity,
@@ -128,14 +128,14 @@ func (sl *SpiderLeader) register(clientSet kubernetes.Interface) error {
 		Callbacks: leaderelection.LeaderCallbacks{
 			OnStartedLeading: func(_ context.Context) {
 				sl.Lock()
-				sl.isLeader = true
+				sl.isLeader <- true
 				sl.Unlock()
 				logger.Sugar().Infof("leader elected: %s/%s/%s", sl.leaseLockNamespace, sl.leaseLockName, sl.leaseLockIdentity)
 			},
 			OnStoppedLeading: func() {
 				// we can do cleanup here
 				sl.Lock()
-				sl.isLeader = false
+				sl.isLeader <- false
 				sl.Unlock()
 				logger.Sugar().Warnf("leader lost: %s/%s/%s", sl.leaseLockNamespace, sl.leaseLockName, sl.leaseLockIdentity)
 			},
@@ -150,7 +150,7 @@ func (sl *SpiderLeader) register(clientSet kubernetes.Interface) error {
 	return nil
 }
 
-func (sl *SpiderLeader) IsElected() bool {
+func (sl *SpiderLeader) IsElected() chan bool {
 	sl.RLock()
 	defer sl.RUnlock()
 

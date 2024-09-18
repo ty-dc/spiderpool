@@ -53,10 +53,10 @@ func (mr *MockSpiderLeaseElectorMockRecorder) GetLeader() *gomock.Call {
 }
 
 // IsElected mocks base method.
-func (m *MockSpiderLeaseElector) IsElected() bool {
+func (m *MockSpiderLeaseElector) IsElected() chan bool {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "IsElected")
-	ret0, _ := ret[0].(bool)
+	ret0, _ := ret[0].(chan bool)
 	return ret0
 }
 
