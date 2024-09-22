@@ -159,6 +159,7 @@ setup_kind:
 			echo "the following features are only fully supported in versions higher than v1.29.0." ; \
 			sed -i  '$$  a\runtimeConfig: ' $${NEW_KIND_YAML}  ; \
 			sed -i  '$$  a\   api/alpha: "true"' $${NEW_KIND_YAML}  ; \
+			sed -i  '$$  a\   api/beta: "true"' $${NEW_KIND_YAML}  ; \
 			sed -i  '$$  a\featureGates: ' $${NEW_KIND_YAML}  ; \
 			sed -i  '$$  a\   MultiCIDRServiceAllocator: true' $${NEW_KIND_YAML}  ; \
 			if [ "${E2E_SPIDERPOOL_ENABLE_DRA}" == "true" ]; then \
