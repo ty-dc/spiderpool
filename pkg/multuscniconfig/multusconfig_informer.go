@@ -72,49 +72,37 @@ func (mcc *MultusConfigController) SetupInformer(ctx context.Context, client crd
 
 	informerLogger.Info("try to register MultusConfig informer")
 	go func() {
+		innerCtx, innerCancel := context.WithCancel(ctx)
+		defer innerCancel()
+
 		for {
 			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-
-			if !leader.IsElected() {
-				time.Sleep(mcc.LeaderRetryElectGap)
-				continue
-			}
-
-			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						informerLogger.Warn("Leader lost, stop MultusConfig informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(mcc.LeaderRetryElectGap)
+			case isLeader := <-leader.IsElected():
+				if !isLeader {
+					informerLogger.Warn("Leader lost, stop IPPool informer")
+					innerCancel()
+					return
 				}
-			}()
 
-			informerLogger.Info("create MultusConfig informer")
-			factory := externalversions.NewSharedInformerFactory(client, mcc.ResyncPeriod)
-			err := mcc.addEventHandlers(factory.Spiderpool().V2beta1().SpiderMultusConfigs())
-			if nil != err {
-				informerLogger.Error(err.Error())
-				continue
-			}
-			factory.Start(innerCtx.Done())
+				informerLogger.Info("create MultusConfig informer")
+				factory := externalversions.NewSharedInformerFactory(client, mcc.ResyncPeriod)
+				err := mcc.addEventHandlers(factory.Spiderpool().V2beta1().SpiderMultusConfigs())
+				if err != nil {
+					informerLogger.Error(err.Error())
+					innerCancel()
+					continue
+				}
+				factory.Start(innerCtx.Done())
 
-			if err := mcc.Run(innerCtx.Done()); nil != err {
-				informerLogger.Sugar().Errorf("failed to run MultusConfig controller, error: %v", err)
+				if err := mcc.Run(innerCtx.Done()); err != nil {
+					informerLogger.Sugar().Errorf("failed to run MultusConfig controller, error: %v", err)
+				}
+				informerLogger.Error("SpiderMultusConfig informer broken")
+
+			case <-ctx.Done():
+				informerLogger.Warn("Context canceled, stopping Subnet informer")
+				return
 			}
-			informerLogger.Error("SpiderMultusConfig informer broken")
 		}
 	}()
 

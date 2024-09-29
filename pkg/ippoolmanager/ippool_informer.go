@@ -74,52 +74,42 @@ func (ic *IPPoolController) SetupInformer(ctx context.Context, client crdclients
 	if controllerLeader == nil {
 		return fmt.Errorf("failed to start SpiderIPPool informer, controller leader must be specified")
 	}
-
 	informerLogger.Info("try to register SpiderIPPool informer")
+
 	go func() {
+		innerCtx, innerCancel := context.WithCancel(ctx)
+		defer innerCancel()
+
 		for {
 			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-
-			if !controllerLeader.IsElected() {
-				time.Sleep(ic.LeaderRetryElectGap)
-				continue
-			}
-
-			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !controllerLeader.IsElected() {
-						informerLogger.Warn("Leader lost, stop IPPool informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(ic.LeaderRetryElectGap)
+			case isLeader := <-controllerLeader.IsElected():
+				if !isLeader {
+					informerLogger.Warn("Leader lost, stop IPPool informer")
+					innerCancel()
+					return
 				}
-			}()
 
-			informerLogger.Info("create SpiderIPPool informer")
-			factory := externalversions.NewSharedInformerFactory(client, ic.ResyncPeriod)
-			err := ic.addEventHandlers(factory.Spiderpool().V2beta1().SpiderIPPools())
-			if nil != err {
-				informerLogger.Error(err.Error())
-				continue
-			}
-			factory.Start(innerCtx.Done())
+				informerLogger.Info("create SpiderIPPool informer")
+				factory := externalversions.NewSharedInformerFactory(client, ic.ResyncPeriod)
 
-			if err := ic.Run(innerCtx.Done()); nil != err {
-				informerLogger.Sugar().Errorf("failed to run ippool controller, error: %v", err)
+				err := ic.addEventHandlers(factory.Spiderpool().V2beta1().SpiderIPPools())
+				if err != nil {
+					informerLogger.Sugar().Errorf("failed to add event handlers: %w", err)
+					continue
+				}
+
+				factory.Start(innerCtx.Done())
+				informerLogger.Info("SpiderIPPool informer started")
+
+				if err := ic.Run(innerCtx.Done()); err != nil {
+					informerLogger.Sugar().Errorf("failed to run ippool controller, error: %v", err)
+				}
+				informerLogger.Error("SpiderIPPool informer broken")
+
+			case <-ctx.Done():
+				informerLogger.Warn("Context canceled, stopping IPPool informer")
+				return
 			}
-			informerLogger.Error("SpiderIPPool informer broken")
 		}
 	}()
 

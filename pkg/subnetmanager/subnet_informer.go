@@ -90,59 +90,46 @@ func (sc *SubnetController) SetupInformer(ctx context.Context, client clientset.
 	}
 
 	InformerLogger = logutils.Logger.Named("Subnet-Informer")
-
 	go func() {
+		innerCtx, innerCancel := context.WithCancel(ctx)
+		defer innerCancel()
+
 		for {
 			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-
-			if !leader.IsElected() {
-				time.Sleep(sc.LeaderRetryElectGap)
-				continue
-			}
-
-			innerCtx, innerCancel := context.WithCancel(ctx)
-			go func() {
-				for {
-					select {
-					case <-innerCtx.Done():
-						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						InformerLogger.Warn("Leader lost, stop Subnet informer")
-						innerCancel()
-						return
-					}
-					time.Sleep(sc.LeaderRetryElectGap)
+			case isLeader := <-leader.IsElected():
+				if !isLeader {
+					InformerLogger.Warn("Leader lost, stop IPPool informer")
+					innerCancel()
+					return
 				}
-			}()
 
-			InformerLogger.Info("Initialize Dynamic informer")
-			sc.dynamicFactory = dynamicinformer.NewDynamicSharedInformerFactory(sc.DynamicClient, 0)
-			sc.dynamicWorkqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Dynamic-Objects")
+				InformerLogger.Info("Initialize Dynamic informer")
+				sc.dynamicFactory = dynamicinformer.NewDynamicSharedInformerFactory(sc.DynamicClient, 0)
+				sc.dynamicWorkqueue = workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Dynamic-Objects")
 
-			InformerLogger.Info("Initialize Subnet informer")
-			informerFactory := externalversions.NewSharedInformerFactory(client, sc.ResyncPeriod)
-			err := sc.addEventHandlers(
-				informerFactory.Spiderpool().V2beta1().SpiderSubnets(),
-				informerFactory.Spiderpool().V2beta1().SpiderIPPools(),
-			)
-			if nil != err {
-				InformerLogger.Error(err.Error())
-				continue
+				InformerLogger.Info("Initialize Subnet informer")
+				informerFactory := externalversions.NewSharedInformerFactory(client, sc.ResyncPeriod)
+				err := sc.addEventHandlers(
+					informerFactory.Spiderpool().V2beta1().SpiderSubnets(),
+					informerFactory.Spiderpool().V2beta1().SpiderIPPools(),
+				)
+				if err != nil {
+					InformerLogger.Error(err.Error())
+					innerCancel()
+					continue
+				}
+
+				informerFactory.Start(innerCtx.Done())
+				if err := sc.run(logutils.IntoContext(innerCtx, InformerLogger), sc.SubnetControllerWorkers); err != nil {
+					InformerLogger.Sugar().Errorf("failed to run Subnet informer: %v", err)
+					innerCancel()
+				}
+				InformerLogger.Info("Subnet informer down")
+
+			case <-ctx.Done():
+				InformerLogger.Warn("Context canceled, stopping Subnet informer")
+				return
 			}
-
-			informerFactory.Start(innerCtx.Done())
-			if err := sc.run(logutils.IntoContext(innerCtx, InformerLogger), sc.SubnetControllerWorkers); err != nil {
-				InformerLogger.Sugar().Errorf("failed to run Subnet informer: %v", err)
-				innerCancel()
-			}
-			InformerLogger.Info("Subnet informer down")
 		}
 	}()
 

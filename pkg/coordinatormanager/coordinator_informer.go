@@ -132,12 +132,12 @@ func (cc *CoordinatorController) SetupInformer(
 			select {
 			case <-ctx.Done():
 				return
+			case isLeader := <-leader.IsElected():
+				if !isLeader {
+					time.Sleep(cc.LeaderRetryElectGap)
+					continue
+				}
 			default:
-			}
-
-			if !leader.IsElected() {
-				time.Sleep(cc.LeaderRetryElectGap)
-				continue
 			}
 
 			innerCtx, innerCancel := context.WithCancel(ctx)
@@ -146,12 +146,13 @@ func (cc *CoordinatorController) SetupInformer(
 					select {
 					case <-innerCtx.Done():
 						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						InformerLogger.Warn("Leader lost, stop Coordinator informer")
-						innerCancel()
+					case isLeader := <-leader.IsElected():
+						if !isLeader {
+							InformerLogger.Warn("Leader lost, stop Coordinator informer")
+							innerCancel()
+							return
+						}
+					case <-ctx.Done():
 						return
 					}
 					time.Sleep(cc.LeaderRetryElectGap)

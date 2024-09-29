@@ -104,6 +104,11 @@ var _ = Describe("SubnetController", Label("subnet_controller_test"), func() {
 			fakeClientset.PrependWatchReactor("spidersubnets", testing.DefaultWatchReactor(fakeSubnetWatch, nil))
 			fakeClientset.PrependWatchReactor("spiderippools", testing.DefaultWatchReactor(fakeIPPoolWatch, nil))
 
+			mockLeaderElector.EXPECT().
+				IsElected().
+				Return(make(chan bool)).
+				AnyTimes()
+
 			err := subnetController.SetupInformer(bCtx, fakeClientset, mockLeaderElector)
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(func(g Gomega) {

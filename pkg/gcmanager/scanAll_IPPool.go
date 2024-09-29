@@ -46,7 +46,8 @@ func (s *SpiderGC) monitorGCSignal(ctx context.Context) {
 				s.executeScanAll(ctx)
 			default:
 				// The Elected controller will scan All with default GC interval
-				if s.leader.IsElected() {
+				isLeader := <-s.leader.IsElected()
+				if isLeader {
 					logger.Info("trigger default GC interval, execute scan all right now!")
 					s.executeScanAll(ctx)
 				}
@@ -247,20 +248,28 @@ func (s *SpiderGC) executeScanAll(ctx context.Context) {
 				}
 
 				// The goal is to promptly reclaim IP addresses and to avoid having all trace data being blank when the spiderppol controller has just started or during a leader election.
-				if flagTracePodEntry && s.leader.IsElected() {
-					scanAllLogger.Sugar().Debugf("The spiderppol controller pod might have just started or is undergoing a leader election, and is tracking pods %s/%s in the graceful termination phase via trace_worker.", podNS, podName)
-					// check pod status phase with its yaml
-					podEntry, err := s.buildPodEntry(nil, podYaml, false)
-					if err != nil {
-						scanAllLogger.Sugar().Errorf("failed to build podEntry in scanAll, error: %v", err)
-					} else {
-						err = s.PodDB.ApplyPodEntry(podEntry)
-						if err != nil {
-							scanAllLogger.Sugar().Errorf("failed to refresh PodEntry database in scanAll, error: %v", err.Error())
-						} else {
-							scanAllLogger.With(zap.String("tracing-reason", string("the spiderppol controller pod might have just started or is undergoing a leader election."))).
-								Sugar().Infof("update podEntry '%s/%s' successfully", podNS, podName)
+				if flagTracePodEntry {
+					select {
+					case isLeader := <-s.leader.IsElected():
+						// Proceed only if the current pod is the leader
+						if isLeader {
+							scanAllLogger.Sugar().Debugf("The spiderppol controller pod might have just started or is undergoing a leader election, and is tracking pods %s/%s in the graceful termination phase via trace_worker.", podNS, podName)
+							// check pod status phase with its yaml
+							podEntry, err := s.buildPodEntry(nil, podYaml, false)
+							if err != nil {
+								scanAllLogger.Sugar().Errorf("failed to build podEntry in scanAll, error: %v", err)
+							} else {
+								err = s.PodDB.ApplyPodEntry(podEntry)
+								if err != nil {
+									scanAllLogger.Sugar().Errorf("failed to refresh PodEntry database in scanAll, error: %v", err.Error())
+								} else {
+									scanAllLogger.With(zap.String("tracing-reason", string("the spiderppol controller pod might have just started or is undergoing a leader election."))).
+										Sugar().Infof("update podEntry '%s/%s' successfully", podNS, podName)
+								}
+							}
 						}
+					case <-ctx.Done():
+						scanAllLogger.Warn("Context cancelled while waiting for leadership status")
 					}
 				}
 

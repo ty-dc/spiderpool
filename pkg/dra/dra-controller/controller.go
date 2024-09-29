@@ -30,12 +30,11 @@ func StartController(ctx context.Context,
 			select {
 			case <-ctx.Done():
 				return
-			default:
-			}
-
-			if !leader.IsElected() {
-				time.Sleep(leaderRetryElectGap)
-				continue
+			case isLeader := <-leader.IsElected():
+				if !isLeader {
+					time.Sleep(leaderRetryElectGap)
+					continue
+				}
 			}
 
 			innerCtx, innerCancel := context.WithCancel(ctx)
@@ -44,11 +43,12 @@ func StartController(ctx context.Context,
 					select {
 					case <-innerCtx.Done():
 						return
-					default:
-					}
-
-					if !leader.IsElected() {
-						innerCancel()
+					case isLeader := <-leader.IsElected():
+						if !isLeader {
+							innerCancel()
+							return
+						}
+					case <-ctx.Done():
 						return
 					}
 					time.Sleep(leaderRetryElectGap)
@@ -58,6 +58,7 @@ func StartController(ctx context.Context,
 			informerFactory.Start(innerCtx.Done())
 			controller.Run(1)
 		}
+
 	}()
 	return nil
 }
