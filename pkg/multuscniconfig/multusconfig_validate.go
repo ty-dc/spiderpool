@@ -4,6 +4,7 @@
 package multuscniconfig
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -31,7 +32,7 @@ var (
 	annotationField      = field.NewPath("metadata").Child("annotations")
 )
 
-func validate(oldMultusConfig, multusConfig *spiderpoolv2beta1.SpiderMultusConfig) *field.Error {
+func (mcw *MultusConfigWebhook) validate(ctx context.Context, oldMultusConfig, multusConfig *spiderpoolv2beta1.SpiderMultusConfig) *field.Error {
 	if oldMultusConfig != nil {
 		err := validateCustomAnnoNameShouldNotBeChangeable(oldMultusConfig, multusConfig)
 		if nil != err {
@@ -39,7 +40,7 @@ func validate(oldMultusConfig, multusConfig *spiderpoolv2beta1.SpiderMultusConfi
 		}
 	}
 
-	err := validateAnnotation(multusConfig)
+	err := mcw.validateAnnotation(ctx, multusConfig)
 	if nil != err {
 		return err
 	}
@@ -260,10 +261,10 @@ func validateVlanId(vlanId int32) error {
 	return nil
 }
 
-func validateAnnotation(multusConfig *spiderpoolv2beta1.SpiderMultusConfig) *field.Error {
-	// validate the custom net-attach-def resource name
-	customMultusName, ok := multusConfig.Annotations[constant.AnnoNetAttachConfName]
-	if ok && customMultusName == "" {
+func (mcw *MultusConfigWebhook) validateAnnotation(ctx context.Context, multusConfig *spiderpoolv2beta1.SpiderMultusConfig) *field.Error {
+	// Validate the annotation 'multus.spidernet.io/cr-name' to customize the net-attach-def resource name.
+	customMultusName, hasCustomMultusName := multusConfig.Annotations[constant.AnnoNetAttachConfName]
+	if hasCustomMultusName && customMultusName == "" {
 		return field.Invalid(annotationField, multusConfig.Annotations, "invalid custom net-attach-def resource empty name")
 	}
 	if len(customMultusName) > k8svalidation.DNS1123SubdomainMaxLength {
@@ -271,7 +272,47 @@ func validateAnnotation(multusConfig *spiderpoolv2beta1.SpiderMultusConfig) *fie
 			fmt.Sprintf("the custom net-attach-def resource name must be no more than %d characters", k8svalidation.DNS1123SubdomainMaxLength))
 	}
 
-	// validate the custom net-attach-def CNI version
+	var spiderMultusConfigList spiderpoolv2beta1.SpiderMultusConfigList
+	if err := mcw.APIReader.List(ctx, &spiderMultusConfigList); err != nil {
+		return field.InternalError(annotationField, fmt.Errorf("failed to list SpiderMultusConfigs: %v", err))
+	}
+
+	for _, existingConfig := range spiderMultusConfigList.Items {
+		existingCustomMultusName, hasExistingCustomMultusName := existingConfig.Annotations[constant.AnnoNetAttachConfName]
+		// Check if the new SpiderMultusConfig and the existing SpiderMultusConfig are in the same namespace.
+		// If they are in the same namespace, the customMultusName specified via the annotation 'multus.spidernet.io/cr-name' must be unique.
+		isSameNamespace := multusConfig.Namespace == existingConfig.Namespace
+
+		switch {
+		// Case when both the new and existing SpiderMultusConfig have customMultusName,
+		// and they are the same in the same namespace, which creates a name conflict.
+		case hasCustomMultusName && hasExistingCustomMultusName && existingCustomMultusName == customMultusName && isSameNamespace:
+			return field.Invalid(annotationField, multusConfig.Annotations,
+				fmt.Sprintf("In namespace %s, the net-attach-def %s customized for SpiderMultusConfig %s via annotation %s conflicts with the net-attach-def %s of the existing SpiderMultusConfig %s.",
+					multusConfig.Namespace, customMultusName, multusConfig.Name, constant.AnnoNetAttachConfName, existingCustomMultusName, existingConfig.Name,
+				))
+
+		// Case when the new SpiderMultusConfig has a custom Multus name, but the existing SpiderMultusConfig does not,
+		// and the new SpiderMultusConfig‘s customMultusName matches the existing SpiderMultusConfig's name in the same namespace.
+		// This would also create a name conflict.
+		case hasCustomMultusName && !hasExistingCustomMultusName && existingConfig.Name == customMultusName && isSameNamespace:
+			return field.Invalid(annotationField, multusConfig.Annotations,
+				fmt.Sprintf("In namespace %s, the net-attach-def %s customized for SpiderMultusConfig %s via annotation %s conflicts with the name of the existing SpiderMultusConfig %s.",
+					multusConfig.Namespace, customMultusName, multusConfig.Name, constant.AnnoNetAttachConfName, existingConfig.Name,
+				))
+
+		// Case when the new SpiderMultusConfig does not have a customMultusName, but the existing SpiderMultusConfig does,
+		// and the existing SpiderMultusConfig‘s customMultusName matches the new SpiderMultusConfig's name in the same namespace.
+		// This is another potential name conflict.
+		case !hasCustomMultusName && hasExistingCustomMultusName && existingCustomMultusName == multusConfig.Name && isSameNamespace:
+			return field.Invalid(annotationField, multusConfig.Annotations,
+				fmt.Sprintf("In namespace %s, the name of SpiderMultusConfig %s conflicts with the net-attach-def %s customized by the annotation %s of the existing SpiderMultusConfig %s.",
+					multusConfig.Namespace, multusConfig.Name, existingCustomMultusName, constant.AnnoNetAttachConfName, existingConfig.Name,
+				))
+		}
+	}
+
+	// Validate the custom net-attach-def CNI version
 	cniVersion, ok := multusConfig.Annotations[constant.AnnoMultusConfigCNIVersion]
 	if ok && !slices.Contains(cmd.SupportCNIVersions, cniVersion) {
 		return field.Invalid(annotationField, multusConfig.Annotations, fmt.Sprintf("unsupported CNI version %s", cniVersion))
