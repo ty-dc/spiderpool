@@ -32,6 +32,8 @@ const (
 	BatchCreateTimeout         = time.Minute * 5
 	KdoctorCheckTime           = time.Minute * 10
 	SpiderSyncMultusTime       = time.Minute * 2
+	// The time to wait for the IPPool informer to synchronize
+	InformerSyncStatusTime = time.Second * 30
 )
 
 var ForcedWaitingTime = time.Second

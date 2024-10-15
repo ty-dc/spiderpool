@@ -302,6 +302,22 @@ elif [ "$TYPE"x == "detail"x ] ; then
     kubectl get netreach --kubeconfig ${E2E_KUBECONFIG}
     kubectl get netreach --kubeconfig ${E2E_KUBECONFIG} -o yaml
 
+    echo ""
+    echo "=============== kubelet and docker log  ============== "
+    KIND_CLUSTER_NAME=${KIND_CLUSTER_NAME:-"spider"}
+    KIND_NODES=$(  kind get  nodes --name ${KIND_CLUSTER_NAME} )
+    [ -z "$KIND_NODES" ] && echo "warning, failed to find nodes of kind cluster $KIND_CLUSTER_NAME " || true
+    for NODE in $KIND_NODES ; do
+        echo "--------- kubelet status from node ${NODE}"
+        docker exec $NODE systemctl status kubelet -l
+        echo "--------- kubelete logs from node ${NODE}"
+        docker exec $NODE journalctl -u kubelet -n 500
+        echo "--------- docker status from node ${NODE}"
+        docker exec $NODE systemctl status docker -l
+        echo "--------- docker logs from node ${NODE}"
+        docker exec $NODE journalctl -u docker -n 500
+    done
+
 elif [ "$TYPE"x == "error"x ] ; then
     CHECK_ERROR(){
         LLOG_MARK="$1"

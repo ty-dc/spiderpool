@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/spidernet-io/spiderpool/pkg/constant"
+	"github.com/spidernet-io/spiderpool/pkg/utils/retry"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -49,7 +50,14 @@ func GenerateExamplePodYaml(podName, namespace string) *corev1.Pod {
 func CreatePodUntilReady(frame *e2e.Framework, podYaml *corev1.Pod, podName, namespace string, waitPodStartTimeout time.Duration) (pod *corev1.Pod, podIPv4, podIPv6 string) {
 	// create pod
 	GinkgoWriter.Printf("create pod %v/%v \n", namespace, podName)
-	err := frame.CreatePod(podYaml)
+	err := retry.RetryOnConflictWithContext(context.Background(), retry.DefaultBackoff, func(ctx context.Context) error {
+		err := frame.CreatePod(podYaml)
+		if err != nil {
+			GinkgoLogr.Error(fmt.Errorf("failed to create pod %v/%v, error: %v", namespace, podName, err), "Failed")
+			return err
+		}
+		return nil
+	})
 	Expect(err).NotTo(HaveOccurred(), "failed to create pod")
 
 	// wait for pod ip
