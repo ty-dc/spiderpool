@@ -109,6 +109,7 @@ func (im *ipPoolManager) AllocateIP(ctx context.Context, poolName, nic string, p
 		if err != nil {
 			return err
 		}
+		logger.Sugar().Infof("debug ipPool 1 ===============================================: %+v", ipPool)
 
 		logger.Debug("Generate a random IP address")
 		allocatedIP, err := im.genRandomIP(ctx, ipPool, pod, podController)
@@ -119,6 +120,7 @@ func (im *ipPoolManager) AllocateIP(ctx context.Context, poolName, nic string, p
 		resourceVersion := ipPool.ResourceVersion
 		logger.With(zap.String("IPPool-ResourceVersion", resourceVersion)).
 			Sugar().Debugf("Try to update the allocation status of IPPool using random IP %s", allocatedIP)
+		logger.Sugar().Infof("debug ipPool 2 ===============================================: %+v", ipPool)
 		if err := im.client.Status().Update(ctx, ipPool); err != nil {
 			if apierrors.IsConflict(err) {
 				metric.IpamAllocationUpdateIPPoolConflictCounts.Add(ctx, 1)

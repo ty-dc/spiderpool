@@ -97,8 +97,7 @@ var _ = Describe("MacvlanUnderlayOne", Serial, Label("underlay", "one-interface"
 			taskCopy := task
 
 			GinkgoWriter.Printf("kdoctor task: %+v \n", task)
-			err := frame.CreateResource(task)
-			Expect(err).NotTo(HaveOccurred(), " kdoctor nethttp crd create failed")
+			Expect(frame.CreateResource(task)).NotTo(HaveOccurred(), " kdoctor nethttp crd create failed")
 
 			err = frame.GetResource(apitypes.NamespacedName{Name: name}, taskCopy)
 			Expect(err).NotTo(HaveOccurred(), " kdoctor nethttp crd get failed")
