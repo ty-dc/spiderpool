@@ -122,8 +122,9 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 
 					// Check the Pod's IP recorded IPPool
 					ok, _, _, err := common.CheckPodIpRecordInIppool(frame, globalDefaultV4IppoolList, globalDefaultV6IppoolList, podList)
-					Expect(err).NotTo(HaveOccurred())
-					Expect(ok).To(BeTrue())
+					if err != nil && !ok {
+						return err
+					}
 
 					// try to delete pod
 					Expect(frame.DeleteDaemonSet(dsName, namespace)).NotTo(HaveOccurred())
@@ -133,11 +134,17 @@ var _ = Describe("test reliability", Label("reliability"), Serial, func() {
 					}
 
 					if frame.Info.IpV4Enabled {
-						Expect(common.CheckIppoolSanity(frame, common.SpiderPoolIPv4PoolDefault)).NotTo(HaveOccurred(), "error %v", err)
+						err = common.CheckIppoolSanity(frame, common.SpiderPoolIPv4PoolDefault)
+						if err != nil {
+							return err
+						}
 						GinkgoWriter.Printf("successfully checked sanity of spiderpool %v \n", common.SpiderPoolIPv4PoolDefault)
 					}
 					if frame.Info.IpV6Enabled {
-						Expect(common.CheckIppoolSanity(frame, common.SpiderPoolIPv6PoolDefault)).NotTo(HaveOccurred(), "error %v", err)
+						err = common.CheckIppoolSanity(frame, common.SpiderPoolIPv6PoolDefault)
+						if err != nil {
+							return err
+						}
 						GinkgoWriter.Printf("successfully checked sanity of spiderpool %v \n", common.SpiderPoolIPv6PoolDefault)
 					}
 

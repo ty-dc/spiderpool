@@ -33,6 +33,7 @@ const (
 	KdoctorCheckTime           = time.Minute * 10
 	SpiderSyncMultusTime       = time.Minute * 2
 	KDoctorRunTimeout          = time.Minute * 10
+	InformerSyncStatusTime     = time.Second * 30
 )
 
 var ForcedWaitingTime = time.Second
