@@ -516,7 +516,7 @@ func DeleteIPPoolUntilFinish(f *frame.Framework, poolName string, ctx context.Co
 		default:
 			_, err := GetIppoolByName(f, poolName)
 			if err != nil {
-				GinkgoWriter.Printf("IPPool '%s' has been removed，error: %v", poolName, err)
+				GinkgoWriter.Printf("IPPool '%s' has been removed, error: %v", poolName, err)
 				return nil
 			}
 			time.Sleep(ForcedWaitingTime)
@@ -608,7 +608,7 @@ func WaitWorkloadDeleteUntilFinish(ctx context.Context, f *frame.Framework, name
 			_, err := GetWorkloadByName(f, namespace, name)
 			if err != nil {
 				if api_errors.IsNotFound(err) {
-					GinkgoWriter.Printf("workload '%s/%s' has been removed，error: %v", namespace, name, err)
+					GinkgoWriter.Printf("workload '%s/%s' has been removed, error: %v", namespace, name, err)
 					return nil
 				}
 				return err
@@ -987,24 +987,50 @@ func CheckIppoolSanity(f *frame.Framework, poolName string) error {
 		}
 	}
 
-	if *ippool.Status.AllocatedIPCount > *ippool.Status.TotalIPCount {
-		GinkgoWriter.Printf(
-			"allocated IP count (%v) exceeds total IP count (%v) \n",
-			*ippool.Status.AllocatedIPCount, *ippool.Status.TotalIPCount,
-		)
-		isSanity = false
-	}
+	// The status of IPPool is automatically synchronized by the IPPool informer based on the events it receives.
+	// In the CI environment, the creation of IPPools happens very quickly, and their health checks are performed promptly.
+	// When checking the TotalIPCount status, if the spiderpool-controller undergoes a leader election or the informer has not yet completed synchronization,
+	// the IPPool status TotalIPCount may be nil. This can lead to a panic.
+	// In such cases, try waiting for the informer to complete status synchronization before checking the robustness of the IPPool.
+	ctx, cancel := context.WithTimeout(context.Background(), InformerSyncStatusTime)
+	defer cancel()
+	for {
+		select {
+		case <-ctx.Done():
+			return fmt.Errorf("waiting for informer to synchronize IPPool %s status timed out", poolName)
+		default:
+			if ippool.Status.AllocatedIPCount == nil || ippool.Status.TotalIPCount == nil {
+				GinkgoLogr.Error(fmt.Errorf("IPPool %s has nil status fields, retrying", poolName), "Failed")
+				ippool, err = GetIppoolByName(f, poolName)
+				if err != nil {
+					if api_errors.IsNotFound(err) {
+						return fmt.Errorf("ippool %s does not exist", poolName)
+					}
+					return fmt.Errorf("failed to get ippool %s, error %v", poolName, err)
+				}
+				time.Sleep(ForcedWaitingTime)
+				continue
+			}
 
-	// Ensure that the IP pool's reported usage matches the actual usage
-	if actualIPUsageCount != int(*ippool.Status.AllocatedIPCount) {
-		GinkgoWriter.Printf("IPPool %s usage count mismatch: expected %d, got %d \n", poolName, actualIPUsageCount, *ippool.Status.AllocatedIPCount)
-		isSanity = false
-	}
+			if *ippool.Status.AllocatedIPCount > *ippool.Status.TotalIPCount {
+				GinkgoWriter.Printf(
+					"allocated IP count (%v) exceeds total IP count (%v) \n",
+					*ippool.Status.AllocatedIPCount, *ippool.Status.TotalIPCount,
+				)
+				isSanity = false
+			}
+			// Ensure that the IP pool's reported usage matches the actual usage
+			if actualIPUsageCount != int(*ippool.Status.AllocatedIPCount) {
+				GinkgoWriter.Printf("IPPool %s usage count mismatch: expected %d, got %d \n", poolName, actualIPUsageCount, *ippool.Status.AllocatedIPCount)
+				isSanity = false
+			}
 
-	if !isSanity {
-		return fmt.Errorf("IPPool %s sanity check failed", poolName)
-	}
+			if !isSanity {
+				return fmt.Errorf("IPPool %s sanity check failed", poolName)
+			}
 
-	GinkgoWriter.Printf("Successfully checked IPPool %s sanity, IPPool record information is correct \n", poolName)
-	return nil
+			GinkgoWriter.Printf("Successfully checked IPPool %s sanity, IPPool record information is correct \n", poolName)
+			return nil
+		}
+	}
 }
