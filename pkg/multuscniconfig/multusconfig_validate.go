@@ -8,11 +8,14 @@ import (
 	"encoding/json"
 	"fmt"
 
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	ktypes "k8s.io/apimachinery/pkg/types"
 	k8svalidation "k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/utils/strings/slices"
 
 	"github.com/containernetworking/cni/libcni"
+	netv1 "github.com/k8snetworkplumbingwg/network-attachment-definition-client/pkg/apis/k8s.cni.cncf.io/v1"
 	"github.com/spidernet-io/spiderpool/cmd/spiderpool/cmd"
 	"github.com/spidernet-io/spiderpool/pkg/constant"
 	"github.com/spidernet-io/spiderpool/pkg/coordinatormanager"
@@ -263,52 +266,33 @@ func validateVlanId(vlanId int32) error {
 
 func (mcw *MultusConfigWebhook) validateAnnotation(ctx context.Context, multusConfig *spiderpoolv2beta1.SpiderMultusConfig) *field.Error {
 	// Validate the annotation 'multus.spidernet.io/cr-name' to customize the net-attach-def resource name.
-	customMultusName, hasCustomMultusName := multusConfig.Annotations[constant.AnnoNetAttachConfName]
-	if hasCustomMultusName && customMultusName == "" {
-		return field.Invalid(annotationField, multusConfig.Annotations, "invalid custom net-attach-def resource empty name")
-	}
-	if len(customMultusName) > k8svalidation.DNS1123SubdomainMaxLength {
-		return field.Invalid(annotationField, multusConfig.Annotations,
-			fmt.Sprintf("the custom net-attach-def resource name must be no more than %d characters", k8svalidation.DNS1123SubdomainMaxLength))
-	}
+	if customMultusName, hasCustomMultusName := multusConfig.Annotations[constant.AnnoNetAttachConfName]; hasCustomMultusName {
+		if customMultusName == "" {
+			return field.Invalid(annotationField, multusConfig.Annotations, "invalid custom net-attach-def resource empty name")
+		}
 
-	var spiderMultusConfigList spiderpoolv2beta1.SpiderMultusConfigList
-	if err := mcw.APIReader.List(ctx, &spiderMultusConfigList); err != nil {
-		return field.InternalError(annotationField, fmt.Errorf("failed to list SpiderMultusConfigs: %v", err))
-	}
+		if errs := k8svalidation.IsDNS1123Subdomain(customMultusName); len(errs) != 0 {
+			return field.Invalid(annotationField, multusConfig.Annotations, fmt.Sprintf("invalid custom net-attach-def resource name, err: %v", errs))
+		}
 
-	for _, existingConfig := range spiderMultusConfigList.Items {
-		existingCustomMultusName, hasExistingCustomMultusName := existingConfig.Annotations[constant.AnnoNetAttachConfName]
-		// Check if the new SpiderMultusConfig and the existing SpiderMultusConfig are in the same namespace.
-		// If they are in the same namespace, the customMultusName specified via the annotation 'multus.spidernet.io/cr-name' must be unique.
-		isSameNamespace := multusConfig.Namespace == existingConfig.Namespace
-
-		switch {
-		// Case when both the new and existing SpiderMultusConfig have customMultusName,
-		// and they are the same in the same namespace, which creates a name conflict.
-		case hasCustomMultusName && hasExistingCustomMultusName && existingCustomMultusName == customMultusName && isSameNamespace:
-			return field.Invalid(annotationField, multusConfig.Annotations,
-				fmt.Sprintf("In namespace %s, the net-attach-def %s customized for SpiderMultusConfig %s via annotation %s conflicts with the net-attach-def %s of the existing SpiderMultusConfig %s.",
-					multusConfig.Namespace, customMultusName, multusConfig.Name, constant.AnnoNetAttachConfName, existingCustomMultusName, existingConfig.Name,
-				))
-
-		// Case when the new SpiderMultusConfig has a custom Multus name, but the existing SpiderMultusConfig does not,
-		// and the new SpiderMultusConfig‘s customMultusName matches the existing SpiderMultusConfig's name in the same namespace.
-		// This would also create a name conflict.
-		case hasCustomMultusName && !hasExistingCustomMultusName && existingConfig.Name == customMultusName && isSameNamespace:
-			return field.Invalid(annotationField, multusConfig.Annotations,
-				fmt.Sprintf("In namespace %s, the net-attach-def %s customized for SpiderMultusConfig %s via annotation %s conflicts with the name of the existing SpiderMultusConfig %s.",
-					multusConfig.Namespace, customMultusName, multusConfig.Name, constant.AnnoNetAttachConfName, existingConfig.Name,
-				))
-
-		// Case when the new SpiderMultusConfig does not have a customMultusName, but the existing SpiderMultusConfig does,
-		// and the existing SpiderMultusConfig‘s customMultusName matches the new SpiderMultusConfig's name in the same namespace.
-		// This is another potential name conflict.
-		case !hasCustomMultusName && hasExistingCustomMultusName && existingCustomMultusName == multusConfig.Name && isSameNamespace:
-			return field.Invalid(annotationField, multusConfig.Annotations,
-				fmt.Sprintf("In namespace %s, the name of SpiderMultusConfig %s conflicts with the net-attach-def %s customized by the annotation %s of the existing SpiderMultusConfig %s.",
-					multusConfig.Namespace, multusConfig.Name, existingCustomMultusName, constant.AnnoNetAttachConfName, existingConfig.Name,
-				))
+		netAttachDef := &netv1.NetworkAttachmentDefinition{}
+		err := mcw.APIReader.Get(ctx, ktypes.NamespacedName{Namespace: multusConfig.Namespace, Name: customMultusName}, netAttachDef)
+		if err != nil {
+			if !apierrors.IsNotFound(err) {
+				return field.InternalError(annotationField,
+					fmt.Errorf("failed to retrieve net-attach-def %s/%s, unable to determine conflicts with existing resources. error: %v", multusConfig.Namespace, customMultusName, err))
+			}
+		} else {
+			if netAttachDef.OwnerReferences != nil && len(netAttachDef.OwnerReferences) > 0 {
+				for _, ownerRef := range netAttachDef.OwnerReferences {
+					if ownerRef.Kind == constant.KindSpiderMultusConfig {
+						// net-attach-def already exists and is managed by SpiderMultusConfig, do not allow the creation of SpiderMultusConfig to take over its management.
+						return field.Invalid(annotationField, multusConfig.Annotations,
+							fmt.Sprintf("the annotation %s custom net-attach-def %s exists and is managed by SpiderMultusConfig %v.", constant.AnnoNetAttachConfName, customMultusName, ownerRef.Name))
+					}
+				}
+			}
+			// The net-attach-def already exists and is not managed by SpiderMultusConfig, allow the creation of SpiderMultusConfig to take over its management.
 		}
 	}
 
