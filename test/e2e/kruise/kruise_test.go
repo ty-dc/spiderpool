@@ -86,11 +86,9 @@ var _ = Describe("Third party control: OpenKruise", Label("kruise"), func() {
 		ok, _, _, err := common.CheckPodIpRecordInIppool(frame, v4PoolNameList, v6PoolNameList, podList)
 		Expect(ok).NotTo(BeFalse())
 		Expect(err).NotTo(HaveOccurred())
-
 		GinkgoWriter.Printf("delete kruise all Pod in namespace. \n", namespace)
 		Expect(common.DeleteKruiseCloneSetByName(frame, kruiseCloneSetName, namespace)).NotTo(HaveOccurred())
 		Expect(common.DeleteKruiseStatefulSetByName(frame, kruiseStatefulSetName, namespace)).NotTo(HaveOccurred())
-
 		// Check workloadendpoint records are deleted
 		// The endpoint of the third-party statefulset can be removed without IP conflict
 		ctx, cancel := context.WithTimeout(context.Background(), common.ResourceDeleteTimeout)
