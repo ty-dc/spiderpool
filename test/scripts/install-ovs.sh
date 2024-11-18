@@ -66,21 +66,26 @@ for NODE in $KIND_NODES; do
   install_openvswitch() {
     for attempt in {1..5}; do
       echo "Attempt $attempt to install openvswitch on ${NODE}..."
-      docker exec ${NODE} apt-get update > /dev/null
-      docker exec ${NODE} apt-get install -y apt-utils > /dev/null
-      docker exec ${NODE} apt-get install -y openvswitch-switch > /dev/null
-      
-      if [[ $? -eq 0 ]]; then
-        echo "Openvswitch installed successfully on ${NODE}"
-        return 0
-      fi
 
-      echo "Failed to install openvswitch on ${NODE}, retrying in 10s..."
-      sleep 10
+      # Check if the package list update is successful
+      if ! docker exec ${NODE} apt-get update > /dev/null; then
+        echo "Failed to update package list on ${NODE}, retrying in 10s..."
+        sleep 10
+        continue
+      fi
+      
+      if ! docker exec ${NODE} apt-get install -y openvswitch-switch > /dev/null; then
+        echo "Failed to install openvswitch on ${NODE}, retrying in 10s..."
+        sleep 10
+        continue
+      fi
+      
+      echo "Succeed to install openvswitch on ${NODE}"
+      return 0
     done
-    
-    echo "Error: Failed to install openvswitch on ${NODE} after 5 attempts"
-    exit 1
+
+    echo "Error: Failed to install openvswitch on ${NODE} after 5 attempts." >&2
+    return 1  # Return an error code
   }
   
   echo "=========install openvswitch"
