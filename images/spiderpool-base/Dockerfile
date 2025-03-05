@@ -3,7 +3,7 @@
 
 # docker buildx build -t testbase:latest --platform=linux/arm64,linux/amd64 --output type=docker .
 
-ARG GOLANG_IMAGE=docker.io/library/golang:1.23.3@sha256:73f06be4578c9987ce560087e2e2ea6485fb605e3910542cadd8fa09fc5f3e31
+ARG GOLANG_IMAGE=docker.io/library/golang:1.24.1@sha256:c5adecdb7b3f8c5ca3c88648a861882849cc8b02fed68ece31e25de88ad13418
 ARG UBUNTU_IMAGE=docker.io/library/ubuntu:20.04@sha256:bea6d19168bbfd6af8d77c2cc3c572114eb5d113e6f422573c93cb605a0e2ffb
 
 
