@@ -1,7 +1,7 @@
 # Copyright 2023 Authors of spidernet-io
 # SPDX-License-Identifier: Apache-2.0
 
-ARG GOLANG_IMAGE=docker.io/library/golang:1.23.3@sha256:73f06be4578c9987ce560087e2e2ea6485fb605e3910542cadd8fa09fc5f3e31
+ARG GOLANG_IMAGE=docker.io/library/golang:1.24.1@sha256:c5adecdb7b3f8c5ca3c88648a861882849cc8b02fed68ece31e25de88ad13418
 
 #======= build plugins ==========
 FROM --platform=${BUILDPLATFORM} ${GOLANG_IMAGE} AS builder
